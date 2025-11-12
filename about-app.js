@@ -8,32 +8,40 @@ function AboutApp() {
         role: 'Digital Marketing Lead',
         image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
         bio: 'SEO specialist with 5+ years of experience in driving organic growth and social media strategies.',
-        portfolio: 'https://alexjohnson-portfolio.com',
-        github: 'https://github.com/alexjohnson'
+        portfolio: 'https://alexjohnson.portfolio.com',
+        github: 'https://github.com/alexjohnson',
+        telegram: 'https://t.me/alexjohnson',
+        whatsapp: 'https://wa.me/1234567890'
       },
       {
         name: 'Sarah Chen',
         role: 'Lead Graphic Designer',
         image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',
         bio: 'Creative designer passionate about crafting beautiful visual identities and user experiences.',
-        portfolio: 'https://sarahchen-design.com',
-        github: 'https://github.com/sarahchen'
+        portfolio: 'https://sarahchen.portfolio.com',
+        github: 'https://github.com/sarahchen',
+        telegram: 'https://t.me/sarahchen',
+        whatsapp: 'https://wa.me/0987654321'
       },
       {
         name: 'Michael Rodriguez',
         role: 'Full Stack Developer',
         image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
         bio: 'MERN stack expert building scalable web applications with clean, efficient code.',
-        portfolio: 'https://michaelrodriguez-dev.com',
-        github: 'https://github.com/mrodriguez'
+        portfolio: 'https://michaelrodriguez.portfolio.com',
+        github: 'https://github.com/michaelrodriguez',
+        telegram: 'https://t.me/michaelrodriguez',
+        whatsapp: 'https://wa.me/1122334455'
       },
       {
         name: 'Emily Park',
         role: 'UI/UX Designer',
         image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
         bio: 'Design thinking advocate focused on creating intuitive and engaging user interfaces.',
-        portfolio: 'https://emilypark-ux.com',
-        github: 'https://github.com/emilypark'
+        portfolio: 'https://emilypark.portfolio.com',
+        github: 'https://github.com/emilypark',
+        telegram: 'https://t.me/emilypark',
+        whatsapp: 'https://wa.me/5566778899'
       }
     ];
 
@@ -57,22 +65,24 @@ function AboutApp() {
             <h2 className="text-4xl font-bold text-center mb-16">Meet Our Team</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {team.map((member, index) => (
-                <TeamMember 
+                <div 
                   key={index} 
-                  {...member} 
-                  onCardClick={setSelectedMember}
-                />
+                  onClick={() => setSelectedMember(member)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <TeamMember {...member} />
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Team Member Modal */}
-        <TeamMemberModal 
-          member={selectedMember} 
-          isOpen={selectedMember !== null}
-          onClose={() => setSelectedMember(null)}
-        />
+        {selectedMember && (
+          <TeamMemberModal 
+            member={selectedMember} 
+            onClose={() => setSelectedMember(null)} 
+          />
+        )}
 
         <section className="section-padding bg-[var(--secondary-color)]">
           <div className="max-w-4xl mx-auto text-center">

@@ -36,17 +36,20 @@ function App() {
       {
         icon: 'megaphone',
         title: 'Digital Marketing',
-        description: 'SEO, social media marketing, and branding strategies that drive results and grow your audience.'
+        description: 'SEO, social media marketing, and branding strategies that drive results and grow your audience.',
+        id: 'digital-marketing'
       },
       {
         icon: 'palette',
         title: 'Graphic Design',
-        description: 'Logo, poster, banner, and UI/UX design that captures attention and communicates your brand.'
+        description: 'Logo, poster, banner, and UI/UX design that captures attention and communicates your brand.',
+        id: 'graphic-design'
       },
       {
         icon: 'code',
         title: 'Web Development',
-        description: 'Responsive websites and web apps using MERN stack for seamless digital experiences.'
+        description: 'Responsive websites and web apps using MERN stack for seamless digital experiences.',
+        id: 'web-development'
       }
     ];
 
@@ -65,7 +68,9 @@ function App() {
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {services.map((service, index) => (
-                <ServiceCard key={index} {...service} />
+                <div key={index} id={service.id}>
+                  <ServiceCard {...service} />
+                </div>
               ))}
             </div>
           </div>

@@ -1,67 +1,95 @@
 function ContactApp() {
   try {
+    const contactInfo = [
+      {
+        icon: '📍',
+        title: 'Office Location',
+        details: 'CreativeAgency HQ',
+        description: 'Visit us at our office'
+      },
+      {
+        icon: '⏰',
+        title: 'Business Hours',
+        details: 'Mon - Fri: 9AM - 6PM',
+        description: 'Saturday by appointment'
+      },
+      {
+        icon: '📧',
+        title: 'Email Support',
+        details: 'hello@creativeagency.com',
+        description: 'Response within 24 hours'
+      },
+      {
+        icon: '☎️',
+        title: 'Phone Support',
+        details: '+1 (555) 123-4567',
+        description: 'Available during business hours'
+      }
+    ];
+
+    const faqs = [
+      {
+        question: 'What is your response time?',
+        answer: 'We typically respond to inquiries within 24 hours during business days.'
+      },
+      {
+        question: 'Do you offer free consultations?',
+        answer: 'Yes! We offer a free 30-minute consultation call to discuss your project needs.'
+      },
+      {
+        question: 'What are your payment terms?',
+        answer: 'We offer flexible payment options: 50% upfront and 50% on completion. Custom plans available.'
+      },
+      {
+        question: 'Can you work with international clients?',
+        answer: 'Absolutely! We have experience working with clients worldwide across multiple time zones.'
+      }
+    ];
+
+    const [expandedFaq, setExpandedFaq] = React.useState(null);
+
     return (
       <div className="min-h-screen bg-white">
         <Header />
         
-        <section className="section-padding bg-gradient-to-b from-[var(--secondary-color)] to-white">
+        {/* Contact Information Grid */}
+        <section className="section-padding bg-[var(--secondary-color)]">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h1 className="text-5xl font-bold mb-6">Get In Touch</h1>
-              <p className="text-xl text-[var(--text-light)] max-w-3xl mx-auto">
-                Ready to start your project? Contact us today and let's discuss how we can help bring your vision to life.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-12">
-              <div>
-                <h2 className="text-3xl font-bold mb-6">Send Us a Message</h2>
-                <ContactForm />
-              </div>
-
-              <div>
-                <h2 className="text-3xl font-bold mb-6">Other Ways to Reach Us</h2>
-                
-                <div className="space-y-6">
-                  <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="flex items-center p-6 bg-green-50 rounded-xl hover:bg-green-100 transition-colors">
-                    <div className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center mr-4">
-                      <div className="icon-message-circle text-2xl text-white"></div>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg mb-1">WhatsApp</h3>
-                      <p className="text-[var(--text-light)]">Chat with us instantly</p>
-                    </div>
-                  </a>
-
-                  <a href="https://t.me/yourusername" target="_blank" rel="noopener noreferrer" className="flex items-center p-6 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors">
-                    <div className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center mr-4">
-                      <div className="icon-send text-2xl text-white"></div>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg mb-1">Telegram</h3>
-                      <p className="text-[var(--text-light)]">Message us on Telegram</p>
-                    </div>
-                  </a>
-
-                  <div className="p-6 bg-[var(--secondary-color)] rounded-xl">
-                    <h3 className="font-bold text-lg mb-4">Follow Us</h3>
-                    <div className="flex gap-4">
-                      <a href="#" className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-[var(--primary-color)] hover:text-white transition-colors">
-                        <div className="icon-facebook text-xl"></div>
-                      </a>
-                      <a href="#" className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-[var(--primary-color)] hover:text-white transition-colors">
-                        <div className="icon-twitter text-xl"></div>
-                      </a>
-                      <a href="#" className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-[var(--primary-color)] hover:text-white transition-colors">
-                        <div className="icon-instagram text-xl"></div>
-                      </a>
-                      <a href="#" className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-[var(--primary-color)] hover:text-white transition-colors">
-                        <div className="icon-linkedin text-xl"></div>
-                      </a>
-                    </div>
-                  </div>
+            <h2 className="text-4xl font-bold text-center mb-16">Contact Information</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {contactInfo.map((info, index) => (
+                <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                  <div className="text-4xl mb-4">{info.icon}</div>
+                  <h3 className="text-lg font-bold mb-2">{info.title}</h3>
+                  <p className="text-[var(--primary-color)] font-semibold mb-2">{info.details}</p>
+                  <p className="text-sm text-[var(--text-light)]">{info.description}</p>
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="section-padding">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-4xl font-bold text-center mb-16">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
+                    className="w-full px-6 py-4 text-left font-semibold hover:bg-[var(--secondary-color)] transition-colors flex justify-between items-center"
+                  >
+                    <span>{faq.question}</span>
+                    <span className={`text-xl transition-transform ${expandedFaq === index ? 'rotate-180' : ''}`}>▼</span>
+                  </button>
+                  {expandedFaq === index && (
+                    <div className="px-6 py-4 bg-[var(--secondary-color)] border-t border-gray-200 text-[var(--text-light)]">
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </section>
