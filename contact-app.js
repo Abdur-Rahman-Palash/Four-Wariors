@@ -16,13 +16,13 @@ function ContactApp() {
       {
         icon: '📧',
         title: 'Email Support',
-        details: 'hello@creativeagency.com',
+        details: 'fourwarriors24@gmail.com',
         description: 'Response within 24 hours'
       },
       {
         icon: '☎️',
         title: 'Phone Support',
-        details: '+1 (555) 123-4567',
+        details: '+8801971233127',
         description: 'Available during business hours'
       }
     ];
@@ -107,11 +107,11 @@ function ContactApp() {
                     <div className="space-y-3 text-sm">
                       <div>
                         <p className="text-[var(--text-light)]">📧 Email</p>
-                        <p className="font-semibold">hello@creativeagency.com</p>
+                        <p className="font-semibold">fourwarriors24@gmail.com</p>
                       </div>
                       <div>
                         <p className="text-[var(--text-light)]">☎️ Phone</p>
-                        <p className="font-semibold">+1 (555) 123-4567</p>
+                        <p className="font-semibold">+8801971233127</p>
                       </div>
                       <div>
                         <p className="text-[var(--text-light)]">⏰ Hours</p>

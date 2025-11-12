@@ -125,7 +125,7 @@ function ContactForm() {
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent outline-none ${
               errors.phone ? 'border-red-500' : 'border-gray-300'
             }`}
-            placeholder="+1 (555) 123-4567"
+            placeholder="+8801971233127"
           />
           {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
         </div>
