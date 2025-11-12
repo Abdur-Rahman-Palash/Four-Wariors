@@ -10,8 +10,8 @@ function AboutApp() {
         bio: 'SEO specialist with 5+ years of experience in driving organic growth and social media strategies.',
         portfolio: 'https://alexjohnson.portfolio.com',
         github: 'https://github.com/alexjohnson',
-        telegram: 'https://t.me/alexjohnson',
-        whatsapp: 'https://wa.me/1234567890'
+        telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1',
+        whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
       },
       {
         name: 'Sarah Chen',
@@ -20,8 +20,8 @@ function AboutApp() {
         bio: 'Creative designer passionate about crafting beautiful visual identities and user experiences.',
         portfolio: 'https://sarahchen.portfolio.com',
         github: 'https://github.com/sarahchen',
-        telegram: 'https://t.me/sarahchen',
-        whatsapp: 'https://wa.me/0987654321'
+        telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1',
+        whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
       },
       {
         name: 'Michael Rodriguez',
@@ -30,8 +30,8 @@ function AboutApp() {
         bio: 'MERN stack expert building scalable web applications with clean, efficient code.',
         portfolio: 'https://michaelrodriguez.portfolio.com',
         github: 'https://github.com/michaelrodriguez',
-        telegram: 'https://t.me/michaelrodriguez',
-        whatsapp: 'https://wa.me/1122334455'
+        telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1',
+        whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
       },
       {
         name: 'Emily Park',
@@ -40,8 +40,8 @@ function AboutApp() {
         bio: 'Design thinking advocate focused on creating intuitive and engaging user interfaces.',
         portfolio: 'https://emilypark.portfolio.com',
         github: 'https://github.com/emilypark',
-        telegram: 'https://t.me/emilypark',
-        whatsapp: 'https://wa.me/5566778899'
+        telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1',
+        whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
       }
     ];
 

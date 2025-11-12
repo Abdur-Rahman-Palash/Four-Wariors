@@ -4,7 +4,7 @@ function ContactForm() {
     // Replace 'YOUR_GROUP_INVITATION_CODE' with your actual WhatsApp group invitation code
     // How to get it: Open WhatsApp group → Group info (i) → Invite via link → Copy link
     // Extract the code from: https://chat.whatsapp.com/INVITATION_CODE
-    const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/YOUR_GROUP_INVITATION_CODE';
+    const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm';
 
     const [formData, setFormData] = React.useState({
       name: '',
