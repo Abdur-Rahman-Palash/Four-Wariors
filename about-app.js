@@ -6,7 +6,7 @@ function AboutApp() {
       {
         name: 'Alex Johnson',
         role: 'Digital Marketing Lead',
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
+        image: 'https://i.pravatar.cc/300?img=1&u=alexjohnson',
         bio: 'SEO specialist with 5+ years of experience in driving organic growth and social media strategies.',
         portfolio: 'https://alexjohnson.portfolio.com',
         github: 'https://github.com/alexjohnson',
@@ -16,7 +16,7 @@ function AboutApp() {
       {
         name: 'Sarah Chen',
         role: 'Lead Graphic Designer',
-        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',
+        image: 'https://i.pravatar.cc/300?img=2&u=sarahchen',
         bio: 'Creative designer passionate about crafting beautiful visual identities and user experiences.',
         portfolio: 'https://sarahchen.portfolio.com',
         github: 'https://github.com/sarahchen',
@@ -26,7 +26,7 @@ function AboutApp() {
       {
         name: 'Michael Rodriguez',
         role: 'Full Stack Developer',
-        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
+        image: 'https://i.pravatar.cc/300?img=3&u=michaelrodriguez',
         bio: 'MERN stack expert building scalable web applications with clean, efficient code.',
         portfolio: 'https://michaelrodriguez.portfolio.com',
         github: 'https://github.com/michaelrodriguez',
@@ -36,7 +36,7 @@ function AboutApp() {
       {
         name: 'Emily Park',
         role: 'UI/UX Designer',
-        image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
+        image: 'https://i.pravatar.cc/300?img=4&u=emilypark',
         bio: 'Design thinking advocate focused on creating intuitive and engaging user interfaces.',
         portfolio: 'https://emilypark.portfolio.com',
         github: 'https://github.com/emilypark',

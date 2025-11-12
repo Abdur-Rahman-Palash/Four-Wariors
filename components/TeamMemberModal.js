@@ -1,5 +1,15 @@
 function TeamMemberModal({ member, onClose }) {
   try {
+    const [imageLoaded, setImageLoaded] = React.useState(false);
+    const [imageError, setImageError] = React.useState(false);
+
+    // Generate initials for fallback avatar
+    const initials = member.name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase();
+
     React.useEffect(() => {
       // Close modal on Escape key
       const handleEscape = (e) => {
@@ -34,18 +44,33 @@ function TeamMemberModal({ member, onClose }) {
           </button>
 
           {/* Header with image */}
-          <div className="relative -mt-12">
+          <div className="relative -mt-12 h-72 bg-gradient-to-br from-blue-100 to-purple-100 overflow-hidden">
+            {/* Fallback avatar */}
+            {!imageLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500">
+                <span className="text-8xl font-bold text-white opacity-80">{initials}</span>
+              </div>
+            )}
+            
+            {/* Member image */}
             <img 
               src={member.image} 
-              alt={member.name} 
-              className="w-full h-64 object-cover"
+              alt={member.name}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => {
+                setImageLoaded(true);
+                setImageError(true);
+              }}
+              className={`w-full h-full object-cover transition-all duration-300 ${!imageLoaded ? 'opacity-0' : 'opacity-100'}`}
             />
+            
+            {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
           </div>
 
           {/* Content */}
           <div className="p-6">
-            <h2 className="text-2xl font-bold mb-2">{member.name}</h2>
+            <h2 className="text-3xl font-bold mb-2 text-gray-900">{member.name}</h2>
             <p className="text-lg text-[var(--primary-color)] font-semibold mb-4">{member.role}</p>
             
             <p className="text-[var(--text-light)] text-base leading-relaxed mb-6">
@@ -54,14 +79,14 @@ function TeamMemberModal({ member, onClose }) {
 
             {/* Links section */}
             <div className="border-t pt-6">
-              <h3 className="text-base font-bold mb-4">Connect</h3>
+              <h3 className="text-base font-bold mb-4 text-gray-900">Connect</h3>
               <div className="flex gap-3 flex-wrap">
                 {member.portfolio && (
                   <a
                     href={member.portfolio}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2 text-sm"
+                    className="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 flex items-center gap-2 text-sm"
                   >
                     <span>📁</span>
                     <span>Portfolio</span>
