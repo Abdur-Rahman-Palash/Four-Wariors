@@ -3,7 +3,7 @@ function Footer() {
     return (
       <footer className="bg-slate-900 text-white section-padding" data-name="footer" data-file="components/Footer.js">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div className="grid md:grid-cols-5 gap-8 mb-8">
             <div>
               <h3 className="text-2xl font-bold mb-4 text-gradient">CreativeAgency</h3>
               <p className="text-gray-400">Designing, developing & marketing digital experiences that deliver results.</p>
@@ -43,6 +43,14 @@ function Footer() {
                 <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[var(--primary-color)] transition-colors text-lg">
                   💼
                 </a>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">Visit Us</h4>
+              <div className="space-y-2 text-gray-400 text-sm">
+                <p>Dadul, Kazihal, Attpukurhat,<br/>Fulbari, Dinajpur, Bangladesh</p>
+                <p className="mt-3"><a href="https://four-wariors.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-[var(--primary-color)] transition-colors">four-wariors.vercel.app</a></p>
               </div>
             </div>
           </div>

@@ -4,7 +4,7 @@ function ContactApp() {
       {
         icon: '📍',
         title: 'Office Location',
-        details: 'CreativeAgency HQ',
+        details: 'Dadul, Kazihal, Attpukurhat, Fulbari, Dinajpur, Bangladesh',
         description: 'Visit us at our office'
       },
       {
