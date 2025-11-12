@@ -52,10 +52,72 @@ function ContactApp() {
       <div className="min-h-screen bg-white">
         <Header />
         
+        <section className="section-padding bg-gradient-to-b from-[var(--secondary-color)] to-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h1 className="text-5xl font-bold mb-6">Hire Us</h1>
+              <p className="text-xl text-[var(--text-light)] max-w-3xl mx-auto">
+                Ready to start your next project? Tell us about your vision and let's bring it to life together.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-12">
+              <div>
+                <h2 className="text-3xl font-bold mb-6">Send Us Your Project Details</h2>
+                <ContactForm />
+              </div>
+
+              <div>
+                <h2 className="text-3xl font-bold mb-6">Quick Connect</h2>
+                
+                <div className="space-y-6">
+                  <a href="https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm" target="_blank" rel="noopener noreferrer" className="flex items-center p-6 bg-green-50 rounded-xl hover:bg-green-100 transition-colors">
+                    <div className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center mr-4 text-2xl">
+                      💬
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-1">WhatsApp</h3>
+                      <p className="text-[var(--text-light)]">Chat with us instantly</p>
+                    </div>
+                  </a>
+
+                  <a href="https://t.me/+rIv1Kf6xr7pmNTM1" target="_blank" rel="noopener noreferrer" className="flex items-center p-6 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors">
+                    <div className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center mr-4 text-2xl">
+                      ✈️
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-1">Telegram</h3>
+                      <p className="text-[var(--text-light)]">Message us on Telegram</p>
+                    </div>
+                  </a>
+
+                  <div className="p-6 bg-[var(--secondary-color)] rounded-xl">
+                    <h3 className="font-bold text-lg mb-3">Contact Info</h3>
+                    <div className="space-y-3 text-sm">
+                      <div>
+                        <p className="text-[var(--text-light)]">📧 Email</p>
+                        <p className="font-semibold">hello@creativeagency.com</p>
+                      </div>
+                      <div>
+                        <p className="text-[var(--text-light)]">☎️ Phone</p>
+                        <p className="font-semibold">+1 (555) 123-4567</p>
+                      </div>
+                      <div>
+                        <p className="text-[var(--text-light)]">⏰ Hours</p>
+                        <p className="font-semibold">Mon - Fri: 9AM - 6PM</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Contact Information Grid */}
         <section className="section-padding bg-[var(--secondary-color)]">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-16">Contact Information</h2>
+            <h2 className="text-4xl font-bold text-center mb-16">Why Choose Us?</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {contactInfo.map((info, index) => (
                 <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
