@@ -28,13 +28,50 @@
         }
     }
     </style>
+    <!-- Anti-copy styles: deterrent only. Remove .nocopy class to re-enable selection. -->
+    <style>
+    .nocopy, .nocopy * {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+    }
+    .nocopy img {
+        -webkit-user-drag: none !important;
+        user-drag: none !important;
+        pointer-events: none !important;
+    }
+    </style>
+    <!-- Scroll progress bar styles -->
+    <style>
+    #scroll-progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 6px; background: rgba(0,0,0,0.06); z-index: 9999; pointer-events: none; }
+    #scroll-progress { width: 100%; height: 100%; transform-origin: left center; transform: scaleX(0); background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%); box-shadow: 0 0 12px rgba(37,99,235,0.45); transition: transform 250ms cubic-bezier(.22,.9,.35,1); }
+    </style>
 </head>
-<body>
+<body class="nocopy">
+    <div id="scroll-progress-container" aria-hidden="true"><div id="scroll-progress"></div></div>
     <div id="root"></div>
     <script type="text/babel" src="components/Header.js"></script>
     <script type="text/babel" src="components/Footer.js"></script>
     <script type="text/babel" src="components/FloatingContact.js"></script>
     <script type="text/babel" src="components/ServiceDetail.js"></script>
     <script type="text/babel" src="services-app.js"></script>
+        <script>
+        (function(){
+            document.addEventListener('contextmenu', function(e){ e.preventDefault(); }, false);
+            document.addEventListener('copy', function(e){ try { if (e.clipboardData) { e.preventDefault(); e.clipboardData.setData('text/plain', ''); } else { e.preventDefault(); } } catch(err){} }, false);
+            document.addEventListener('cut', function(e){ e.preventDefault(); }, false);
+            document.addEventListener('keydown', function(e){ if (e.ctrlKey || e.metaKey) { const k = (e.key || '').toLowerCase(); if (k === 'c' || k === 'u' || k === 's' || (e.shiftKey && k === 'i')) { e.preventDefault(); e.stopPropagation(); } } if (e.key === 'F12') { e.preventDefault(); } }, false);
+            document.addEventListener('selectionchange', function(){ try { var sel = document.getSelection(); if (sel && sel.toString().length > 0) sel.removeAllRanges(); } catch(err){} }, false);
+            console.info('Anti-copy deterrent active on this page. This does NOT prevent determined users from accessing source or assets.');
+        })();
+        </script>
+        <script>
+        (function(){
+            const progress = document.getElementById('scroll-progress'); if (!progress) return; const doc = document.documentElement; let lastScrollY = window.scrollY || doc.scrollTop || 0; let ticking = false;
+            function update() { const scrollTop = window.scrollY || doc.scrollTop || 0; const maxScroll = Math.max(1, doc.scrollHeight - doc.clientHeight); const pct = Math.min(1, Math.max(0, scrollTop / maxScroll)); const directionDown = scrollTop >= lastScrollY; lastScrollY = scrollTop; progress.style.transformOrigin = directionDown ? 'left center' : 'right center'; progress.style.transform = 'scaleX(' + pct + ')'; ticking = false; }
+            window.addEventListener('scroll', function(){ if (!ticking) { window.requestAnimationFrame(update); ticking = true; } }, { passive: true }); document.addEventListener('DOMContentLoaded', update); update();
+        })();
+        </script>
 </body>
 </html>

@@ -1,29 +1,39 @@
 function AboutApp() {
   try {
+    const [selectedMember, setSelectedMember] = React.useState(null);
+
     const team = [
       {
         name: 'Alex Johnson',
         role: 'Digital Marketing Lead',
         image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
-        bio: 'SEO specialist with 5+ years of experience in driving organic growth and social media strategies.'
+        bio: 'SEO specialist with 5+ years of experience in driving organic growth and social media strategies.',
+        portfolio: 'https://alexjohnson-portfolio.com',
+        github: 'https://github.com/alexjohnson'
       },
       {
         name: 'Sarah Chen',
         role: 'Lead Graphic Designer',
         image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80',
-        bio: 'Creative designer passionate about crafting beautiful visual identities and user experiences.'
+        bio: 'Creative designer passionate about crafting beautiful visual identities and user experiences.',
+        portfolio: 'https://sarahchen-design.com',
+        github: 'https://github.com/sarahchen'
       },
       {
         name: 'Michael Rodriguez',
         role: 'Full Stack Developer',
         image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80',
-        bio: 'MERN stack expert building scalable web applications with clean, efficient code.'
+        bio: 'MERN stack expert building scalable web applications with clean, efficient code.',
+        portfolio: 'https://michaelrodriguez-dev.com',
+        github: 'https://github.com/mrodriguez'
       },
       {
         name: 'Emily Park',
         role: 'UI/UX Designer',
         image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80',
-        bio: 'Design thinking advocate focused on creating intuitive and engaging user interfaces.'
+        bio: 'Design thinking advocate focused on creating intuitive and engaging user interfaces.',
+        portfolio: 'https://emilypark-ux.com',
+        github: 'https://github.com/emilypark'
       }
     ];
 
@@ -47,11 +57,22 @@ function AboutApp() {
             <h2 className="text-4xl font-bold text-center mb-16">Meet Our Team</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {team.map((member, index) => (
-                <TeamMember key={index} {...member} />
+                <TeamMember 
+                  key={index} 
+                  {...member} 
+                  onCardClick={setSelectedMember}
+                />
               ))}
             </div>
           </div>
         </section>
+
+        {/* Team Member Modal */}
+        <TeamMemberModal 
+          member={selectedMember} 
+          isOpen={selectedMember !== null}
+          onClose={() => setSelectedMember(null)}
+        />
 
         <section className="section-padding bg-[var(--secondary-color)]">
           <div className="max-w-4xl mx-auto text-center">
