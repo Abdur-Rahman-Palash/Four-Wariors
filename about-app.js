@@ -4,12 +4,12 @@ function AboutApp() {
 
     const team = [
       {
-        name: 'Alex Johnson',
-        role: 'Digital Marketing Lead',
-        image: 'https://i.pravatar.cc/300?img=1&u=alexjohnson',
-        bio: 'SEO specialist with 5+ years of experience in driving organic growth and social media strategies.',
-        portfolio: 'https://alexjohnson.portfolio.com',
-        github: 'https://github.com/alexjohnson',
+        name: 'Abdur Rahman',
+        role: 'Frontend Developer & Graphics Designer',
+        image: 'https://ibb.co/hFWdkHNs',
+        bio: 'Frontend Developer & Graphics Designer | React | AI-Assisted Websites | PSD → HTML | WordPress & SEO.',
+        portfolio: 'https://portfolio-edit-t3uy.vercel.app/',
+        github: 'https://github.com/Abdur-Rahman-Palash',
         telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1',
         whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
       },
