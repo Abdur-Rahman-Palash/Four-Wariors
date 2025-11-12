@@ -6,7 +6,7 @@ function AboutApp() {
       {
         name: 'Abdur Rahman',
         role: 'Frontend Developer & Graphics Designer',
-        image: 'https://freeimage.host/i/KpDrvMQ.jpg',
+        image: 'https://drive.google.com/uc?export=view&id=1WYmT0Pzn2ipuAgj8mNTuw6TtIJ9bRM1P',
         bio: 'Frontend Developer & Graphics Designer | React | AI-Assisted Websites | PSD → HTML | WordPress & SEO.',
         portfolio: 'https://portfolio-edit-t3uy.vercel.app/',
         github: 'https://github.com/Abdur-Rahman-Palash',
