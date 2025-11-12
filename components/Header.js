@@ -36,7 +36,7 @@ function Header() {
       <header className="bg-white shadow-sm sticky top-0 z-50" data-name="header" data-file="components/Header.js">
         <nav className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <a href="https://four-wariors.vercel.app/index.html" target="_blank" rel="noopener noreferrer" className="text-2xl font-bold text-gradient">CreativeAgency</a>
+            <a href="index.html" className="text-2xl font-bold text-gradient">CreativeAgency</a>
             
             <div className="hidden md:flex items-center space-x-8">
               {navItems.map((item, index) => (
