@@ -45,7 +45,7 @@ function HeroCarousel() {
                 <p className="text-xl md:text-2xl mb-8">{slide.subtitle}</p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <a href="portfolio.html" className="btn-primary">View Portfolio</a>
-                  <a href="contact.html" className="btn-secondary bg-white hover:bg-gray-100 text-[var(--primary-color)] border-white">Contact Now</a>
+                  <a href="contact.html#contact" className="btn-secondary bg-white hover:bg-gray-100 text-[var(--primary-color)] border-white">Contact Now</a>
                 </div>
               </div>
             </div>

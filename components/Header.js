@@ -9,7 +9,7 @@ function Header() {
       { label: 'Services', href: 'services.html', hasDropdown: true },
       { label: 'Portfolio', href: 'portfolio.html' },
       { label: 'Testimonials', href: 'testimonials.html' },
-      { label: 'Contact', href: 'contact.html' }
+      { label: 'Contact', href: 'contact.html#contact' }
     ];
 
     const serviceItems = [
@@ -72,7 +72,7 @@ function Header() {
                   )}
                 </div>
               ))}
-              <a href="contact.html" className="btn-primary">Hire Us</a>
+              <a href="contact.html#hire" className="btn-primary">Hire Us</a>
             </div>
 
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden text-2xl">

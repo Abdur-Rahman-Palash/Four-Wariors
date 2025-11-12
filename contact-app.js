@@ -48,12 +48,24 @@ function ContactApp() {
 
     const [expandedFaq, setExpandedFaq] = React.useState(null);
 
-    return (
-      <div className="min-h-screen bg-white">
-        <Header />
-        
-        <section className="section-padding bg-gradient-to-b from-[var(--secondary-color)] to-white">
-          <div className="max-w-7xl mx-auto">
+    function ContactContent() {
+      const [mode, setMode] = React.useState(() => {
+        const h = (window.location.hash || '').replace('#', '');
+        return h === 'hire' ? 'hire' : 'contact';
+      });
+
+      React.useEffect(() => {
+        function onHash() {
+          const h = (window.location.hash || '').replace('#', '');
+          setMode(h === 'hire' ? 'hire' : 'contact');
+        }
+        window.addEventListener('hashchange', onHash);
+        return () => window.removeEventListener('hashchange', onHash);
+      }, []);
+
+      if (mode === 'hire') {
+        return (
+          <div>
             <div className="text-center mb-16">
               <h1 className="text-5xl font-bold mb-6">Hire Us</h1>
               <p className="text-xl text-[var(--text-light)] max-w-3xl mx-auto">
@@ -69,7 +81,6 @@ function ContactApp() {
 
               <div>
                 <h2 className="text-3xl font-bold mb-6">Quick Connect</h2>
-                
                 <div className="space-y-6">
                   <a href="https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm" target="_blank" rel="noopener noreferrer" className="flex items-center p-6 bg-green-50 rounded-xl hover:bg-green-100 transition-colors">
                     <div className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center mr-4 text-2xl">
@@ -112,29 +123,30 @@ function ContactApp() {
               </div>
             </div>
           </div>
-        </section>
+        );
+      }
 
-        {/* Contact Information Grid */}
-        <section className="section-padding bg-[var(--secondary-color)]">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-16">Why Choose Us?</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {contactInfo.map((info, index) => (
-                <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
-                  <div className="text-4xl mb-4">{info.icon}</div>
-                  <h3 className="text-lg font-bold mb-2">{info.title}</h3>
-                  <p className="text-[var(--primary-color)] font-semibold mb-2">{info.details}</p>
-                  <p className="text-sm text-[var(--text-light)]">{info.description}</p>
-                </div>
-              ))}
-            </div>
+      // default: contact mode
+      return (
+        <div>
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
+            <p className="text-lg text-[var(--text-light)] max-w-2xl mx-auto">Have a question or need support? Reach out via any of the channels below.</p>
           </div>
-        </section>
 
-        {/* FAQ Section */}
-        <section className="section-padding">
+          <div className="grid md:grid-cols-4 gap-6 mb-12">
+            {contactInfo.map((info, index) => (
+              <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div className="text-4xl mb-4">{info.icon}</div>
+                <h3 className="text-lg font-bold mb-2">{info.title}</h3>
+                <p className="text-[var(--primary-color)] font-semibold mb-2">{info.details}</p>
+                <p className="text-sm text-[var(--text-light)]">{info.description}</p>
+              </div>
+            ))}
+          </div>
+
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-16">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-bold mb-6">Frequently Asked Questions</h2>
             <div className="space-y-4">
               {faqs.map((faq, index) => (
                 <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
@@ -154,8 +166,21 @@ function ContactApp() {
               ))}
             </div>
           </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="min-h-screen bg-white">
+        <Header />
+
+        <section className="section-padding bg-gradient-to-b from-[var(--secondary-color)] to-white">
+          <div className="max-w-7xl mx-auto">
+            <ContactContent />
+          </div>
         </section>
 
+        {/* Additional sections (Why Choose Us, FAQ duplication removed) */}
         <Footer />
         <FloatingContact />
       </div>
