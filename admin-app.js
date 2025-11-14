@@ -374,17 +374,8 @@ function AdminApp(){
                   <input 
                     type={showPw ? "text" : "password"} 
                     value={pwInput} 
-                    onChange={e=>{}} 
-                    onPaste={e=>{
-                      e.preventDefault();
-                      const paste = (e.clipboardData || window.clipboardData).getData('text');
-                      setPwInput(paste);
-                    }}
-                    onKeyPress={e=>e.preventDefault()}
-                    onKeyDown={e=>{
-                      if(e.key.length === 1) e.preventDefault();
-                    }}
-                    placeholder="Password (paste only)" 
+                    onChange={e=>setPwInput(e.target.value)} 
+                    placeholder="Password" 
                     className="w-full border px-3 py-2 rounded pr-10" 
                   />
                   <button type="button" onClick={()=>setShowPw(!showPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
@@ -406,7 +397,7 @@ function AdminApp(){
                   ) : (
                     <div className="mt-3 space-y-2">
                       <div className="relative">
-                        <input type="password" value={registerPw} onChange={e=>{}} onPaste={e=>{ e.preventDefault(); const paste = (e.clipboardData || window.clipboardData).getData('text'); setRegisterPw(paste); }} onKeyPress={e=>e.preventDefault()} onKeyDown={e=>{ if(e.key.length===1) e.preventDefault(); }} placeholder="Paste admin password to confirm" className="w-full border px-3 py-2 rounded" />
+                        <input type="password" value={registerPw} onChange={e=>setRegisterPw(e.target.value)} placeholder="Admin password" className="w-full border px-3 py-2 rounded" />
                       </div>
                       <div className="flex gap-2">
                         <button onClick={()=>registerCurrentDevice(registerPw)} className="px-3 py-2 bg-yellow-500 text-white rounded">Confirm & Register</button>
