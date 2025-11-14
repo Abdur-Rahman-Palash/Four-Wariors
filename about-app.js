@@ -2,7 +2,7 @@ function AboutApp() {
   try {
     const [selectedMember, setSelectedMember] = React.useState(null);
 
-    const team = [
+    const defaultTeam = [
       {
         name: 'Abdur Rahman',
         role: 'Frontend Developer & Graphics Designer',
@@ -44,6 +44,8 @@ function AboutApp() {
         whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
       }
     ];
+
+    const team = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('fw_team') || 'null') || defaultTeam; } catch(e){ return defaultTeam; } }, []);
 
     return (
       <div className="min-h-screen bg-white">

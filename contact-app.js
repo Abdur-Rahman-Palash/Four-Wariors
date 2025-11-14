@@ -1,28 +1,31 @@
 function ContactApp() {
   try {
+    const defaultCompanyInfo = { email: 'fourwarriors24@gmail.com', phone: '+8801971233127', address: 'Dadul, Kazihal, Attpukurhat, Fulbari, Dinajpur, Bangladesh', hours: 'Mon - Fri: 9AM - 6PM', whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm', telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1' };
+    const companyInfo = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('fw_company_info') || 'null') || defaultCompanyInfo; } catch(e){ return defaultCompanyInfo; } }, []);
+
     const contactInfo = [
       {
         icon: '📍',
         title: 'Office Location',
-        details: 'Dadul, Kazihal, Attpukurhat, Fulbari, Dinajpur, Bangladesh',
+        details: companyInfo.address,
         description: 'Visit us at our office'
       },
       {
         icon: '⏰',
         title: 'Business Hours',
-        details: 'Mon - Fri: 9AM - 6PM',
+        details: companyInfo.hours,
         description: 'Saturday by appointment'
       },
       {
         icon: '📧',
         title: 'Email Support',
-        details: 'fourwarriors24@gmail.com',
+        details: companyInfo.email,
         description: 'Response within 24 hours'
       },
       {
         icon: '☎️',
         title: 'Phone Support',
-        details: '+8801971233127',
+        details: companyInfo.phone,
         description: 'Available during business hours'
       }
     ];
@@ -82,7 +85,7 @@ function ContactApp() {
               <div>
                 <h2 className="text-3xl font-bold mb-6">Quick Connect</h2>
                 <div className="space-y-6">
-                  <a href="https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm" target="_blank" rel="noopener noreferrer" className="flex items-center p-6 bg-green-50 rounded-xl hover:bg-green-100 transition-colors">
+                  <a href={companyInfo.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center p-6 bg-green-50 rounded-xl hover:bg-green-100 transition-colors">
                     <div className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center mr-4 text-2xl">
                       💬
                     </div>
@@ -92,7 +95,7 @@ function ContactApp() {
                     </div>
                   </a>
 
-                  <a href="https://t.me/+rIv1Kf6xr7pmNTM1" target="_blank" rel="noopener noreferrer" className="flex items-center p-6 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors">
+                  <a href={companyInfo.telegram} target="_blank" rel="noopener noreferrer" className="flex items-center p-6 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors">
                     <div className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center mr-4 text-2xl">
                       ✈️
                     </div>
@@ -107,15 +110,15 @@ function ContactApp() {
                     <div className="space-y-3 text-sm">
                       <div>
                         <p className="text-[var(--text-light)]">📧 Email</p>
-                        <p className="font-semibold">fourwarriors24@gmail.com</p>
+                        <p className="font-semibold">{companyInfo.email}</p>
                       </div>
                       <div>
                         <p className="text-[var(--text-light)]">☎️ Phone</p>
-                        <p className="font-semibold">+8801971233127</p>
+                        <p className="font-semibold">{companyInfo.phone}</p>
                       </div>
                       <div>
                         <p className="text-[var(--text-light)]">⏰ Hours</p>
-                        <p className="font-semibold">Mon - Fri: 9AM - 6PM</p>
+                        <p className="font-semibold">{companyInfo.hours}</p>
                       </div>
                     </div>
                   </div>

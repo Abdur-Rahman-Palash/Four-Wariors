@@ -1,6 +1,6 @@
 function ServicesApp() {
   try {
-    const services = [
+    const defaultServices = [
       {
         icon: 'megaphone',
         title: 'Digital Marketing',
@@ -41,6 +41,8 @@ function ServicesApp() {
         ]
       }
     ];
+
+    const services = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('fw_services') || 'null') || defaultServices; } catch(e){ return defaultServices; } }, []);
 
     return (
       <div className="min-h-screen bg-white">
