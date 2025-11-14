@@ -1,12 +1,12 @@
 function AdminApp(){
   const { useState, useEffect, useRef } = React;
 
-  // ======== AUTH ========
+  // ======== AUTH & ROLES ========
   const DEFAULT_ADMIN_PASS = 'fwadmin123';
   const getSavedPass = () => { try { return localStorage.getItem('fw_admin_pass') || DEFAULT_ADMIN_PASS } catch(e){ return DEFAULT_ADMIN_PASS } };
-  const [isAuthed, setIsAuthed] = useState(() => {
-    try { return sessionStorage.getItem('fw_admin_authed') === '1'; } catch (e) { return false; }
-  });
+  
+  const [authMode, setAuthMode] = useState('login'); // 'login', 'team-select', 'authenticated'
+  const [userRole, setUserRole] = useState(null); // 'admin' or team member index
   const [pwInput, setPwInput] = useState('');
   const [showPw, setShowPw] = useState(false);
   const [showChangePass, setShowChangePass] = useState(false);
@@ -83,19 +83,26 @@ function AdminApp(){
   useEffect(() => { try { localStorage.setItem('fw_services', JSON.stringify(services)); } catch(e){} }, [services]);
 
   // ======== AUTH FUNCTIONS ========
-  function attemptLogin(e){
+  function attemptAdminLogin(e){
     e?.preventDefault();
     if (pwInput === getSavedPass()) {
-      try { sessionStorage.setItem('fw_admin_authed','1'); } catch(e){}
-      setIsAuthed(true); setPwInput('');
+      setUserRole('admin');
+      setAuthMode('authenticated');
+      setPwInput('');
     } else {
       alert('Incorrect password.');
     }
   }
 
+  function selectTeamMember(idx){
+    setUserRole(idx);
+    setAuthMode('authenticated');
+  }
+
   function handleLogout(){
-    try { sessionStorage.removeItem('fw_admin_authed'); } catch(e){}
-    setIsAuthed(false);
+    setAuthMode('login');
+    setUserRole(null);
+    setPwInput('');
   }
 
   function handleChangePassword(e){
@@ -134,7 +141,6 @@ function AdminApp(){
 
   // ======== PROJECT HANDLERS ========
   const resetProjectForm = () => { setProjectForm({ title: '', category: 'web', image: '', description: '', tools: '' }); setEditingProjectIdx(-1); if(projectFileRef.current) projectFileRef.current.value=''; };
-  
   async function handleAddProject(e){
     e?.preventDefault();
     if (!projectForm.title || !projectForm.description) return alert('Title and description are required');
@@ -153,14 +159,11 @@ function AdminApp(){
     }
     resetProjectForm();
   }
-
   function handleEditProject(idx){ const p = projects[idx]; setProjectForm({ title: p.title, category: p.category, image: p.image || '', description: p.description, tools: (p.tools || []).join(', ') }); setEditingProjectIdx(idx); window.scrollTo({top:0}); }
-  
   function handleDeleteProject(idx){ if(!confirm('Delete this project?')) return; const copy = projects.slice(); copy.splice(idx,1); setProjects(copy); }
 
   // ======== TEAM HANDLERS ========
   const resetTeamForm = () => { setTeamForm({ name: '', role: '', image: '', bio: '', portfolio: '', github: '', telegram: '', whatsapp: '' }); setEditingTeamIdx(-1); if(teamFileRef.current) teamFileRef.current.value=''; };
-  
   async function handleAddTeam(e){
     e?.preventDefault();
     if (!teamForm.name || !teamForm.role) return alert('Name and role are required');
@@ -179,14 +182,11 @@ function AdminApp(){
     }
     resetTeamForm();
   }
-
   function handleEditTeam(idx){ const m = team[idx]; setTeamForm({ name: m.name, role: m.role, image: m.image || '', bio: m.bio, portfolio: m.portfolio, github: m.github, telegram: m.telegram, whatsapp: m.whatsapp }); setEditingTeamIdx(idx); window.scrollTo({top:0}); }
-  
   function handleDeleteTeam(idx){ if(!confirm('Delete this team member?')) return; const copy = team.slice(); copy.splice(idx,1); setTeam(copy); }
 
   // ======== SERVICE HANDLERS ========
   const resetServiceForm = () => { setServiceForm({ icon: '', title: '', description: '', features: '' }); setEditingServiceIdx(-1); };
-  
   function handleAddService(e){
     e?.preventDefault();
     if (!serviceForm.title || !serviceForm.description) return alert('Title and description are required');
@@ -201,22 +201,76 @@ function AdminApp(){
     }
     resetServiceForm();
   }
-
   function handleEditService(idx){ const s = services[idx]; setServiceForm({ icon: s.icon, title: s.title, description: s.description, features: (s.features || []).join('\n') }); setEditingServiceIdx(idx); window.scrollTo({top:0}); }
-  
   function handleDeleteService(idx){ if(!confirm('Delete this service?')) return; const copy = services.slice(); copy.splice(idx,1); setServices(copy); }
 
-  // ======== LOGIN SCREEN ========
-  if (!isAuthed) {
+  // ======== LOGIN SCREEN - ROLE SELECTION ========
+  if (authMode === 'login') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="w-full max-w-md bg-white p-6 rounded shadow">
-          <h2 className="text-xl font-semibold mb-4">Admin Login</h2>
-          <p className="text-sm text-gray-600 mb-4">Enter the admin password to access the website content management panel.</p>
+          <h2 className="text-xl font-semibold mb-4">Admin Access</h2>
+          <p className="text-sm text-gray-600 mb-6">Choose your role to continue:</p>
+          
+          <div className="space-y-3 mb-6">
+            <button onClick={() => setAuthMode('team-select')} className="w-full px-4 py-3 bg-blue-50 border-2 border-blue-300 rounded hover:bg-blue-100 transition-colors text-left">
+              <h3 className="font-bold text-blue-700">👥 I am a Team Member</h3>
+              <p className="text-xs text-blue-600">Edit your profile (no password needed)</p>
+            </button>
+            
+            <button onClick={() => setAuthMode('admin-login')} className="w-full px-4 py-3 bg-purple-50 border-2 border-purple-300 rounded hover:bg-purple-100 transition-colors text-left">
+              <h3 className="font-bold text-purple-700">🔐 I am the Super Admin</h3>
+              <p className="text-xs text-purple-600">Full access (password required)</p>
+            </button>
+          </div>
+
+          <div className="text-xs text-gray-400 text-center">
+            <p>This is a role-based access control system</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ======== TEAM MEMBER SELECT ========
+  if (authMode === 'team-select') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="w-full max-w-2xl">
+          <button onClick={() => setAuthMode('login')} className="mb-6 px-4 py-2 bg-gray-200 rounded text-sm">← Back</button>
+          
+          <h2 className="text-2xl font-bold mb-2">Select Your Profile</h2>
+          <p className="text-gray-600 mb-6">Choose your name to edit your profile</p>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {team.map((member, idx) => (
+              <button key={idx} onClick={() => selectTeamMember(idx)} className="p-4 bg-white border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-lg transition-all text-left">
+                <div className="w-16 h-16 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
+                  {member.image ? <img src={member.image} alt={member.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-xs">No image</span>}
+                </div>
+                <h3 className="font-bold text-lg">{member.name}</h3>
+                <p className="text-sm text-blue-600">{member.role}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ======== SUPER ADMIN LOGIN ========
+  if (authMode === 'admin-login') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="w-full max-w-md bg-white p-6 rounded shadow">
+          <button onClick={() => setAuthMode('login')} className="mb-4 text-sm text-gray-600 hover:text-gray-800">← Back to role selection</button>
+          
+          <h2 className="text-xl font-semibold mb-4">Super Admin Login</h2>
+          <p className="text-sm text-gray-600 mb-4">Enter the admin password for full website access.</p>
           
           {!showSetPassOnLogin ? (
             <>
-              <form onSubmit={attemptLogin} className="space-y-4">
+              <form onSubmit={attemptAdminLogin} className="space-y-4">
                 <div className="relative">
                   <input type={showPw ? "text" : "password"} value={pwInput} onChange={e=>setPwInput(e.target.value)} placeholder="Password" className="w-full border px-3 py-2 rounded pr-10" />
                   <button type="button" onClick={()=>setShowPw(!showPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
@@ -254,21 +308,28 @@ function AdminApp(){
     );
   }
 
-  // ======== ADMIN DASHBOARD ========
+  // ======== AUTHENTICATED DASHBOARD ========
+  const isAdmin = userRole === 'admin';
+  const currentMemberIdx = typeof userRole === 'number' ? userRole : -1;
+  const currentMember = currentMemberIdx >= 0 ? team[currentMemberIdx] : null;
+
   return (
     <div>
       <Header />
       <div className="max-w-7xl mx-auto py-6 px-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold">Website CMS Admin</h1>
+          <div>
+            <h1 className="text-3xl font-bold">{isAdmin ? 'Website CMS Admin' : `Team Profile: ${currentMember?.name}`}</h1>
+            <p className="text-gray-600 mt-1">{isAdmin ? 'Full website management' : 'Edit your profile information'}</p>
+          </div>
           <div className="flex items-center gap-3">
-            <button onClick={()=>setShowChangePass(!showChangePass)} className="px-3 py-2 border rounded text-sm">{showChangePass ? 'Close' : 'Change password'}</button>
+            {isAdmin && <button onClick={()=>setShowChangePass(!showChangePass)} className="px-3 py-2 border rounded text-sm">{showChangePass ? 'Close' : 'Change password'}</button>}
             <button onClick={handleLogout} className="px-3 py-2 bg-red-600 text-white rounded text-sm">Logout</button>
           </div>
         </div>
 
-        {showChangePass && (
+        {isAdmin && showChangePass && (
           <form onSubmit={handleChangePassword} className="bg-white p-4 rounded shadow mb-6 max-w-md">
             <h3 className="font-semibold mb-2">Set new admin password</h3>
             <div className="mb-2 relative">
@@ -290,258 +351,328 @@ function AdminApp(){
           </form>
         )}
 
-        {/* Tabs */}
-        <div className="bg-white rounded-lg shadow mb-6">
-          <div className="flex border-b overflow-x-auto">
-            {['company', 'team', 'services', 'projects'].map(tab => (
-              <button key={tab} onClick={()=>setActiveTab(tab)} className={`px-4 py-3 font-medium capitalize whitespace-nowrap ${activeTab===tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}>
-                {tab === 'company' ? '🏢 Company' : tab === 'team' ? '👥 Team' : tab === 'services' ? '⚙️ Services' : '📁 Projects'}
-              </button>
-            ))}
-          </div>
+        {/* ADMIN TABS */}
+        {isAdmin && (
+          <div className="bg-white rounded-lg shadow mb-6">
+            <div className="flex border-b overflow-x-auto">
+              {['company', 'team', 'services', 'projects'].map(tab => (
+                <button key={tab} onClick={()=>setActiveTab(tab)} className={`px-4 py-3 font-medium capitalize whitespace-nowrap ${activeTab===tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}>
+                  {tab === 'company' ? '🏢 Company' : tab === 'team' ? '👥 Team' : tab === 'services' ? '⚙️ Services' : '📁 Projects'}
+                </button>
+              ))}
+            </div>
 
-          <div className="p-6">
-            {/* COMPANY TAB */}
-            {activeTab === 'company' && (
-              <div>
-                <h2 className="text-2xl font-bold mb-6">Company Information</h2>
-                <div className="bg-gray-50 p-6 rounded">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Company Name</label>
-                      <input value={companyInfo.name} onChange={e=>setCompanyInfo({...companyInfo, name:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Tagline</label>
-                      <input value={companyInfo.tagline} onChange={e=>setCompanyInfo({...companyInfo, tagline:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium mb-1">Address</label>
-                      <textarea value={companyInfo.address} onChange={e=>setCompanyInfo({...companyInfo, address:e.target.value})} className="w-full border px-3 py-2 rounded h-20"></textarea>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Email</label>
-                      <input value={companyInfo.email} onChange={e=>setCompanyInfo({...companyInfo, email:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Phone</label>
-                      <input value={companyInfo.phone} onChange={e=>setCompanyInfo({...companyInfo, phone:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Website</label>
-                      <input value={companyInfo.website} onChange={e=>setCompanyInfo({...companyInfo, website:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Business Hours</label>
-                      <input value={companyInfo.hours} onChange={e=>setCompanyInfo({...companyInfo, hours:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Facebook URL</label>
-                      <input value={companyInfo.facebook} onChange={e=>setCompanyInfo({...companyInfo, facebook:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Twitter URL</label>
-                      <input value={companyInfo.twitter} onChange={e=>setCompanyInfo({...companyInfo, twitter:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Instagram URL</label>
-                      <input value={companyInfo.instagram} onChange={e=>setCompanyInfo({...companyInfo, instagram:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">LinkedIn URL</label>
-                      <input value={companyInfo.linkedin} onChange={e=>setCompanyInfo({...companyInfo, linkedin:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-4">💾 Changes are saved automatically.</p>
-                </div>
-              </div>
-            )}
-
-            {/* TEAM TAB */}
-            {activeTab === 'team' && (
-              <div>
-                <h2 className="text-2xl font-bold mb-6">Team Members</h2>
-                <form onSubmit={handleAddTeam} className="bg-gray-50 p-6 rounded mb-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Name *</label>
-                      <input value={teamForm.name} onChange={e=>setTeamForm({...teamForm, name:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Role *</label>
-                      <input value={teamForm.role} onChange={e=>setTeamForm({...teamForm, role:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Image URL</label>
-                      <input value={teamForm.image} onChange={e=>setTeamForm({...teamForm, image:e.target.value})} placeholder="https://... or upload" className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Or Upload Image</label>
-                      <input ref={teamFileRef} type="file" accept="image/*" className="w-full" />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium mb-1">Bio</label>
-                      <textarea value={teamForm.bio} onChange={e=>setTeamForm({...teamForm, bio:e.target.value})} className="w-full border px-3 py-2 rounded h-20"></textarea>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Portfolio URL</label>
-                      <input value={teamForm.portfolio} onChange={e=>setTeamForm({...teamForm, portfolio:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">GitHub URL</label>
-                      <input value={teamForm.github} onChange={e=>setTeamForm({...teamForm, github:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Telegram URL</label>
-                      <input value={teamForm.telegram} onChange={e=>setTeamForm({...teamForm, telegram:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">WhatsApp URL</label>
-                      <input value={teamForm.whatsapp} onChange={e=>setTeamForm({...teamForm, whatsapp:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                  </div>
-                  <div className="flex gap-3 mt-4">
-                    <button type="submit" className="btn-primary">{editingTeamIdx>=0 ? 'Save changes' : 'Add member'}</button>
-                    <button type="button" onClick={resetTeamForm} className="px-4 py-2 border rounded">Reset</button>
-                  </div>
-                </form>
-
-                <h3 className="text-xl font-semibold mb-4">Team Members ({team.length})</h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {team.map((m, idx) => (
-                    <div key={idx} className="bg-white border rounded p-4">
-                      <div className="w-full h-40 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
-                        {m.image ? <img src={m.image} alt={m.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+            <div className="p-6">
+              {/* COMPANY TAB */}
+              {activeTab === 'company' && (
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">Company Information</h2>
+                  <div className="bg-gray-50 p-6 rounded">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Company Name</label>
+                        <input value={companyInfo.name} onChange={e=>setCompanyInfo({...companyInfo, name:e.target.value})} className="w-full border px-3 py-2 rounded" />
                       </div>
-                      <h4 className="font-bold">{m.name}</h4>
-                      <p className="text-sm text-blue-600 mb-2">{m.role}</p>
-                      <p className="text-xs text-gray-600 line-clamp-2 mb-3">{m.bio}</p>
-                      <div className="flex gap-2">
-                        <button onClick={()=>handleEditTeam(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
-                        <button onClick={()=>handleDeleteTeam(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Tagline</label>
+                        <input value={companyInfo.tagline} onChange={e=>setCompanyInfo({...companyInfo, tagline:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">Address</label>
+                        <textarea value={companyInfo.address} onChange={e=>setCompanyInfo({...companyInfo, address:e.target.value})} className="w-full border px-3 py-2 rounded h-20"></textarea>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Email</label>
+                        <input value={companyInfo.email} onChange={e=>setCompanyInfo({...companyInfo, email:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Phone</label>
+                        <input value={companyInfo.phone} onChange={e=>setCompanyInfo({...companyInfo, phone:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Website</label>
+                        <input value={companyInfo.website} onChange={e=>setCompanyInfo({...companyInfo, website:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Business Hours</label>
+                        <input value={companyInfo.hours} onChange={e=>setCompanyInfo({...companyInfo, hours:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Facebook URL</label>
+                        <input value={companyInfo.facebook} onChange={e=>setCompanyInfo({...companyInfo, facebook:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Twitter URL</label>
+                        <input value={companyInfo.twitter} onChange={e=>setCompanyInfo({...companyInfo, twitter:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Instagram URL</label>
+                        <input value={companyInfo.instagram} onChange={e=>setCompanyInfo({...companyInfo, instagram:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">LinkedIn URL</label>
+                        <input value={companyInfo.linkedin} onChange={e=>setCompanyInfo({...companyInfo, linkedin:e.target.value})} className="w-full border px-3 py-2 rounded" />
                       </div>
                     </div>
-                  ))}
+                    <p className="text-xs text-gray-500 mt-4">💾 Changes are saved automatically.</p>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* SERVICES TAB */}
-            {activeTab === 'services' && (
-              <div>
-                <h2 className="text-2xl font-bold mb-6">Services</h2>
-                <form onSubmit={handleAddService} className="bg-gray-50 p-6 rounded mb-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Icon (text or emoji)</label>
-                      <input value={serviceForm.icon} onChange={e=>setServiceForm({...serviceForm, icon:e.target.value})} placeholder="e.g. megaphone, palette, code" className="w-full border px-3 py-2 rounded" />
+              {/* TEAM TAB */}
+              {activeTab === 'team' && (
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">Team Members</h2>
+                  <form onSubmit={handleAddTeam} className="bg-gray-50 p-6 rounded mb-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Name *</label>
+                        <input value={teamForm.name} onChange={e=>setTeamForm({...teamForm, name:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Role *</label>
+                        <input value={teamForm.role} onChange={e=>setTeamForm({...teamForm, role:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Image URL</label>
+                        <input value={teamForm.image} onChange={e=>setTeamForm({...teamForm, image:e.target.value})} placeholder="https://... or upload" className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Or Upload Image</label>
+                        <input ref={teamFileRef} type="file" accept="image/*" className="w-full" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">Bio</label>
+                        <textarea value={teamForm.bio} onChange={e=>setTeamForm({...teamForm, bio:e.target.value})} className="w-full border px-3 py-2 rounded h-20"></textarea>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Portfolio URL</label>
+                        <input value={teamForm.portfolio} onChange={e=>setTeamForm({...teamForm, portfolio:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">GitHub URL</label>
+                        <input value={teamForm.github} onChange={e=>setTeamForm({...teamForm, github:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Telegram URL</label>
+                        <input value={teamForm.telegram} onChange={e=>setTeamForm({...teamForm, telegram:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">WhatsApp URL</label>
+                        <input value={teamForm.whatsapp} onChange={e=>setTeamForm({...teamForm, whatsapp:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Title *</label>
-                      <input value={serviceForm.title} onChange={e=>setServiceForm({...serviceForm, title:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                    <div className="flex gap-3 mt-4">
+                      <button type="submit" className="btn-primary">{editingTeamIdx>=0 ? 'Save changes' : 'Add member'}</button>
+                      <button type="button" onClick={resetTeamForm} className="px-4 py-2 border rounded">Reset</button>
                     </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium mb-1">Description *</label>
-                      <textarea value={serviceForm.description} onChange={e=>setServiceForm({...serviceForm, description:e.target.value})} className="w-full border px-3 py-2 rounded h-20"></textarea>
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium mb-1">Features (one per line)</label>
-                      <textarea value={serviceForm.features} onChange={e=>setServiceForm({...serviceForm, features:e.target.value})} className="w-full border px-3 py-2 rounded h-32"></textarea>
-                    </div>
-                  </div>
-                  <div className="flex gap-3 mt-4">
-                    <button type="submit" className="btn-primary">{editingServiceIdx>=0 ? 'Save changes' : 'Add service'}</button>
-                    <button type="button" onClick={resetServiceForm} className="px-4 py-2 border rounded">Reset</button>
-                  </div>
-                </form>
+                  </form>
 
-                <h3 className="text-xl font-semibold mb-4">Services ({services.length})</h3>
-                <div className="space-y-4">
-                  {services.map((s, idx) => (
-                    <div key={idx} className="bg-white border rounded p-4">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h4 className="font-bold text-lg">{s.title}</h4>
-                          <p className="text-sm text-gray-600 mb-3">{s.description}</p>
-                          <div className="text-xs text-gray-500 space-y-1">
-                            {(s.features || []).slice(0, 3).map((f, i) => <div key={i}>• {f}</div>)}
-                            {(s.features || []).length > 3 && <div>• ... and {(s.features || []).length - 3} more</div>}
+                  <h3 className="text-xl font-semibold mb-4">Team Members ({team.length})</h3>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {team.map((m, idx) => (
+                      <div key={idx} className="bg-white border rounded p-4">
+                        <div className="w-full h-40 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
+                          {m.image ? <img src={m.image} alt={m.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+                        </div>
+                        <h4 className="font-bold">{m.name}</h4>
+                        <p className="text-sm text-blue-600 mb-2">{m.role}</p>
+                        <p className="text-xs text-gray-600 line-clamp-2 mb-3">{m.bio}</p>
+                        <div className="flex gap-2">
+                          <button onClick={()=>handleEditTeam(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
+                          <button onClick={()=>handleDeleteTeam(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* SERVICES TAB */}
+              {activeTab === 'services' && (
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">Services</h2>
+                  <form onSubmit={handleAddService} className="bg-gray-50 p-6 rounded mb-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Icon (text or emoji)</label>
+                        <input value={serviceForm.icon} onChange={e=>setServiceForm({...serviceForm, icon:e.target.value})} placeholder="e.g. megaphone, palette, code" className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Title *</label>
+                        <input value={serviceForm.title} onChange={e=>setServiceForm({...serviceForm, title:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">Description *</label>
+                        <textarea value={serviceForm.description} onChange={e=>setServiceForm({...serviceForm, description:e.target.value})} className="w-full border px-3 py-2 rounded h-20"></textarea>
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">Features (one per line)</label>
+                        <textarea value={serviceForm.features} onChange={e=>setServiceForm({...serviceForm, features:e.target.value})} className="w-full border px-3 py-2 rounded h-32"></textarea>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 mt-4">
+                      <button type="submit" className="btn-primary">{editingServiceIdx>=0 ? 'Save changes' : 'Add service'}</button>
+                      <button type="button" onClick={resetServiceForm} className="px-4 py-2 border rounded">Reset</button>
+                    </div>
+                  </form>
+
+                  <h3 className="text-xl font-semibold mb-4">Services ({services.length})</h3>
+                  <div className="space-y-4">
+                    {services.map((s, idx) => (
+                      <div key={idx} className="bg-white border rounded p-4">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h4 className="font-bold text-lg">{s.title}</h4>
+                            <p className="text-sm text-gray-600 mb-3">{s.description}</p>
+                            <div className="text-xs text-gray-500 space-y-1">
+                              {(s.features || []).slice(0, 3).map((f, i) => <div key={i}>• {f}</div>)}
+                              {(s.features || []).length > 3 && <div>• ... and {(s.features || []).length - 3} more</div>}
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button onClick={()=>handleEditService(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
+                            <button onClick={()=>handleDeleteService(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
                           </div>
                         </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* PROJECTS TAB */}
+              {activeTab === 'projects' && (
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">Projects Portfolio</h2>
+                  <form onSubmit={handleAddProject} className="bg-gray-50 p-6 rounded mb-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Title *</label>
+                        <input value={projectForm.title} onChange={e=>setProjectForm({...projectForm, title:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Category</label>
+                        <select value={projectForm.category} onChange={e=>setProjectForm({...projectForm, category:e.target.value})} className="w-full border px-3 py-2 rounded">
+                          <option value="web">Web</option>
+                          <option value="design">Design</option>
+                          <option value="marketing">Marketing</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Image URL</label>
+                        <input value={projectForm.image} onChange={e=>setProjectForm({...projectForm, image:e.target.value})} placeholder="https://... or upload" className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Or Upload Image</label>
+                        <input ref={projectFileRef} type="file" accept="image/*" className="w-full" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">Description *</label>
+                        <textarea value={projectForm.description} onChange={e=>setProjectForm({...projectForm, description:e.target.value})} className="w-full border px-3 py-2 rounded h-24"></textarea>
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">Tools (comma separated)</label>
+                        <input value={projectForm.tools} onChange={e=>setProjectForm({...projectForm, tools:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                    </div>
+                    <div className="flex gap-3 mt-4">
+                      <button type="submit" className="btn-primary">{editingProjectIdx>=0 ? 'Save changes' : 'Add project'}</button>
+                      <button type="button" onClick={resetProjectForm} className="px-4 py-2 border rounded">Reset</button>
+                    </div>
+                  </form>
+
+                  <h3 className="text-xl font-semibold mb-4">Projects ({projects.length})</h3>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {projects.map((p, idx) => (
+                      <div key={idx} className="bg-white rounded-lg shadow p-4">
+                        <div className="w-full h-40 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
+                          {p.image ? <img src={p.image} alt={p.title} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+                        </div>
+                        <h4 className="font-bold">{p.title}</h4>
+                        <p className="text-xs text-blue-600 mb-1">{p.category}</p>
+                        <p className="text-sm text-gray-600 line-clamp-2 mb-2">{p.description}</p>
+                        <p className="text-xs text-gray-500 mb-3">{(p.tools || []).join(', ')}</p>
                         <div className="flex gap-2">
-                          <button onClick={()=>handleEditService(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
-                          <button onClick={()=>handleDeleteService(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
+                          <button onClick={()=>handleEditProject(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
+                          <button onClick={()=>handleDeleteProject(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* PROJECTS TAB */}
-            {activeTab === 'projects' && (
-              <div>
-                <h2 className="text-2xl font-bold mb-6">Projects Portfolio</h2>
-                <form onSubmit={handleAddProject} className="bg-gray-50 p-6 rounded mb-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Title *</label>
-                      <input value={projectForm.title} onChange={e=>setProjectForm({...projectForm, title:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Category</label>
-                      <select value={projectForm.category} onChange={e=>setProjectForm({...projectForm, category:e.target.value})} className="w-full border px-3 py-2 rounded">
-                        <option value="web">Web</option>
-                        <option value="design">Design</option>
-                        <option value="marketing">Marketing</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Image URL</label>
-                      <input value={projectForm.image} onChange={e=>setProjectForm({...projectForm, image:e.target.value})} placeholder="https://... or upload" className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Or Upload Image</label>
-                      <input ref={projectFileRef} type="file" accept="image/*" className="w-full" />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium mb-1">Description *</label>
-                      <textarea value={projectForm.description} onChange={e=>setProjectForm({...projectForm, description:e.target.value})} className="w-full border px-3 py-2 rounded h-24"></textarea>
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium mb-1">Tools (comma separated)</label>
-                      <input value={projectForm.tools} onChange={e=>setProjectForm({...projectForm, tools:e.target.value})} className="w-full border px-3 py-2 rounded" />
-                    </div>
+                    ))}
                   </div>
-                  <div className="flex gap-3 mt-4">
-                    <button type="submit" className="btn-primary">{editingProjectIdx>=0 ? 'Save changes' : 'Add project'}</button>
-                    <button type="button" onClick={resetProjectForm} className="px-4 py-2 border rounded">Reset</button>
-                  </div>
-                </form>
-
-                <h3 className="text-xl font-semibold mb-4">Projects ({projects.length})</h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {projects.map((p, idx) => (
-                    <div key={idx} className="bg-white rounded-lg shadow p-4">
-                      <div className="w-full h-40 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
-                        {p.image ? <img src={p.image} alt={p.title} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
-                      </div>
-                      <h4 className="font-bold">{p.title}</h4>
-                      <p className="text-xs text-blue-600 mb-1">{p.category}</p>
-                      <p className="text-sm text-gray-600 line-clamp-2 mb-2">{p.description}</p>
-                      <p className="text-xs text-gray-500 mb-3">{(p.tools || []).join(', ')}</p>
-                      <div className="flex gap-2">
-                        <button onClick={()=>handleEditProject(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
-                        <button onClick={()=>handleDeleteProject(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
-                      </div>
-                    </div>
-                  ))}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* TEAM MEMBER PROFILE EDIT (non-admin) */}
+        {!isAdmin && currentMember && (
+          <div className="bg-white rounded-lg shadow p-6 max-w-2xl">
+            <h2 className="text-2xl font-bold mb-6">Edit Your Profile</h2>
+            
+            <form onSubmit={(e) => { e.preventDefault(); handleEditTeam(currentMemberIdx); }} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Profile Photo</label>
+                <div className="w-32 h-32 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
+                  {teamForm.image || currentMember.image ? <img src={teamForm.image || currentMember.image} alt={currentMember.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Image URL</label>
+                <input value={teamForm.image} onChange={e=>setTeamForm({...teamForm, image:e.target.value})} placeholder="https://... or upload below" className="w-full border px-3 py-2 rounded" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Or Upload New Image</label>
+                <input ref={teamFileRef} type="file" accept="image/*" className="w-full" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Full Name</label>
+                <input value={teamForm.name} onChange={e=>setTeamForm({...teamForm, name:e.target.value})} className="w-full border px-3 py-2 rounded" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Job Title</label>
+                <input value={teamForm.role} onChange={e=>setTeamForm({...teamForm, role:e.target.value})} className="w-full border px-3 py-2 rounded" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Bio / About You</label>
+                <textarea value={teamForm.bio} onChange={e=>setTeamForm({...teamForm, bio:e.target.value})} className="w-full border px-3 py-2 rounded h-24"></textarea>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Portfolio URL</label>
+                <input value={teamForm.portfolio} onChange={e=>setTeamForm({...teamForm, portfolio:e.target.value})} placeholder="https://..." className="w-full border px-3 py-2 rounded" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">GitHub URL</label>
+                <input value={teamForm.github} onChange={e=>setTeamForm({...teamForm, github:e.target.value})} placeholder="https://..." className="w-full border px-3 py-2 rounded" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Telegram URL</label>
+                <input value={teamForm.telegram} onChange={e=>setTeamForm({...teamForm, telegram:e.target.value})} placeholder="https://..." className="w-full border px-3 py-2 rounded" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">WhatsApp URL</label>
+                <input value={teamForm.whatsapp} onChange={e=>setTeamForm({...teamForm, whatsapp:e.target.value})} placeholder="https://..." className="w-full border px-3 py-2 rounded" />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button type="submit" className="btn-primary">Save Changes</button>
+                <button type="button" onClick={() => { resetTeamForm(); setTeamForm(currentMember); }} className="px-4 py-2 border rounded">Reset</button>
+              </div>
+            </form>
+
+            <p className="text-xs text-gray-500 mt-6">💾 Changes are saved automatically.</p>
+          </div>
+        )}
       </div>
       <Footer />
     </div>
