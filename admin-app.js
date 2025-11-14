@@ -92,7 +92,11 @@ function AdminApp(){
     }
   }
 
-  const resetForm = () => setForm({ title: '', category: 'web', image: '', description: '', tools: '' });
+  const resetForm = () => {
+    setForm({ title: '', category: 'web', image: '', description: '', tools: '' });
+    setEditingIndex(-1);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
 
   const onFile = (file) => {
     return new Promise((resolve, reject) => {
@@ -142,29 +146,6 @@ function AdminApp(){
     const copy = projects.slice();
     copy.splice(idx,1);
     setProjects(copy);
-  }
-
-  function handleExport(){
-    const data = JSON.stringify(projects, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'projects.json'; a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function handleImport(e){
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        if (!Array.isArray(parsed)) throw new Error('Invalid file');
-        setProjects(parsed);
-      } catch (err){ alert('Invalid JSON file'); }
-    };
-    reader.readAsText(file);
   }
 
   if (!isAuthed) {
@@ -293,12 +274,7 @@ function AdminApp(){
 
           <div className="flex items-center gap-3 mt-4">
             <button type="submit" className="btn-primary">{editingIndex >=0 ? 'Save changes' : 'Add project'}</button>
-            <button type="button" onClick={()=>{ resetForm(); setEditingIndex(-1); if (fileInputRef.current) fileInputRef.current.value=''; }} className="px-4 py-2 border rounded">Reset</button>
-            <button type="button" onClick={handleExport} className="px-4 py-2 border rounded">Export JSON</button>
-            <label className="px-4 py-2 border rounded cursor-pointer">
-              Import JSON
-              <input type="file" accept="application/json" onChange={handleImport} className="hidden" />
-            </label>
+            <button type="button" onClick={resetForm} className="px-4 py-2 border rounded">Reset</button>
           </div>
         </form>
 
