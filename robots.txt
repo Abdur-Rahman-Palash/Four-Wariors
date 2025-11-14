@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /admin-app.js
+
+# Crawl delay
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://four-wariors.vercel.app/sitemap.xml
+
+# Google Search Console
+User-agent: Googlebot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
