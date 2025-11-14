@@ -1,7 +1,10 @@
 function Footer() {
   try {
     const defaultCompanyInfo = { name: 'CreativeAgency', tagline: 'Designing, developing & marketing digital experiences that deliver results.', address: 'Dadul, Kazihal, Attpukurhat, Fulbari, Dinajpur, Bangladesh', website: 'four-wariors.vercel.app', facebook: 'https://www.facebook.com/', twitter: 'https://twitter.com/', instagram: 'https://www.instagram.com/', linkedin: 'https://www.linkedin.com/' };
+    const defaultFooter = { about: 'We are a creative agency specializing in digital transformation.', copyright: '© 2025 CreativeAgency. All rights reserved.', quickLinks: 'Home, About, Services, Portfolio, Contact', footerEmail: 'info@creativeagency.com', footerPhone: '+8801971233127' };
     const companyInfo = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('fw_company_info') || 'null') || defaultCompanyInfo; } catch(e){ return defaultCompanyInfo; } }, []);
+    const footerData = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('fw_footer') || 'null') || defaultFooter; } catch(e){ return defaultFooter; } }, []);
+    const quickLinksList = footerData.quickLinks.split(',').map(link => link.trim()).filter(Boolean);
 
     return (
       <footer className="bg-slate-900 text-white section-padding" data-name="footer" data-file="components/Footer.js">
@@ -9,16 +12,22 @@ function Footer() {
           <div className="grid md:grid-cols-5 gap-8 mb-8">
             <div>
               <h3 className="text-2xl font-bold mb-4 text-gradient">{companyInfo.name}</h3>
-              <p className="text-gray-400">{companyInfo.tagline}</p>
+              <p className="text-gray-400">{footerData.about}</p>
             </div>
             
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <div className="space-y-2">
-                <a href="index.html" className="block text-gray-400 hover:text-white transition-colors">Home</a>
-                <a href="about.html" className="block text-gray-400 hover:text-white transition-colors">About</a>
-                <a href="services.html" className="block text-gray-400 hover:text-white transition-colors">Services</a>
-                <a href="portfolio.html" className="block text-gray-400 hover:text-white transition-colors">Portfolio</a>
+                {quickLinksList.length > 0 ? quickLinksList.map((link, idx) => {
+                  const lowerLink = link.toLowerCase();
+                  const href = lowerLink === 'home' ? 'index.html' : lowerLink === 'about' ? 'about.html' : lowerLink === 'services' ? 'services.html' : lowerLink === 'portfolio' ? 'portfolio.html' : 'contact.html';
+                  return <a key={idx} href={href} className="block text-gray-400 hover:text-white transition-colors">{link}</a>;
+                }) : <>
+                  <a href="index.html" className="block text-gray-400 hover:text-white transition-colors">Home</a>
+                  <a href="about.html" className="block text-gray-400 hover:text-white transition-colors">About</a>
+                  <a href="services.html" className="block text-gray-400 hover:text-white transition-colors">Services</a>
+                  <a href="portfolio.html" className="block text-gray-400 hover:text-white transition-colors">Portfolio</a>
+                </>}
               </div>
             </div>
 
@@ -53,13 +62,15 @@ function Footer() {
               <h4 className="font-semibold mb-4">Visit Us</h4>
               <div className="space-y-2 text-gray-400 text-sm">
                 <p>{companyInfo.address}</p>
+                <p className="mt-1"><a href={`mailto:${footerData.footerEmail}`} className="text-white hover:text-[var(--primary-color)] transition-colors">{footerData.footerEmail}</a></p>
+                <p><a href={`tel:${footerData.footerPhone}`} className="text-white hover:text-[var(--primary-color)] transition-colors">{footerData.footerPhone}</a></p>
                 <p className="mt-3"><a href={`https://${companyInfo.website}`} target="_blank" rel="noopener noreferrer" className="text-white hover:text-[var(--primary-color)] transition-colors">{companyInfo.website}</a></p>
               </div>
             </div>
           </div>
 
           <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 CreativeAgency. All rights reserved.</p>
+            <p>{footerData.copyright}</p>
           </div>
         </div>
       </footer>

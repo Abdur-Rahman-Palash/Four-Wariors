@@ -17,6 +17,15 @@ function AdminApp(){
   const [showConfirmPw, setShowConfirmPw] = useState(false);
   const [activeTab, setActiveTab] = useState('projects');
 
+  // ======== FOOTER DATA ========
+  const defaultFooter = {
+    about: 'We are a creative agency specializing in digital transformation.',
+    copyright: '© 2025 CreativeAgency. All rights reserved.',
+    quickLinks: 'Home, About, Services, Portfolio, Contact',
+    footerEmail: 'info@creativeagency.com',
+    footerPhone: '+8801971233127'
+  };
+
   // ======== DEFAULT DATA ========
   const defaultProjects = [{
     title: 'E-Commerce Platform', category: 'web', image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=600&q=80',
@@ -64,6 +73,7 @@ function AdminApp(){
   const [companyInfo, setCompanyInfo] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_company_info') || 'null') || defaultCompanyInfo; } catch(e){ return defaultCompanyInfo; } });
   const [team, setTeam] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_team') || 'null') || defaultTeam; } catch(e){ return defaultTeam; } });
   const [services, setServices] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_services') || 'null') || defaultServices; } catch(e){ return defaultServices; } });
+  const [footer, setFooter] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_footer') || 'null') || defaultFooter; } catch(e){ return defaultFooter; } });
 
   const [projectForm, setProjectForm] = useState({ title: '', category: 'web', image: '', description: '', tools: '' });
   const [editingProjectIdx, setEditingProjectIdx] = useState(-1);
@@ -81,6 +91,7 @@ function AdminApp(){
   useEffect(() => { try { localStorage.setItem('fw_company_info', JSON.stringify(companyInfo)); } catch(e){} }, [companyInfo]);
   useEffect(() => { try { localStorage.setItem('fw_team', JSON.stringify(team)); } catch(e){} }, [team]);
   useEffect(() => { try { localStorage.setItem('fw_services', JSON.stringify(services)); } catch(e){} }, [services]);
+  useEffect(() => { try { localStorage.setItem('fw_footer', JSON.stringify(footer)); } catch(e){} }, [footer]);
 
   // ======== AUTH FUNCTIONS ========
   function attemptAdminLogin(e){
@@ -355,9 +366,9 @@ function AdminApp(){
         {isAdmin && (
           <div className="bg-white rounded-lg shadow mb-6">
             <div className="flex border-b overflow-x-auto">
-              {['company', 'team', 'services', 'projects'].map(tab => (
+              {['company', 'team', 'services', 'projects', 'footer'].map(tab => (
                 <button key={tab} onClick={()=>setActiveTab(tab)} className={`px-4 py-3 font-medium capitalize whitespace-nowrap ${activeTab===tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}>
-                  {tab === 'company' ? '🏢 Company' : tab === 'team' ? '👥 Team' : tab === 'services' ? '⚙️ Services' : '📁 Projects'}
+                  {tab === 'company' ? '🏢 Company' : tab === 'team' ? '👥 Team' : tab === 'services' ? '⚙️ Services' : tab === 'projects' ? '📁 Projects' : '📄 Footer'}
                 </button>
               ))}
             </div>
@@ -599,6 +610,38 @@ function AdminApp(){
                         </div>
                       </div>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* FOOTER TAB */}
+              {activeTab === 'footer' && (
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">Footer Settings</h2>
+                  <div className="bg-gray-50 p-6 rounded">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">About Section Text</label>
+                        <textarea value={footer.about} onChange={e=>setFooter({...footer, about:e.target.value})} className="w-full border px-3 py-2 rounded h-20"></textarea>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Footer Email</label>
+                        <input value={footer.footerEmail} onChange={e=>setFooter({...footer, footerEmail:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Footer Phone</label>
+                        <input value={footer.footerPhone} onChange={e=>setFooter({...footer, footerPhone:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Quick Links (comma separated)</label>
+                        <input value={footer.quickLinks} onChange={e=>setFooter({...footer, quickLinks:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Copyright Text</label>
+                        <input value={footer.copyright} onChange={e=>setFooter({...footer, copyright:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-4">💾 Changes are saved automatically.</p>
                   </div>
                 </div>
               )}
