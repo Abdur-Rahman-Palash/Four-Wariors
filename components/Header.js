@@ -46,7 +46,7 @@ function Header() {
                 <div key={index} className="relative group">
                   {item.hasDropdown ? (
                     <>
-                      <button 
+                      <button type="button"
                         onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
                         className="text-[var(--text-dark)] hover:text-[var(--primary-color)] transition-colors flex items-center gap-1"
                       >
@@ -57,7 +57,7 @@ function Header() {
                       {isServicesDropdownOpen && (
                         <div className="absolute left-0 mt-0 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
                           {serviceItems.map((service, sIndex) => (
-                            <button
+                            <button type="button"
                               key={sIndex}
                               onClick={() => handleServiceClick(service.id)}
                               className="w-full text-left px-4 py-2 text-[var(--text-dark)] hover:bg-[var(--secondary-color)] hover:text-[var(--primary-color)] transition-colors"
@@ -92,7 +92,7 @@ function Header() {
               <a href="contact.html#hire" className="btn-primary">Hire Us</a>
             </div>
 
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden text-2xl">
+            <button type="button" onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden text-2xl">
               {isMenuOpen ? '✕' : '☰'}
             </button>
           </div>
@@ -103,7 +103,7 @@ function Header() {
                 <div key={index}>
                   {item.hasDropdown ? (
                     <>
-                      <button 
+                      <button type="button" 
                         onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
                         className="w-full text-left py-2 text-[var(--text-dark)] hover:text-[var(--primary-color)] flex justify-between items-center"
                       >
@@ -114,7 +114,7 @@ function Header() {
                       {isServicesDropdownOpen && (
                         <div className="ml-4 space-y-2 mt-2">
                           {serviceItems.map((service, sIndex) => (
-                            <button
+                            <button type="button"
                               key={sIndex}
                               onClick={() => handleServiceClick(service.id)}
                               className="w-full text-left py-1 text-sm text-[var(--text-light)] hover:text-[var(--primary-color)]"

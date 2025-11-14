@@ -153,7 +153,7 @@ function ContactApp() {
             <div className="space-y-4">
               {faqs.map((faq, index) => (
                 <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
-                  <button
+                  <button type="button"
                     onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
                     className="w-full px-6 py-4 text-left font-semibold hover:bg-[var(--secondary-color)] transition-colors flex justify-between items-center"
                   >

@@ -79,7 +79,7 @@ function PortfolioApp() {
             
             <div className="flex justify-center gap-4 mb-12 flex-wrap">
               {categories.map((cat) => (
-                <button
+                <button type="button"
                   key={cat}
                   onClick={() => setFilter(cat)}
                   className={`px-6 py-2 rounded-lg font-semibold transition-all ${

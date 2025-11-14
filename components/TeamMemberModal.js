@@ -33,7 +33,7 @@ function TeamMemberModal({ member, onClose }) {
       >
         <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto animate-fadeIn relative">
           {/* Close button - fixed at top right */}
-          <button
+          <button type="button"
             onClick={onClose}
             className="fixed top-6 right-6 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 rounded-full p-2 z-50 shadow-lg"
             aria-label="Close modal"

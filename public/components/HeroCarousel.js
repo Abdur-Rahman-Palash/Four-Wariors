@@ -54,7 +54,7 @@ function HeroCarousel() {
 
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
           {slides.map((_, index) => (
-            <button
+            <button type="button"
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`w-3 h-3 rounded-full transition-all ${index === currentSlide ? 'bg-white w-8' : 'bg-white/50'}`}
