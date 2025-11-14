@@ -1,6 +1,44 @@
 function AdminApp(){
   const { useState, useEffect, useRef } = React;
 
+  // ======== DEVICE FINGERPRINTING ========
+  const getDeviceFingerprint = () => {
+    const nav = navigator;
+    const screen_data = screen.width + ',' + screen.height + ',' + screen.colorDepth;
+    const ua = nav.userAgent;
+    const lang = nav.language || nav.userLanguage || '';
+    const tz = new Date().getTimezoneOffset();
+    const plugins = Array.from(nav.plugins || []).map(p => p.name).join('|');
+    const data = ua + screen_data + lang + tz + plugins;
+    
+    // Simple hash function
+    let hash = 0;
+    for (let i = 0; i < data.length; i++) {
+      const char = data.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash).toString(36);
+  };
+
+  const checkDeviceAccess = () => {
+    const currentFingerprint = getDeviceFingerprint();
+    const savedFingerprint = localStorage.getItem('fw_device_fingerprint');
+    
+    if (!savedFingerprint) {
+      // First time - save device fingerprint
+      localStorage.setItem('fw_device_fingerprint', currentFingerprint);
+      return true;
+    }
+    
+    // Check if this is the same device
+    if (currentFingerprint !== savedFingerprint) {
+      alert('⚠️ Admin access is locked to your original device only.\n\nDifferent device detected. Access denied.\n\nContact administrator to unlock.');
+      return false;
+    }
+    return true;
+  };
+
   // ======== AUTH & ROLES ========
   const DEFAULT_ADMIN_PASS = 'fwadmin123';
   const getSavedPass = () => { try { return localStorage.getItem('fw_admin_pass') || DEFAULT_ADMIN_PASS } catch(e){ return DEFAULT_ADMIN_PASS } };
@@ -87,7 +125,14 @@ function AdminApp(){
   const [editingServiceIdx, setEditingServiceIdx] = useState(-1);
 
   // ======== AUTO-SAVE ========
-  useEffect(() => { try { localStorage.setItem('fw_projects', JSON.stringify(projects)); } catch(e){} }, [projects]);
+  useEffect(() => { 
+    // Check device access on component mount
+    if (!checkDeviceAccess()) {
+      setAuthMode('login');
+      return;
+    }
+    try { localStorage.setItem('fw_projects', JSON.stringify(projects)); } catch(e){} 
+  }, [projects]);
   useEffect(() => { try { localStorage.setItem('fw_company_info', JSON.stringify(companyInfo)); } catch(e){} }, [companyInfo]);
   useEffect(() => { try { localStorage.setItem('fw_team', JSON.stringify(team)); } catch(e){} }, [team]);
   useEffect(() => { try { localStorage.setItem('fw_services', JSON.stringify(services)); } catch(e){} }, [services]);
@@ -96,6 +141,12 @@ function AdminApp(){
   // ======== AUTH FUNCTIONS ========
   function attemptAdminLogin(e){
     e?.preventDefault();
+    
+    // Check device fingerprint first
+    if (!checkDeviceAccess()) {
+      return;
+    }
+    
     if (pwInput === getSavedPass()) {
       setUserRole('admin');
       setAuthMode('authenticated');
