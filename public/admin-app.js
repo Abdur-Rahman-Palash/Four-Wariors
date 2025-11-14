@@ -312,12 +312,12 @@ function AdminApp(){
           <p className="text-sm text-gray-600 mb-6">Choose your role to continue:</p>
           
           <div className="space-y-3 mb-6">
-            <button onClick={() => setAuthMode('team-select')} className="w-full px-4 py-3 bg-blue-50 border-2 border-blue-300 rounded hover:bg-blue-100 transition-colors text-left">
+            <button type="button" onClick={() => setAuthMode('team-select')} className="w-full px-4 py-3 bg-blue-50 border-2 border-blue-300 rounded hover:bg-blue-100 transition-colors text-left">
               <h3 className="font-bold text-blue-700">👥 I am a Team Member</h3>
               <p className="text-xs text-blue-600">Edit your profile (no password needed)</p>
             </button>
             
-            <button onClick={() => setAuthMode('admin-login')} className="w-full px-4 py-3 bg-purple-50 border-2 border-purple-300 rounded hover:bg-purple-100 transition-colors text-left">
+            <button type="button" onClick={() => setAuthMode('admin-login')} className="w-full px-4 py-3 bg-purple-50 border-2 border-purple-300 rounded hover:bg-purple-100 transition-colors text-left">
               <h3 className="font-bold text-purple-700">🔐 I am the Super Admin</h3>
               <p className="text-xs text-purple-600">Full access (password required)</p>
             </button>
@@ -336,14 +336,14 @@ function AdminApp(){
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="w-full max-w-2xl">
-          <button onClick={() => setAuthMode('login')} className="mb-6 px-4 py-2 bg-gray-200 rounded text-sm">← Back</button>
+          <button type="button" onClick={() => setAuthMode('login')} className="mb-6 px-4 py-2 bg-gray-200 rounded text-sm">← Back</button>
           
           <h2 className="text-2xl font-bold mb-2">Select Your Profile</h2>
           <p className="text-gray-600 mb-6">Choose your name to edit your profile</p>
 
           <div className="grid md:grid-cols-2 gap-4">
             {team.map((member, idx) => (
-              <button key={idx} onClick={() => selectTeamMember(idx)} className="p-4 bg-white border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-lg transition-all text-left">
+              <button type="button" key={idx} onClick={() => selectTeamMember(idx)} className="p-4 bg-white border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-lg transition-all text-left">
                 <div className="w-16 h-16 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
                   {member.image ? <img src={member.image} alt={member.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-xs">No image</span>}
                 </div>
@@ -362,7 +362,7 @@ function AdminApp(){
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="w-full max-w-md bg-white p-6 rounded shadow">
-          <button onClick={() => setAuthMode('login')} className="mb-4 text-sm text-gray-600 hover:text-gray-800">← Back to role selection</button>
+          <button type="button" onClick={() => setAuthMode('login')} className="mb-4 text-sm text-gray-600 hover:text-gray-800">← Back to role selection</button>
           
           <h2 className="text-xl font-semibold mb-4">Super Admin Login</h2>
           <p className="text-sm text-gray-600 mb-4">Enter the admin password for full website access.</p>
@@ -392,7 +392,7 @@ function AdminApp(){
                   <p className="text-sm text-yellow-800">Different device detected. You can register this device if you know the admin password.</p>
                   {!showRegisterForm ? (
                     <div className="mt-3">
-                      <button onClick={() => setShowRegisterForm(true)} className="px-3 py-2 mt-2 bg-yellow-400 text-white rounded">Register this device</button>
+                      <button type="button" onClick={() => setShowRegisterForm(true)} className="px-3 py-2 mt-2 bg-yellow-400 text-white rounded">Register this device</button>
                     </div>
                   ) : (
                     <div className="mt-3 space-y-2">
@@ -400,8 +400,8 @@ function AdminApp(){
                         <input type="password" value={registerPw} onChange={e=>setRegisterPw(e.target.value)} placeholder="Admin password" className="w-full border px-3 py-2 rounded" />
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={()=>registerCurrentDevice(registerPw)} className="px-3 py-2 bg-yellow-500 text-white rounded">Confirm & Register</button>
-                        <button onClick={()=>{ setShowRegisterForm(false); setRegisterPw(''); }} className="px-3 py-2 border rounded">Cancel</button>
+                        <button type="button" onClick={()=>registerCurrentDevice(registerPw)} className="px-3 py-2 bg-yellow-500 text-white rounded">Confirm & Register</button>
+                        <button type="button" onClick={()=>{ setShowRegisterForm(false); setRegisterPw(''); }} className="px-3 py-2 border rounded">Cancel</button>
                       </div>
                     </div>
                   )}
@@ -450,8 +450,8 @@ function AdminApp(){
             <p className="text-gray-600 mt-1">{isAdmin ? 'Full website management' : 'Edit your profile information'}</p>
           </div>
           <div className="flex items-center gap-3">
-            {isAdmin && <button onClick={()=>setShowChangePass(!showChangePass)} className="px-3 py-2 border rounded text-sm">{showChangePass ? 'Close' : 'Change password'}</button>}
-            <button onClick={handleLogout} className="px-3 py-2 bg-red-600 text-white rounded text-sm">Logout</button>
+            {isAdmin && <button type="button" onClick={()=>setShowChangePass(!showChangePass)} className="px-3 py-2 border rounded text-sm">{showChangePass ? 'Close' : 'Change password'}</button>}
+            <button type="button" onClick={handleLogout} className="px-3 py-2 bg-red-600 text-white rounded text-sm">Logout</button>
           </div>
         </div>
 
@@ -482,7 +482,7 @@ function AdminApp(){
           <div className="bg-white rounded-lg shadow mb-6">
             <div className="flex border-b overflow-x-auto">
               {['company', 'team', 'services', 'projects', 'footer'].map(tab => (
-                <button key={tab} onClick={()=>setActiveTab(tab)} className={`px-4 py-3 font-medium capitalize whitespace-nowrap ${activeTab===tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}>
+                <button type="button" key={tab} onClick={()=>setActiveTab(tab)} className={`px-4 py-3 font-medium capitalize whitespace-nowrap ${activeTab===tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}>
                   {tab === 'company' ? '🏢 Company' : tab === 'team' ? '👥 Team' : tab === 'services' ? '⚙️ Services' : tab === 'projects' ? '📁 Projects' : '📄 Footer'}
                 </button>
               ))}
@@ -605,8 +605,8 @@ function AdminApp(){
                         <p className="text-sm text-blue-600 mb-2">{m.role}</p>
                         <p className="text-xs text-gray-600 line-clamp-2 mb-3">{m.bio}</p>
                         <div className="flex gap-2">
-                          <button onClick={()=>handleEditTeam(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
-                          <button onClick={()=>handleDeleteTeam(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
+                            <button type="button" onClick={()=>handleEditTeam(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
+                              <button type="button" onClick={()=>handleDeleteTeam(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
                         </div>
                       </div>
                     ))}
@@ -657,8 +657,8 @@ function AdminApp(){
                             </div>
                           </div>
                           <div className="flex gap-2">
-                            <button onClick={()=>handleEditService(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
-                            <button onClick={()=>handleDeleteService(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
+                            <button type="button" onClick={()=>handleEditService(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
+                            <button type="button" onClick={()=>handleDeleteService(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
                           </div>
                         </div>
                       </div>
@@ -720,8 +720,8 @@ function AdminApp(){
                         <p className="text-sm text-gray-600 line-clamp-2 mb-2">{p.description}</p>
                         <p className="text-xs text-gray-500 mb-3">{(p.tools || []).join(', ')}</p>
                         <div className="flex gap-2">
-                          <button onClick={()=>handleEditProject(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
-                          <button onClick={()=>handleDeleteProject(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
+                          <button type="button" onClick={()=>handleEditProject(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
+                          <button type="button" onClick={()=>handleDeleteProject(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
                         </div>
                       </div>
                     ))}
