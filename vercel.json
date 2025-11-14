@@ -7,8 +7,5 @@
         { "key": "Content-Type", "value": "application/xml" }
       ]
     }
-  ],
-  "analytics": {
-    "enabled": false
-  }
+  ]
 }
