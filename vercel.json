@@ -1,0 +1,5 @@
+{
+  "buildCommand": "echo 'Building static site'",
+  "devCommand": "python -m http.server 3000",
+  "installCommand": "echo 'No installation needed'"
+}
