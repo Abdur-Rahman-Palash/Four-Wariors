@@ -211,21 +211,7 @@
         }
     }
     </style>
-        <!-- Anti-copy styles: deterrent only. Remove .nocopy class to re-enable selection. -->
-        <style>
-        /* Prevent text selection and image dragging for casual copy attempts */
-        .nocopy, .nocopy * {
-                -webkit-user-select: none !important;
-                -moz-user-select: none !important;
-                -ms-user-select: none !important;
-                user-select: none !important;
-        }
-        .nocopy img {
-                -webkit-user-drag: none !important;
-                user-drag: none !important;
-                pointer-events: none !important;
-        }
-        </style>
+        <!-- Anti-copy styles removed for testing -->
         <!-- Scroll progress bar styles -->
         <style>
         /* Fixed thin progress bar at the top */
@@ -250,7 +236,7 @@
         }
         </style>
 </head>
-<body class="nocopy">
+<body>
         <!-- Scroll progress bar (fills left->right when scrolling down; right->left when scrolling up) -->
         <div id="scroll-progress-container" aria-hidden="true">
             <div id="scroll-progress"></div>
@@ -272,51 +258,7 @@
                 });
             });
         </script>
-        <!-- Anti-copy deterrent script: not foolproof. Users can still view source or use devtools. -->
-        <script>
-        (function(){
-            // Prevent context menu (right-click)
-            document.addEventListener('contextmenu', function(e){ e.preventDefault(); }, false);
-
-            // Prevent copy and cut events (attempt to clear clipboard)
-            document.addEventListener('copy', function(e){
-                try {
-                    if (e.clipboardData) {
-                        e.preventDefault();
-                        e.clipboardData.setData('text/plain', '');
-                    } else {
-                        e.preventDefault();
-                    }
-                } catch(err){ /* ignore */ }
-            }, false);
-            document.addEventListener('cut', function(e){ e.preventDefault(); }, false);
-
-            // Prevent common developer shortcuts and copy-related keys
-            document.addEventListener('keydown', function(e){
-                // Block Ctrl/Cmd + [C,U,S] and Ctrl+Shift+I
-                if (e.ctrlKey || e.metaKey) {
-                    const k = (e.key || '').toLowerCase();
-                    if (k === 'c' || k === 'u' || k === 's' || (e.shiftKey && k === 'i')) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
-                }
-                // Block F12
-                if (e.key === 'F12') { e.preventDefault(); }
-            }, false);
-
-            // Remove any selection immediately
-            document.addEventListener('selectionchange', function(){
-                try {
-                    var sel = document.getSelection();
-                    if (sel && sel.toString().length > 0) sel.removeAllRanges();
-                } catch(err){}
-            }, false);
-
-            // Inform developers: this is only a deterrent
-            console.info('Anti-copy deterrent active on this page. This does NOT prevent determined users from accessing source or assets.');
-        })();
-        </script>
+        <!-- Anti-copy deterrent script removed for testing -->
             <!-- Scroll-direction progress bar script -->
             <script>
             (function(){
