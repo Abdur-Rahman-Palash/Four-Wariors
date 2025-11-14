@@ -39,6 +39,26 @@ function AdminApp(){
     return true;
   };
 
+  const isDeviceLocked = () => {
+    try {
+      const current = getDeviceFingerprint();
+      const saved = localStorage.getItem('fw_device_fingerprint');
+      return !!saved && current !== saved;
+    } catch (e) { return false; }
+  };
+
+  const registerCurrentDevice = (pw) => {
+    try {
+      if (pw !== getSavedPass()) return alert('Incorrect admin password.');
+      const fp = getDeviceFingerprint();
+      localStorage.setItem('fw_device_fingerprint', fp);
+      alert('Device registered successfully. You can now login from this device.');
+      setShowRegisterForm(false);
+      setRegisterPw('');
+      setAuthMode('admin-login');
+    } catch (err) { console.warn(err); alert('Could not register device.'); }
+  };
+
   // ======== AUTH & ROLES ========
   const DEFAULT_ADMIN_PASS = 'fwadmin123';
   const getSavedPass = () => { try { return localStorage.getItem('fw_admin_pass') || DEFAULT_ADMIN_PASS } catch(e){ return DEFAULT_ADMIN_PASS } };
@@ -54,6 +74,23 @@ function AdminApp(){
   const [showNewPw, setShowNewPw] = useState(false);
   const [showConfirmPw, setShowConfirmPw] = useState(false);
   const [activeTab, setActiveTab] = useState('projects');
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const [registerPw, setRegisterPw] = useState('');
+
+  // Run device check on mount and log fingerprint for debugging
+  useEffect(() => {
+    try {
+      const fp = getDeviceFingerprint();
+      console.info('Device fingerprint (current):', fp);
+      const saved = localStorage.getItem('fw_device_fingerprint');
+      console.info('Device fingerprint (saved):', saved);
+      const ok = checkDeviceAccess();
+      console.info('Device access allowed:', ok);
+      if (!ok) {
+        setAuthMode('login');
+      }
+    } catch (err) { console.warn('Fingerprint check failed', err); }
+  }, []);
 
   // ======== FOOTER DATA ========
   const defaultFooter = {
@@ -358,6 +395,27 @@ function AdminApp(){
                 <button type="button" onClick={()=>setShowSetPassOnLogin(true)} className="w-full px-3 py-2 border rounded text-sm hover:bg-gray-100">Set New Password</button>
               </form>
               <p className="text-xs text-gray-400 mt-4">Default password: <strong>{DEFAULT_ADMIN_PASS}</strong></p>
+
+              {isDeviceLocked() && (
+                <div className="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-300 rounded">
+                  <p className="text-sm text-yellow-800">Different device detected. You can register this device if you know the admin password.</p>
+                  {!showRegisterForm ? (
+                    <div className="mt-3">
+                      <button onClick={() => setShowRegisterForm(true)} className="px-3 py-2 mt-2 bg-yellow-400 text-white rounded">Register this device</button>
+                    </div>
+                  ) : (
+                    <div className="mt-3 space-y-2">
+                      <div className="relative">
+                        <input type="password" value={registerPw} onChange={e=>{}} onPaste={e=>{ e.preventDefault(); const paste = (e.clipboardData || window.clipboardData).getData('text'); setRegisterPw(paste); }} onKeyPress={e=>e.preventDefault()} onKeyDown={e=>{ if(e.key.length===1) e.preventDefault(); }} placeholder="Paste admin password to confirm" className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div className="flex gap-2">
+                        <button onClick={()=>registerCurrentDevice(registerPw)} className="px-3 py-2 bg-yellow-500 text-white rounded">Confirm & Register</button>
+                        <button onClick={()=>{ setShowRegisterForm(false); setRegisterPw(''); }} className="px-3 py-2 border rounded">Cancel</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </>
           ) : (
             <form onSubmit={handleSetPassOnLogin} className="space-y-3">

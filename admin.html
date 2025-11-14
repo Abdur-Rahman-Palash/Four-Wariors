@@ -14,132 +14,13 @@
     body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
     .btn-primary { @apply px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl; }
     
-    /* Anti-copy protection */
-    .nocopy, .nocopy * {
-      -webkit-user-select: none !important;
-      -moz-user-select: none !important;
-      -ms-user-select: none !important;
-      user-select: none !important;
-    }
-    .nocopy img {
-      -webkit-user-drag: none !important;
-      user-drag: none !important;
-      pointer-events: none !important;
-    }
+    /* Anti-copy protection removed for testing */
   </style>
 </head>
-<body class="bg-gray-50 nocopy">
+<body class="bg-gray-50">
   <div id="root" class="min-h-screen"></div>
 
-  <!-- Anti-copy and anti-developer-tools script -->
-  <script>
-    (function(){
-      // Prevent context menu (right-click)
-      document.addEventListener('contextmenu', function(e){
-        e.preventDefault();
-        alert('Right-click is disabled on this admin panel.');
-      }, false);
-
-      // Prevent copy, cut, and paste events
-      document.addEventListener('copy', function(e){
-        e.preventDefault();
-        console.warn('Copy functionality is disabled');
-      }, false);
-      
-      document.addEventListener('cut', function(e){
-        e.preventDefault();
-        console.warn('Cut functionality is disabled');
-      }, false);
-
-      // Block common developer keyboard shortcuts
-      document.addEventListener('keydown', function(e){
-        // Block Ctrl/Cmd + C (Copy)
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c') {
-          e.preventDefault();
-          console.warn('Copy is disabled');
-        }
-        // Block Ctrl/Cmd + X (Cut)
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'x') {
-          e.preventDefault();
-          console.warn('Cut is disabled');
-        }
-        // Block Ctrl/Cmd + V (Paste)
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'v') {
-          e.preventDefault();
-          console.warn('Paste is disabled');
-        }
-        // Block Ctrl/Cmd + U (View Source)
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'u') {
-          e.preventDefault();
-          console.warn('View source is disabled');
-        }
-        // Block F12 (Developer Tools)
-        if (e.key === 'F12') {
-          e.preventDefault();
-          console.warn('Developer tools access is disabled');
-        }
-        // Block Ctrl+Shift+I (Inspect Element)
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'i') {
-          e.preventDefault();
-          console.warn('Inspector access is disabled');
-        }
-        // Block Ctrl+Shift+J (Console)
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'j') {
-          e.preventDefault();
-          console.warn('Console access is disabled');
-        }
-        // Block Ctrl+Shift+K (Console alternative)
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'k') {
-          e.preventDefault();
-          console.warn('Console access is disabled');
-        }
-      }, false);
-
-      // Prevent text selection
-      document.addEventListener('selectstart', function(e){
-        e.preventDefault();
-      }, false);
-
-      // Prevent mouse drag selection
-      document.addEventListener('mousedown', function(e){
-        if (e.detail > 1) {
-          e.preventDefault();
-        }
-      }, false);
-
-      // Disable developer tools detection
-      var devtools = { open: false, orientation: null };
-      var threshold = 160;
-      setInterval(function() {
-        if (window.outerHeight - window.innerHeight > threshold ||
-            window.outerWidth - window.innerWidth > threshold) {
-          if (!devtools.open) {
-            devtools.open = true;
-            console.log('%c⚠️ Admin Panel Security', 'color: red; font-size: 16px; font-weight: bold;');
-            console.log('%cDeveloper tools are disabled on this page. Unauthorized access is logged.', 'color: orange; font-size: 14px;');
-          }
-        } else {
-          devtools.open = false;
-        }
-      }, 500);
-
-      // Log security message
-      console.clear();
-      console.log('%c🔒 ADMIN PANEL - SECURED', 'color: #2563eb; font-size: 18px; font-weight: bold; background: #dbeafe; padding: 10px;');
-      console.log('%cThis is a restricted admin area. Unauthorized access attempts are monitored.', 'color: #1e40af; font-size: 14px;');
-      console.log('%cAny attempt to copy, export, or hack this panel will be logged and reported.', 'color: #991b1b; font-size: 12px; font-weight: bold;');
-
-      // Prevent iframe embedding
-      if (window.self !== window.top) {
-        window.top.location = window.self.location;
-      }
-
-      // Warn about unauthorized access
-      window.addEventListener('beforeunload', function(e){
-        // Optional: Log when user leaves
-      });
-    })();
-  </script>
+  <!-- Anti-copy and anti-developer-tools script disabled for testing -->
 
   <script type="text/babel" src="components/Header.js"></script>
   <script type="text/babel" src="components/Footer.js"></script>

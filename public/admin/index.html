@@ -14,21 +14,10 @@
     body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
     .btn-primary { @apply px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl; }
     
-    /* Anti-copy protection */
-    .nocopy, .nocopy * {
-      -webkit-user-select: none !important;
-      -moz-user-select: none !important;
-      -ms-user-select: none !important;
-      user-select: none !important;
-    }
-    .nocopy img {
-      -webkit-user-drag: none !important;
-      user-drag: none !important;
-      pointer-events: none !important;
-    }
+    /* Anti-copy protection removed for testing */
   </style>
 </head>
-<body class="bg-gray-50 nocopy">
+<body class="bg-gray-50">
   <div id="root" class="min-h-screen"></div>
 
   <script type="text/babel" src="/components/Header.js"></script>
@@ -36,78 +25,6 @@
   <script type="text/babel" src="/components/ProjectCard.js"></script>
   <script type="text/babel" src="/admin-app.js"></script>
 
-  <!-- Anti-copy protection (Enhanced) -->
-  <script>
-    (function() {
-      // 1. Block right-click
-      document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      });
-
-      // 2. Block copy/cut
-      ['copy', 'cut'].forEach(function(event) {
-        document.addEventListener(event, function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          if (e.clipboardData) {
-            e.clipboardData.setData('text/plain', '');
-            e.clipboardData.setData('text/html', '');
-          }
-          return false;
-        });
-      });
-
-      // 3. Block keyboard shortcuts (Ctrl+C, Ctrl+X, Ctrl+U, Ctrl+S, F12, Ctrl+Shift+I, Ctrl+Shift+C)
-      document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey || e.metaKey) {
-          const key = (e.key || '').toLowerCase();
-          if (['c', 'x', 'u', 's', 'i'].includes(key)) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-          }
-        }
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'C')) {
-          e.preventDefault();
-          e.stopPropagation();
-          return false;
-        }
-      });
-
-      // 4. Override clipboard API
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText = function() {
-          return Promise.reject('Copy disabled');
-        };
-        navigator.clipboard.write = function() {
-          return Promise.reject('Copy disabled');
-        };
-      }
-
-      // 5. Remove any existing selections every 100ms
-      setInterval(function() {
-        try {
-          const sel = window.getSelection();
-          if (sel && sel.rangeCount > 0) {
-            sel.removeAllRanges();
-          }
-        } catch(e) {}
-      }, 100);
-
-      // 6. Disable ondrag and ondrop
-      document.addEventListener('dragstart', function(e) {
-        e.preventDefault();
-        return false;
-      });
-      document.addEventListener('drop', function(e) {
-        e.preventDefault();
-        return false;
-      });
-
-      console.log('%cAnti-copy protection ACTIVE', 'color: red; font-size: 14px; font-weight: bold;');
-    })();
-  </script>
+  <!-- Anti-copy protection disabled for testing -->
 </body>
 </html>
