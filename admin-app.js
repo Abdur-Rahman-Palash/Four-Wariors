@@ -7,11 +7,14 @@ function AdminApp(){
   // - Session authentication stored in sessionStorage key `fw_admin_authed`
   // -----------------------------
   const DEFAULT_ADMIN_PASS = 'fwadmin123';
-  const savedPass = (() => { try { return localStorage.getItem('fw_admin_pass') || DEFAULT_ADMIN_PASS } catch(e){ return DEFAULT_ADMIN_PASS } })();
+  const getSavedPass = () => { try { return localStorage.getItem('fw_admin_pass') || DEFAULT_ADMIN_PASS } catch(e){ return DEFAULT_ADMIN_PASS } };
   const [isAuthed, setIsAuthed] = useState(() => {
     try { return sessionStorage.getItem('fw_admin_authed') === '1'; } catch (e) { return false; }
   });
   const [pwInput, setPwInput] = useState('');
+  const [showChangePass, setShowChangePass] = useState(false);
+  const [newPass, setNewPass] = useState('');
+  const [confirmPass, setConfirmPass] = useState('');
 
   const defaultProjects = [
     {
@@ -43,12 +46,31 @@ function AdminApp(){
 
   function attemptLogin(e){
     e && e.preventDefault();
-    if (pwInput === savedPass) {
+    if (pwInput === getSavedPass()) {
       try { sessionStorage.setItem('fw_admin_authed','1'); } catch(e){}
       setIsAuthed(true);
       setPwInput('');
     } else {
       alert('Incorrect password.');
+    }
+  }
+
+  function handleLogout(){
+    try { sessionStorage.removeItem('fw_admin_authed'); } catch(e){}
+    setIsAuthed(false);
+  }
+
+  function handleChangePassword(e){
+    e && e.preventDefault();
+    if (!newPass) return alert('Enter new password');
+    if (newPass !== confirmPass) return alert('Passwords do not match');
+    try {
+      localStorage.setItem('fw_admin_pass', newPass);
+      alert('Password changed successfully');
+      setNewPass(''); setConfirmPass(''); setShowChangePass(false);
+    } catch (err) {
+      console.warn('Failed to save new password', err);
+      alert('Could not save password in this browser');
     }
   }
 
@@ -152,9 +174,35 @@ function AdminApp(){
   return (
     <div>
       <Header />
-      <div className="max-w-6xl mx-auto py-12 px-6">
+      <div className="max-w-6xl mx-auto py-6 px-6">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-2xl font-bold">Admin — Manage Projects</h1>
+          <div className="flex items-center gap-3">
+            <button onClick={()=>setShowChangePass(!showChangePass)} className="px-3 py-2 border rounded text-sm">{showChangePass ? 'Close' : 'Change password'}</button>
+            <button onClick={handleLogout} className="px-3 py-2 bg-red-600 text-white rounded text-sm">Logout</button>
+          </div>
+        </div>
+
+        {showChangePass && (
+          <form onSubmit={handleChangePassword} className="bg-white p-4 rounded shadow mb-6 max-w-md">
+            <h3 className="font-semibold mb-2">Set new admin password</h3>
+            <div className="mb-2">
+              <input type="password" value={newPass} onChange={e=>setNewPass(e.target.value)} placeholder="New password" className="w-full border px-3 py-2 rounded" />
+            </div>
+            <div className="mb-2">
+              <input type="password" value={confirmPass} onChange={e=>setConfirmPass(e.target.value)} placeholder="Confirm password" className="w-full border px-3 py-2 rounded" />
+            </div>
+            <div className="flex gap-2">
+              <button type="submit" className="btn-primary">Save password</button>
+              <button type="button" onClick={()=>{ setShowChangePass(false); setNewPass(''); setConfirmPass(''); }} className="px-3 py-2 border rounded">Cancel</button>
+            </div>
+          </form>
+        )}
+
+      </div>
+      <div className="max-w-6xl mx-auto py-6 px-6">
         <h1 className="text-3xl font-bold mb-4">Admin — Manage Projects</h1>
-        <p className="text-sm text-gray-600 mb-6">Add, edit, delete projects. Images may be a URL or uploaded (stored locally in your browser).</p>
+        <p className="text-sm text-gray-600 mb-6">Add, edit, delete projects. Images may be a URL or uploaded (stored locally in your browser). Changes are saved to this browser only unless you export and import JSON.</p>
 
         <form onSubmit={handleAdd} className="bg-white p-6 rounded-lg shadow mb-8">
           <div className="grid md:grid-cols-2 gap-4">
