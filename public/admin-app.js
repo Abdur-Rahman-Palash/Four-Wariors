@@ -60,7 +60,7 @@ function AdminApp(){
   };
 
   // ======== AUTH & ROLES ========
-  const DEFAULT_ADMIN_PASS = 'abdurrahmanadmin';
+  const DEFAULT_ADMIN_PASS = 'abdurrahman';
   // Enforce fixed admin password. Do NOT read or write fw_admin_pass from localStorage.
   const getSavedPass = () => DEFAULT_ADMIN_PASS;
   
