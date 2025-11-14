@@ -334,7 +334,22 @@ function AdminApp(){
             <>
               <form onSubmit={attemptAdminLogin} className="space-y-4">
                 <div className="relative">
-                  <input type={showPw ? "text" : "password"} value={pwInput} onChange={e=>setPwInput(e.target.value)} placeholder="Password" className="w-full border px-3 py-2 rounded pr-10" />
+                  <input 
+                    type={showPw ? "text" : "password"} 
+                    value={pwInput} 
+                    onChange={e=>{}} 
+                    onPaste={e=>{
+                      e.preventDefault();
+                      const paste = (e.clipboardData || window.clipboardData).getData('text');
+                      setPwInput(paste);
+                    }}
+                    onKeyPress={e=>e.preventDefault()}
+                    onKeyDown={e=>{
+                      if(e.key.length === 1) e.preventDefault();
+                    }}
+                    placeholder="Password (paste only)" 
+                    className="w-full border px-3 py-2 rounded pr-10" 
+                  />
                   <button type="button" onClick={()=>setShowPw(!showPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
                     {showPw ? '🙈' : '👁️'}
                   </button>
