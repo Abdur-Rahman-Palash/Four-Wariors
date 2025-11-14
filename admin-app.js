@@ -1,6 +1,18 @@
 function AdminApp(){
   const { useState, useEffect, useRef } = React;
 
+  // -----------------------------
+  // Simple client-side password protection
+  // - Default password stored in localStorage key `fw_admin_pass` (change via console)
+  // - Session authentication stored in sessionStorage key `fw_admin_authed`
+  // -----------------------------
+  const DEFAULT_ADMIN_PASS = 'fwadmin123';
+  const savedPass = (() => { try { return localStorage.getItem('fw_admin_pass') || DEFAULT_ADMIN_PASS } catch(e){ return DEFAULT_ADMIN_PASS } })();
+  const [isAuthed, setIsAuthed] = useState(() => {
+    try { return sessionStorage.getItem('fw_admin_authed') === '1'; } catch (e) { return false; }
+  });
+  const [pwInput, setPwInput] = useState('');
+
   const defaultProjects = [
     {
       title: 'E-Commerce Platform',
@@ -28,6 +40,17 @@ function AdminApp(){
   useEffect(() => {
     try { localStorage.setItem('fw_projects', JSON.stringify(projects)); } catch (err) { console.warn('save failed', err); }
   }, [projects]);
+
+  function attemptLogin(e){
+    e && e.preventDefault();
+    if (pwInput === savedPass) {
+      try { sessionStorage.setItem('fw_admin_authed','1'); } catch(e){}
+      setIsAuthed(true);
+      setPwInput('');
+    } else {
+      alert('Incorrect password.');
+    }
+  }
 
   const resetForm = () => setForm({ title: '', category: 'web', image: '', description: '', tools: '' });
 
@@ -102,6 +125,28 @@ function AdminApp(){
       } catch (err){ alert('Invalid JSON file'); }
     };
     reader.readAsText(file);
+  }
+
+  if (!isAuthed) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="w-full max-w-md bg-white p-6 rounded shadow">
+          <h2 className="text-xl font-semibold mb-4">Admin Login</h2>
+          <p className="text-sm text-gray-600 mb-4">Enter the admin password to access the Projects admin panel.</p>
+          <form onSubmit={attemptLogin} className="space-y-4">
+            <input type="password" value={pwInput} onChange={e=>setPwInput(e.target.value)} placeholder="Password" className="w-full border px-3 py-2 rounded" />
+            <div className="flex items-center justify-between">
+              <button onClick={attemptLogin} className="btn-primary">Unlock Admin</button>
+              <button type="button" onClick={()=>{
+                // tip: change password via console
+                alert('Tip: To change the admin password open the console and run:\nlocalStorage.setItem("fw_admin_pass","your-new-pass");');
+              }} className="px-3 py-2 border rounded text-sm">How to change password</button>
+            </div>
+            <p className="text-xs text-gray-400">Default password (first time): <strong>{DEFAULT_ADMIN_PASS}</strong></p>
+          </form>
+        </div>
+      </div>
+    );
   }
 
   return (
