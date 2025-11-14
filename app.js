@@ -53,6 +53,46 @@ function App() {
       }
     ];
 
+    // Load projects from localStorage for portfolio section
+    const defaultProjects = [
+      {
+        title: 'E-Commerce Platform',
+        category: 'web',
+        image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=600&q=80',
+        description: 'Full-stack e-commerce solution with payment integration',
+        tools: ['React', 'Node.js', 'MongoDB']
+      },
+      {
+        title: 'Brand Identity Design',
+        category: 'design',
+        image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&q=80',
+        description: 'Complete brand identity for a tech startup',
+        tools: ['Illustrator', 'Photoshop', 'Figma']
+      },
+      {
+        title: 'Social Media Campaign',
+        category: 'marketing',
+        image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&q=80',
+        description: 'Multi-platform social media marketing strategy',
+        tools: ['Meta Ads', 'Analytics', 'Canva']
+      }
+    ];
+
+    const loadProjects = () => {
+      try {
+        const raw = localStorage.getItem('fw_projects');
+        if (!raw) return defaultProjects;
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed) || parsed.length === 0) return defaultProjects;
+        return parsed;
+      } catch (err) {
+        console.warn('Failed to read projects from localStorage, using defaults', err);
+        return defaultProjects;
+      }
+    };
+
+    const projects = loadProjects();
+
     return (
       <div className="min-h-screen bg-white" data-name="app" data-file="app.js">
         <Header />
@@ -72,6 +112,27 @@ function App() {
                   <ServiceCard {...service} />
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section-padding bg-white">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold mb-4">Featured Projects</h2>
+              <p className="text-xl text-[var(--text-light)] max-w-2xl mx-auto">
+                Explore our latest work and see how we've helped businesses achieve their goals
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.slice(0, 6).map((project, index) => (
+                <ProjectCard key={index} {...project} />
+              ))}
+            </div>
+            <div className="text-center mt-12">
+              <a href="portfolio.html" className="btn-primary">
+                View All Projects
+              </a>
             </div>
           </div>
         </section>
