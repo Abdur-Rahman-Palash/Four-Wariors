@@ -35,5 +35,27 @@
   <script type="text/babel" src="/components/Footer.js"></script>
   <script type="text/babel" src="/components/ProjectCard.js"></script>
   <script type="text/babel" src="/admin-app.js"></script>
+
+  <!-- Anti-copy protection -->
+  <script>
+    // Disable copy on Ctrl+C
+    document.addEventListener('copy', function(e) {
+      e.preventDefault();
+      return false;
+    });
+
+    // Disable cut
+    document.addEventListener('cut', function(e) {
+      e.preventDefault();
+      return false;
+    });
+
+    // Override clipboard API
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText = function() {
+        return Promise.reject('Copy is disabled on this page');
+      };
+    }
+  </script>
 </body>
 </html>
