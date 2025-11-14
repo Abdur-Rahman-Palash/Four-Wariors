@@ -12,10 +12,13 @@ function AdminApp(){
     try { return sessionStorage.getItem('fw_admin_authed') === '1'; } catch (e) { return false; }
   });
   const [pwInput, setPwInput] = useState('');
+  const [showPw, setShowPw] = useState(false);
   const [showChangePass, setShowChangePass] = useState(false);
   const [showSetPassOnLogin, setShowSetPassOnLogin] = useState(false);
   const [newPass, setNewPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
+  const [showNewPw, setShowNewPw] = useState(false);
+  const [showConfirmPw, setShowConfirmPw] = useState(false);
 
   const defaultProjects = [
     {
@@ -174,7 +177,12 @@ function AdminApp(){
           {!showSetPassOnLogin ? (
             <>
               <form onSubmit={attemptLogin} className="space-y-4">
-                <input type="password" value={pwInput} onChange={e=>setPwInput(e.target.value)} placeholder="Password" className="w-full border px-3 py-2 rounded" />
+                <div className="relative">
+                  <input type={showPw ? "text" : "password"} value={pwInput} onChange={e=>setPwInput(e.target.value)} placeholder="Password" className="w-full border px-3 py-2 rounded pr-10" />
+                  <button type="button" onClick={()=>setShowPw(!showPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
+                    {showPw ? '🙈' : '👁️'}
+                  </button>
+                </div>
                 <div className="flex items-center gap-2">
                   <button type="submit" className="btn-primary flex-1">Unlock Admin</button>
                 </div>
@@ -185,11 +193,21 @@ function AdminApp(){
           ) : (
             <form onSubmit={handleSetPassOnLogin} className="space-y-3">
               <h3 className="font-semibold text-sm">Set Your Admin Password</h3>
-              <input type="password" value={newPass} onChange={e=>setNewPass(e.target.value)} placeholder="New password" className="w-full border px-3 py-2 rounded" />
-              <input type="password" value={confirmPass} onChange={e=>setConfirmPass(e.target.value)} placeholder="Confirm password" className="w-full border px-3 py-2 rounded" />
+              <div className="relative">
+                <input type={showNewPw ? "text" : "password"} value={newPass} onChange={e=>setNewPass(e.target.value)} placeholder="New password" className="w-full border px-3 py-2 rounded pr-10" />
+                <button type="button" onClick={()=>setShowNewPw(!showNewPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
+                  {showNewPw ? '🙈' : '👁️'}
+                </button>
+              </div>
+              <div className="relative">
+                <input type={showConfirmPw ? "text" : "password"} value={confirmPass} onChange={e=>setConfirmPass(e.target.value)} placeholder="Confirm password" className="w-full border px-3 py-2 rounded pr-10" />
+                <button type="button" onClick={()=>setShowConfirmPw(!showConfirmPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
+                  {showConfirmPw ? '🙈' : '👁️'}
+                </button>
+              </div>
               <div className="flex gap-2">
                 <button type="submit" className="btn-primary flex-1">Save Password</button>
-                <button type="button" onClick={()=>{setShowSetPassOnLogin(false); setNewPass(''); setConfirmPass('');}} className="px-3 py-2 border rounded">Cancel</button>
+                <button type="button" onClick={()=>{setShowSetPassOnLogin(false); setNewPass(''); setConfirmPass(''); setShowNewPw(false); setShowConfirmPw(false);}} className="px-3 py-2 border rounded">Cancel</button>
               </div>
             </form>
           )}
@@ -213,15 +231,21 @@ function AdminApp(){
         {showChangePass && (
           <form onSubmit={handleChangePassword} className="bg-white p-4 rounded shadow mb-6 max-w-md">
             <h3 className="font-semibold mb-2">Set new admin password</h3>
-            <div className="mb-2">
-              <input type="password" value={newPass} onChange={e=>setNewPass(e.target.value)} placeholder="New password" className="w-full border px-3 py-2 rounded" />
+            <div className="mb-2 relative">
+              <input type={showNewPw ? "text" : "password"} value={newPass} onChange={e=>setNewPass(e.target.value)} placeholder="New password" className="w-full border px-3 py-2 rounded pr-10" />
+              <button type="button" onClick={()=>setShowNewPw(!showNewPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
+                {showNewPw ? '🙈' : '👁️'}
+              </button>
             </div>
-            <div className="mb-2">
-              <input type="password" value={confirmPass} onChange={e=>setConfirmPass(e.target.value)} placeholder="Confirm password" className="w-full border px-3 py-2 rounded" />
+            <div className="mb-2 relative">
+              <input type={showConfirmPw ? "text" : "password"} value={confirmPass} onChange={e=>setConfirmPass(e.target.value)} placeholder="Confirm password" className="w-full border px-3 py-2 rounded pr-10" />
+              <button type="button" onClick={()=>setShowConfirmPw(!showConfirmPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
+                {showConfirmPw ? '🙈' : '👁️'}
+              </button>
             </div>
             <div className="flex gap-2">
               <button type="submit" className="btn-primary">Save password</button>
-              <button type="button" onClick={()=>{ setShowChangePass(false); setNewPass(''); setConfirmPass(''); }} className="px-3 py-2 border rounded">Cancel</button>
+              <button type="button" onClick={()=>{ setShowChangePass(false); setNewPass(''); setConfirmPass(''); setShowNewPw(false); setShowConfirmPw(false); }} className="px-3 py-2 border rounded">Cancel</button>
             </div>
           </form>
         )}
