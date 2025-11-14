@@ -133,10 +133,21 @@
     }
     </script>
 
-        <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js" defer></script>
-        <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js" defer></script>
-        <script src="https://resource.trickle.so/vendor_lib/unpkg/@babel/standalone/babel.min.js" defer></script>
-        <script src="https://cdn.tailwindcss.com" defer></script>
+                <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js" defer></script>
+                <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js" defer></script>
+                <script src="https://resource.trickle.so/vendor_lib/unpkg/@babel/standalone/babel.min.js" defer></script>
+                <script src="https://cdn.tailwindcss.com" defer></script>
+                <script>
+                (function(){
+                    // Fallback loader: if CDN host is down, load React/ReactDOM/Babel from unpkg
+                    function load(src){var s=document.createElement('script');s.src=src;s.defer=true;document.head.appendChild(s);}
+                    if(!window.React){
+                        load('https://unpkg.com/react@18/umd/react.production.min.js');
+                        load('https://unpkg.com/react-dom@18/umd/react-dom.production.min.js');
+                        load('https://unpkg.com/@babel/standalone/babel.min.js');
+                    }
+                })();
+                </script>
         <link href="https://resource.trickle.so/vendor_lib/unpkg/lucide-static@0.516.0/font/lucide.css" rel="stylesheet">
         <style>
             @font-face {
