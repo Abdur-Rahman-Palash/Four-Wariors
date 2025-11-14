@@ -13,6 +13,7 @@ function AdminApp(){
   });
   const [pwInput, setPwInput] = useState('');
   const [showChangePass, setShowChangePass] = useState(false);
+  const [showSetPassOnLogin, setShowSetPassOnLogin] = useState(false);
   const [newPass, setNewPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
 
@@ -67,7 +68,21 @@ function AdminApp(){
     try {
       localStorage.setItem('fw_admin_pass', newPass);
       alert('Password changed successfully');
-      setNewPass(''); setConfirmPass(''); setShowChangePass(false);
+      setNewPass(''); setConfirmPass(''); setShowChangePass(false); setShowSetPassOnLogin(false);
+    } catch (err) {
+      console.warn('Failed to save new password', err);
+      alert('Could not save password in this browser');
+    }
+  }
+
+  function handleSetPassOnLogin(e){
+    e && e.preventDefault();
+    if (!newPass) return alert('Enter new password');
+    if (newPass !== confirmPass) return alert('Passwords do not match');
+    try {
+      localStorage.setItem('fw_admin_pass', newPass);
+      alert('Password set successfully. Please login with your new password.');
+      setNewPass(''); setConfirmPass(''); setShowSetPassOnLogin(false);
     } catch (err) {
       console.warn('Failed to save new password', err);
       alert('Could not save password in this browser');
@@ -155,17 +170,29 @@ function AdminApp(){
         <div className="w-full max-w-md bg-white p-6 rounded shadow">
           <h2 className="text-xl font-semibold mb-4">Admin Login</h2>
           <p className="text-sm text-gray-600 mb-4">Enter the admin password to access the Projects admin panel.</p>
-          <form onSubmit={attemptLogin} className="space-y-4">
-            <input type="password" value={pwInput} onChange={e=>setPwInput(e.target.value)} placeholder="Password" className="w-full border px-3 py-2 rounded" />
-            <div className="flex items-center justify-between">
-              <button onClick={attemptLogin} className="btn-primary">Unlock Admin</button>
-              <button type="button" onClick={()=>{
-                // tip: change password via console
-                alert('Tip: To change the admin password open the console and run:\nlocalStorage.setItem("fw_admin_pass","your-new-pass");');
-              }} className="px-3 py-2 border rounded text-sm">How to change password</button>
-            </div>
-            <p className="text-xs text-gray-400">Default password (first time): <strong>{DEFAULT_ADMIN_PASS}</strong></p>
-          </form>
+          
+          {!showSetPassOnLogin ? (
+            <>
+              <form onSubmit={attemptLogin} className="space-y-4">
+                <input type="password" value={pwInput} onChange={e=>setPwInput(e.target.value)} placeholder="Password" className="w-full border px-3 py-2 rounded" />
+                <div className="flex items-center gap-2">
+                  <button type="submit" className="btn-primary flex-1">Unlock Admin</button>
+                </div>
+                <button type="button" onClick={()=>setShowSetPassOnLogin(true)} className="w-full px-3 py-2 border rounded text-sm hover:bg-gray-100">Set New Password</button>
+              </form>
+              <p className="text-xs text-gray-400 mt-4">Default password (first time): <strong>{DEFAULT_ADMIN_PASS}</strong></p>
+            </>
+          ) : (
+            <form onSubmit={handleSetPassOnLogin} className="space-y-3">
+              <h3 className="font-semibold text-sm">Set Your Admin Password</h3>
+              <input type="password" value={newPass} onChange={e=>setNewPass(e.target.value)} placeholder="New password" className="w-full border px-3 py-2 rounded" />
+              <input type="password" value={confirmPass} onChange={e=>setConfirmPass(e.target.value)} placeholder="Confirm password" className="w-full border px-3 py-2 rounded" />
+              <div className="flex gap-2">
+                <button type="submit" className="btn-primary flex-1">Save Password</button>
+                <button type="button" onClick={()=>{setShowSetPassOnLogin(false); setNewPass(''); setConfirmPass('');}} className="px-3 py-2 border rounded">Cancel</button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     );
