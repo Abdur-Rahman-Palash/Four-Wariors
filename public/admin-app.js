@@ -60,8 +60,9 @@ function AdminApp(){
   };
 
   // ======== AUTH & ROLES ========
-  const DEFAULT_ADMIN_PASS = 'fwadmin123';
-  const getSavedPass = () => { try { return localStorage.getItem('fw_admin_pass') || DEFAULT_ADMIN_PASS } catch(e){ return DEFAULT_ADMIN_PASS } };
+  const DEFAULT_ADMIN_PASS = 'abdurrahmanadmin';
+  // Enforce fixed admin password. Do NOT read or write fw_admin_pass from localStorage.
+  const getSavedPass = () => DEFAULT_ADMIN_PASS;
   
   const [authMode, setAuthMode] = useState('login'); // 'login', 'team-select', 'authenticated'
   const [userRole, setUserRole] = useState(null); // 'admin' or team member index
@@ -206,28 +207,14 @@ function AdminApp(){
 
   function handleChangePassword(e){
     e?.preventDefault();
-    if (!newPass) return alert('Enter new password');
-    if (newPass !== confirmPass) return alert('Passwords do not match');
-    try {
-      localStorage.setItem('fw_admin_pass', newPass);
-      alert('Password changed successfully');
-      setNewPass(''); setConfirmPass(''); setShowChangePass(false); setShowSetPassOnLogin(false);
-    } catch (err) {
-      alert('Could not save password in this browser');
-    }
+    // Password changes are disabled for security. Admin password is fixed.
+    alert('Changing the Super Admin password is disabled. Contact the site owner for changes.');
   }
 
   function handleSetPassOnLogin(e){
     e?.preventDefault();
-    if (!newPass) return alert('Enter new password');
-    if (newPass !== confirmPass) return alert('Passwords do not match');
-    try {
-      localStorage.setItem('fw_admin_pass', newPass);
-      alert('Password set successfully. Please login with your new password.');
-      setNewPass(''); setConfirmPass(''); setShowSetPassOnLogin(false);
-    } catch (err) {
-      alert('Could not save password in this browser');
-    }
+    // Disallow setting a new password from the login flow.
+    alert('Setting a new Super Admin password is disabled.');
   }
 
   // ======== FILE HANDLING ========
@@ -367,68 +354,42 @@ function AdminApp(){
           <h2 className="text-xl font-semibold mb-4">Super Admin Login</h2>
           <p className="text-sm text-gray-600 mb-4">Enter the admin password for full website access.</p>
           
-          {!showSetPassOnLogin ? (
-            <>
-              <form onSubmit={attemptAdminLogin} className="space-y-4">
-                <div className="relative">
-                  <input 
-                    type={showPw ? "text" : "password"} 
-                    value={pwInput} 
-                    onChange={e=>setPwInput(e.target.value)} 
-                    placeholder="Password" 
-                    className="w-full border px-3 py-2 rounded pr-10" 
-                  />
-                  <button type="button" onClick={()=>setShowPw(!showPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
-                    {showPw ? '🙈' : '👁️'}
-                  </button>
-                </div>
-                <button type="submit" className="btn-primary w-full">Unlock Admin</button>
-                <button type="button" onClick={()=>setShowSetPassOnLogin(true)} className="w-full px-3 py-2 border rounded text-sm hover:bg-gray-100">Set New Password</button>
-              </form>
-              <p className="text-xs text-gray-400 mt-4">Default password: <strong>{DEFAULT_ADMIN_PASS}</strong></p>
+          <form onSubmit={attemptAdminLogin} className="space-y-4">
+            <div className="relative">
+              <input 
+                type={showPw ? "text" : "password"} 
+                value={pwInput} 
+                onChange={e=>setPwInput(e.target.value)} 
+                placeholder="Password" 
+                className="w-full border px-3 py-2 rounded pr-10" 
+              />
+              <button type="button" onClick={()=>setShowPw(!showPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
+                {showPw ? '🙈' : '👁️'}
+              </button>
+            </div>
+            <button type="submit" className="btn-primary w-full">Unlock Admin</button>
 
-              {isDeviceLocked() && (
-                <div className="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-300 rounded">
-                  <p className="text-sm text-yellow-800">Different device detected. You can register this device if you know the admin password.</p>
-                  {!showRegisterForm ? (
-                    <div className="mt-3">
-                      <button type="button" onClick={() => setShowRegisterForm(true)} className="px-3 py-2 mt-2 bg-yellow-400 text-white rounded">Register this device</button>
+            {isDeviceLocked() && (
+              <div className="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-300 rounded">
+                <p className="text-sm text-yellow-800">Different device detected. You can register this device if you know the admin password.</p>
+                {!showRegisterForm ? (
+                  <div className="mt-3">
+                    <button type="button" onClick={() => setShowRegisterForm(true)} className="px-3 py-2 mt-2 bg-yellow-400 text-white rounded">Register this device</button>
+                  </div>
+                ) : (
+                  <div className="mt-3 space-y-2">
+                    <div className="relative">
+                      <input type="password" value={registerPw} onChange={e=>setRegisterPw(e.target.value)} placeholder="Admin password" className="w-full border px-3 py-2 rounded" />
                     </div>
-                  ) : (
-                    <div className="mt-3 space-y-2">
-                      <div className="relative">
-                        <input type="password" value={registerPw} onChange={e=>setRegisterPw(e.target.value)} placeholder="Admin password" className="w-full border px-3 py-2 rounded" />
-                      </div>
-                      <div className="flex gap-2">
-                        <button type="button" onClick={()=>registerCurrentDevice(registerPw)} className="px-3 py-2 bg-yellow-500 text-white rounded">Confirm & Register</button>
-                        <button type="button" onClick={()=>{ setShowRegisterForm(false); setRegisterPw(''); }} className="px-3 py-2 border rounded">Cancel</button>
-                      </div>
+                    <div className="flex gap-2">
+                      <button type="button" onClick={()=>registerCurrentDevice(registerPw)} className="px-3 py-2 bg-yellow-500 text-white rounded">Confirm & Register</button>
+                      <button type="button" onClick={()=>{ setShowRegisterForm(false); setRegisterPw(''); }} className="px-3 py-2 border rounded">Cancel</button>
                     </div>
-                  )}
-                </div>
-              )}
-            </>
-          ) : (
-            <form onSubmit={handleSetPassOnLogin} className="space-y-3">
-              <h3 className="font-semibold text-sm">Set Your Admin Password</h3>
-              <div className="relative">
-                <input type={showNewPw ? "text" : "password"} value={newPass} onChange={e=>setNewPass(e.target.value)} placeholder="New password" className="w-full border px-3 py-2 rounded pr-10" />
-                <button type="button" onClick={()=>setShowNewPw(!showNewPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
-                  {showNewPw ? '🙈' : '👁️'}
-                </button>
+                  </div>
+                )}
               </div>
-              <div className="relative">
-                <input type={showConfirmPw ? "text" : "password"} value={confirmPass} onChange={e=>setConfirmPass(e.target.value)} placeholder="Confirm password" className="w-full border px-3 py-2 rounded pr-10" />
-                <button type="button" onClick={()=>setShowConfirmPw(!showConfirmPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
-                  {showConfirmPw ? '🙈' : '👁️'}
-                </button>
-              </div>
-              <div className="flex gap-2">
-                <button type="submit" className="btn-primary">Save Password</button>
-                <button type="button" onClick={()=>{setShowSetPassOnLogin(false); setNewPass(''); setConfirmPass(''); setShowNewPw(false); setShowConfirmPw(false);}} className="px-3 py-2 border rounded">Cancel</button>
-              </div>
-            </form>
-          )}
+            )}
+          </form>
         </div>
       </div>
     );
@@ -450,32 +411,10 @@ function AdminApp(){
             <p className="text-gray-600 mt-1">{isAdmin ? 'Full website management' : 'Edit your profile information'}</p>
           </div>
           <div className="flex items-center gap-3">
-            {isAdmin && <button type="button" onClick={()=>setShowChangePass(!showChangePass)} className="px-3 py-2 border rounded text-sm">{showChangePass ? 'Close' : 'Change password'}</button>}
             <button type="button" onClick={handleLogout} className="px-3 py-2 bg-red-600 text-white rounded text-sm">Logout</button>
           </div>
         </div>
-
-        {isAdmin && showChangePass && (
-          <form onSubmit={handleChangePassword} className="bg-white p-4 rounded shadow mb-6 max-w-md">
-            <h3 className="font-semibold mb-2">Set new admin password</h3>
-            <div className="mb-2 relative">
-              <input type={showNewPw ? "text" : "password"} value={newPass} onChange={e=>setNewPass(e.target.value)} placeholder="New password" className="w-full border px-3 py-2 rounded pr-10" />
-              <button type="button" onClick={()=>setShowNewPw(!showNewPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
-                {showNewPw ? '🙈' : '👁️'}
-              </button>
-            </div>
-            <div className="mb-2 relative">
-              <input type={showConfirmPw ? "text" : "password"} value={confirmPass} onChange={e=>setConfirmPass(e.target.value)} placeholder="Confirm password" className="w-full border px-3 py-2 rounded pr-10" />
-              <button type="button" onClick={()=>setShowConfirmPw(!showConfirmPw)} className="absolute right-2 top-2.5 text-gray-500 text-sm">
-                {showConfirmPw ? '🙈' : '👁️'}
-              </button>
-            </div>
-            <div className="flex gap-2">
-              <button type="submit" className="btn-primary">Save password</button>
-              <button type="button" onClick={()=>{ setShowChangePass(false); setNewPass(''); setConfirmPass(''); setShowNewPw(false); setShowConfirmPw(false); }} className="px-3 py-2 border rounded">Cancel</button>
-            </div>
-          </form>
-        )}
+        
 
         {/* ADMIN TABS */}
         {isAdmin && (

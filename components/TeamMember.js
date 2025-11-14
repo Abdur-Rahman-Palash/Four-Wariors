@@ -1,4 +1,4 @@
-function TeamMember({ name, role, image, bio }) {
+function TeamMember({ name, role, image, bio, onClick }) {
   try {
     const [isHovered, setIsHovered] = React.useState(false);
     const [imageLoaded, setImageLoaded] = React.useState(false);
@@ -19,6 +19,10 @@ function TeamMember({ name, role, image, bio }) {
         title="Click to view details"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onClick={typeof onClick === 'function' ? onClick : undefined}
+        role={onClick ? 'button' : undefined}
+        tabIndex={onClick ? 0 : undefined}
+        onKeyDown={e => { if (onClick && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onClick(); } }}
       >
         <div className="relative overflow-hidden h-64 bg-gradient-to-br from-blue-100 to-purple-100">
           {/* Fallback avatar */}

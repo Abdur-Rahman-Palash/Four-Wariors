@@ -67,13 +67,11 @@ function AboutApp() {
             <h2 className="text-4xl font-bold text-center mb-16">Meet Our Team</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {team.map((member, index) => (
-                <div 
-                  key={index} 
+                <TeamMember
+                  key={index}
+                  {...member}
                   onClick={() => setSelectedMember(member)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <TeamMember {...member} />
-                </div>
+                />
               ))}
             </div>
           </div>
