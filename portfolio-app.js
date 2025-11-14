@@ -2,7 +2,8 @@ function PortfolioApp() {
   try {
     const [filter, setFilter] = React.useState('all');
 
-    const projects = [
+    // Load projects from localStorage if available, otherwise use defaults
+    const defaultProjects = [
       {
         title: 'E-Commerce Platform',
         category: 'web',
@@ -46,6 +47,21 @@ function PortfolioApp() {
         tools: ['SEMrush', 'Google Analytics']
       }
     ];
+
+    const loadProjects = () => {
+      try {
+        const raw = localStorage.getItem('fw_projects');
+        if (!raw) return defaultProjects;
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed) || parsed.length === 0) return defaultProjects;
+        return parsed;
+      } catch (err) {
+        console.warn('Failed to read projects from localStorage, using defaults', err);
+        return defaultProjects;
+      }
+    };
+
+    const projects = loadProjects();
 
     const categories = ['all', 'web', 'design', 'marketing'];
     const filteredProjects = filter === 'all' ? projects : projects.filter(p => p.category === filter);
