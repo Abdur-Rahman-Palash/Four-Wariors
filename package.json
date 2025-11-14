@@ -1,0 +1,23 @@
+{
+  "name": "four-wariors",
+  "version": "1.0.0",
+  "description": "",
+  "main": "about-app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abdur-Rahman-Palash/Four-Wariors.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abdur-Rahman-Palash/Four-Wariors/issues"
+  },
+  "homepage": "https://github.com/Abdur-Rahman-Palash/Four-Wariors#readme",
+  "dependencies": {
+    "@vercel/analytics": "^1.5.0"
+  }
+}
