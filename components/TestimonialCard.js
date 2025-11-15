@@ -3,7 +3,7 @@ function TestimonialCard({ name, company, role, image, rating, text }) {
     return (
       <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300" data-name="testimonial-card" data-file="components/TestimonialCard.js">
         <div className="flex items-center mb-4">
-          <img src={image} alt={name} className="w-16 h-16 rounded-full object-cover mr-4" />
+          <img src={image} alt={name} width={64} height={64} loading="lazy" decoding="async" className="w-16 h-16 rounded-full object-cover mr-4" />
           <div>
             <h3 className="font-bold text-lg">{name}</h3>
             <p className="text-[var(--text-light)] text-sm">{role}, {company}</p>

@@ -2,26 +2,27 @@ function HeroCarousel() {
   try {
     const [currentSlide, setCurrentSlide] = React.useState(0);
 
+    // Use optimized WebP images (Unsplash supports fm=webp) and smaller sizes where appropriate.
     const slides = [
       {
         title: 'We Design, Develop & Market',
         subtitle: 'Digital Experiences That Deliver Results',
         icon: '🚀',
-        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80',
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&auto=format&fit=crop&fm=webp&q=75',
         color: '#3B82F6'
       },
       {
         title: 'Transform Your Brand',
         subtitle: 'With Creative Design Solutions',
         icon: '🎨',
-        image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&q=80',
+        image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1400&auto=format&fit=crop&fm=webp&q=75',
         color: '#8B5CF6'
       },
       {
         title: 'Build Your Digital Future',
         subtitle: 'With Modern Web Technology',
         icon: '💻',
-        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80',
+        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1400&auto=format&fit=crop&fm=webp&q=75',
         color: '#EC4899'
       }
     ];
@@ -111,6 +112,9 @@ function HeroCarousel() {
             </div>
           </div>
         ))}
+
+        {/* Hidden img to help browsers prioritize the LCP image (first slide) */}
+        <img src={slides[0].image} alt="Hero background" width="1400" height="800" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }} aria-hidden="true" fetchpriority="high" />
 
         {/* Navigation Dots - Enhanced */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-10">

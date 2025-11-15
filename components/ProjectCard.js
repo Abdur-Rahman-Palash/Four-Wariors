@@ -3,7 +3,7 @@ function ProjectCard({ title, category, image, description, tools }) {
     return (
       <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2" data-name="project-card" data-file="components/ProjectCard.js">
         <div className="relative overflow-hidden h-64">
-          <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-300 hover:scale-110" />
+          <img src={image} alt={title} width={800} height={400} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-300 hover:scale-110" />
           <div className="absolute top-4 right-4">
             <span className="px-4 py-1 bg-[var(--primary-color)] text-white text-sm font-semibold rounded-full">
               {category}

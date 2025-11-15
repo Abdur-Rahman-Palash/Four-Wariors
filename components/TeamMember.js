@@ -36,6 +36,9 @@ function TeamMember({ name, role, image, bio, onClick }) {
           <img 
             src={image} 
             alt={name}
+            width={400} height={480}
+            loading="lazy"
+            decoding="async"
             onLoad={() => setImageLoaded(true)}
             onError={() => {
               setImageLoaded(true);

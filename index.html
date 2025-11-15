@@ -36,13 +36,15 @@
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=630&fit=crop">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://four-wariors.onrender.com/">
+    <link rel="canonical" href="https://four-wariors.vercel.app/">
     
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://resource.trickle.so">
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://images.unsplash.com">
     <link rel="dns-prefetch" href="https://resource.trickle.so">
+    <!-- Preload hero LCP image (WebP) to improve LCP stability -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&auto=format&fit=crop&fm=webp&q=75">
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%232563eb' font-weight='bold'>C</text></svg>">
@@ -149,6 +151,7 @@
                 })();
                 </script>
         <link href="https://resource.trickle.so/vendor_lib/unpkg/lucide-static@0.516.0/font/lucide.css" rel="stylesheet">
+        <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3H6m3s5wqk2w3U4.woff2" as="font" type="font/woff2" crossorigin>
         <style>
             @font-face {
                 font-family: 'Inter';
@@ -306,6 +309,17 @@
     <script type="text/babel" src="components/StatsSection.js" defer></script>
     <script type="text/babel" src="components/FloatingContact.js" defer></script>
     <script type="text/babel" src="app.js" defer></script>
+
+        <!-- Register a tiny service worker to cache static assets and images for repeat visits -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                try {
+                    navigator.serviceWorker.register('/sw.js').then(reg => {
+                        console.log('ServiceWorker registered:', reg.scope);
+                    }).catch(err => console.warn('SW register failed:', err));
+                } catch (e) { console.warn('SW registration error', e); }
+            }
+        </script>
 
     <!-- Anti-copy Protection: Prevents unauthorized copying, printing, and inspection -->
     <style>

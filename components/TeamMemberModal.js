@@ -56,6 +56,10 @@ function TeamMemberModal({ member, onClose }) {
             <img 
               src={member.image} 
               alt={member.name}
+              width={800} height={800}
+              loading={imageLoaded ? 'lazy' : 'eager'}
+              decoding="async"
+              fetchpriority={imageLoaded ? 'auto' : 'high'}
               onLoad={() => setImageLoaded(true)}
               onError={() => {
                 setImageLoaded(true);
