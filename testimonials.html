@@ -62,5 +62,28 @@
             window.addEventListener('scroll', function(){ if (!ticking) { window.requestAnimationFrame(update); ticking = true; } }, { passive: true }); document.addEventListener('DOMContentLoaded', update); update();
         })();
         </script>
+    <!-- Anti-copy Protection -->
+    <style>
+        body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        body { -webkit-touch-callout: none; }
+        img, a { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        @media print { body { display: none !important; } }
+    </style>
+    <script>
+        document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
+        document.addEventListener('copy', (e) => { e.preventDefault(); return false; });
+        document.addEventListener('cut', (e) => { e.preventDefault(); return false; });
+        document.addEventListener('paste', (e) => { e.preventDefault(); return false; });
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'u' || e.key === 's' || e.key === 'p')) {
+                e.preventDefault(); return false;
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.key === 'K'))) {
+                e.preventDefault(); return false;
+            }
+        });
+        document.addEventListener('dragstart', (e) => { e.preventDefault(); return false; });
+        document.addEventListener('drop', (e) => { e.preventDefault(); return false; });
+    </script>
 </body>
 </html>
