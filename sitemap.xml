@@ -1,53 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
-    <loc>https://four-wariors.vercel.app/</loc>
+    <loc>https://four-wariors.onrender.com/</loc>
     <lastmod>2025-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-
   <url>
-    <loc>https://four-wariors.vercel.app/index.html</loc>
+    <loc>https://four-wariors.onrender.com/index.html</loc>
     <lastmod>2025-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-
   <url>
-    <loc>https://four-wariors.vercel.app/about.html</loc>
+    <loc>https://four-wariors.onrender.com/about.html</loc>
     <lastmod>2025-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://four-wariors.vercel.app/services.html</loc>
+    <loc>https://four-wariors.onrender.com/services.html</loc>
     <lastmod>2025-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://four-wariors.vercel.app/portfolio.html</loc>
+    <loc>https://four-wariors.onrender.com/portfolio.html</loc>
     <lastmod>2025-11-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
   <url>
-    <loc>https://four-wariors.vercel.app/contact.html</loc>
+    <loc>https://four-wariors.onrender.com/contact.html</loc>
     <lastmod>2025-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
   <url>
-    <loc>https://four-wariors.vercel.app/testimonials.html</loc>
+    <loc>https://four-wariors.onrender.com/testimonials.html</loc>
     <lastmod>2025-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-
 </urlset>

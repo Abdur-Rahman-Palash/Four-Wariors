@@ -7,7 +7,7 @@ Disallow: /admin-app.js
 Crawl-delay: 1
 
 # Sitemap
-Sitemap: https://four-wariors.vercel.app/sitemap.xml
+Sitemap: https://four-wariors.onrender.com/sitemap.xml
 
 # Google Search Console
 User-agent: Googlebot

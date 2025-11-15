@@ -127,6 +127,21 @@ function AdminApp(){
     { name: 'Client B', role: 'Founder, DemoCorp', image: '', quote: 'Professional and fast. Highly recommended.' }
   ];
 
+  const defaultHome = {
+    heroTitle: 'We build beautiful digital experiences',
+    heroSubtitle: 'Design, develop and market your brand to grow online.',
+    heroCtaText: 'Get Started',
+    heroCtaUrl: '/contact.html',
+    heroImage: ''
+  };
+
+  const defaultContact = {
+    contactEmail: companyInfo?.email || 'info@creativeagency.com',
+    contactPhone: companyInfo?.phone || '+8801971233127',
+    contactAddress: companyInfo?.address || 'Dadul, Kazihal, Attpukurhat, Fulbari, Dinajpur, Bangladesh',
+    mapEmbed: ''
+  };
+
   // ======== STATE ========
   const [projects, setProjects] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_projects') || 'null') || defaultProjects; } catch(e){ return defaultProjects; } });
   const [companyInfo, setCompanyInfo] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_company_info') || 'null') || defaultCompanyInfo; } catch(e){ return defaultCompanyInfo; } });
@@ -134,6 +149,8 @@ function AdminApp(){
   const [services, setServices] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_services') || 'null') || defaultServices; } catch(e){ return defaultServices; } });
   const [footer, setFooter] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_footer') || 'null') || defaultFooter; } catch(e){ return defaultFooter; } });
   const [testimonials, setTestimonials] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_testimonials') || 'null') || defaultTestimonials; } catch(e){ return defaultTestimonials; } });
+  const [home, setHome] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_home') || 'null') || defaultHome; } catch(e){ return defaultHome; } });
+  const [contactSettings, setContactSettings] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_contact') || 'null') || defaultContact; } catch(e){ return defaultContact; } });
 
   const [projectForm, setProjectForm] = useState({ title: '', category: 'web', image: '', description: '', tools: '' });
   const [editingProjectIdx, setEditingProjectIdx] = useState(-1);
@@ -160,6 +177,8 @@ function AdminApp(){
   useEffect(() => { try { localStorage.setItem('fw_services', JSON.stringify(services)); } catch(e){} }, [services]);
   useEffect(() => { try { localStorage.setItem('fw_footer', JSON.stringify(footer)); } catch(e){} }, [footer]);
   useEffect(() => { try { localStorage.setItem('fw_testimonials', JSON.stringify(testimonials)); } catch(e){} }, [testimonials]);
+  useEffect(() => { try { localStorage.setItem('fw_home', JSON.stringify(home)); } catch(e){} }, [home]);
+  useEffect(() => { try { localStorage.setItem('fw_contact', JSON.stringify(contactSettings)); } catch(e){} }, [contactSettings]);
 
   // ======== AUTH FUNCTIONS ========
   function attemptAdminLogin(e){
@@ -432,9 +451,9 @@ function AdminApp(){
         {isAdmin && (
           <div className="bg-white rounded-lg shadow mb-6">
             <div className="flex border-b overflow-x-auto">
-              {['company', 'team', 'services', 'testimonials', 'projects', 'footer'].map(tab => (
+              {['home','about','company', 'team', 'services', 'testimonials', 'projects', 'footer','contact'].map(tab => (
                 <button type="button" key={tab} onClick={()=>setActiveTab(tab)} className={`px-4 py-3 font-medium capitalize whitespace-nowrap ${activeTab===tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}>
-                  {tab === 'company' ? '🏢 Company' : tab === 'team' ? '👥 Team' : tab === 'services' ? '⚙️ Services' : tab === 'projects' ? '📁 Projects' : '📄 Footer'}
+                  {tab === 'home' ? '🏠 Home' : tab === 'about' ? 'ℹ️ About' : tab === 'company' ? '🏢 Company' : tab === 'team' ? '👥 Team' : tab === 'services' ? '⚙️ Services' : tab === 'projects' ? '📁 Portfolio' : tab === 'contact' ? '✉️ Contact' : '📄 Footer'}
                 </button>
               ))}
             </div>
@@ -614,6 +633,93 @@ function AdminApp(){
                         </div>
                       </div>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* HOME TAB */}
+              {activeTab === 'home' && (
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">Home / Hero Section</h2>
+                  <form onSubmit={(e)=>{ e.preventDefault(); alert('Home content saved.'); }} className="bg-gray-50 p-6 rounded mb-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Hero Title</label>
+                        <input value={home.heroTitle} onChange={e=>setHome({...home, heroTitle:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">CTA Text</label>
+                        <input value={home.heroCtaText} onChange={e=>setHome({...home, heroCtaText:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">Hero Subtitle</label>
+                        <textarea value={home.heroSubtitle} onChange={e=>setHome({...home, heroSubtitle:e.target.value})} className="w-full border px-3 py-2 rounded h-24"></textarea>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">CTA URL</label>
+                        <input value={home.heroCtaUrl} onChange={e=>setHome({...home, heroCtaUrl:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Hero Image URL</label>
+                        <input value={home.heroImage} onChange={e=>setHome({...home, heroImage:e.target.value})} className="w-full border px-3 py-2 rounded" placeholder="https://..." />
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-4">Changes saved automatically.</p>
+                  </form>
+                </div>
+              )}
+
+              {/* ABOUT TAB (company + team) */}
+              {activeTab === 'about' && (
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">About (Company & Team)</h2>
+                  {/* Company form (reuse) */}
+                  <div className="bg-white p-6 rounded mb-6">
+                    <h3 className="font-bold mb-3">Company Information</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Company Name</label>
+                        <input value={companyInfo.name} onChange={e=>setCompanyInfo({...companyInfo, name:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Tagline</label>
+                        <input value={companyInfo.tagline} onChange={e=>setCompanyInfo({...companyInfo, tagline:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">Address</label>
+                        <textarea value={companyInfo.address} onChange={e=>setCompanyInfo({...companyInfo, address:e.target.value})} className="w-full border px-3 py-2 rounded h-20"></textarea>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Email</label>
+                        <input value={companyInfo.email} onChange={e=>setCompanyInfo({...companyInfo, email:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Phone</label>
+                        <input value={companyInfo.phone} onChange={e=>setCompanyInfo({...companyInfo, phone:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-4">Company changes saved automatically.</p>
+                  </div>
+
+                  {/* Team management (reuse) */}
+                  <div>
+                    <h3 className="text-xl font-semibold mb-4">Team Members ({team.length})</h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {team.map((m, idx) => (
+                        <div key={idx} className="bg-white border rounded p-4">
+                          <div className="w-full h-40 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
+                            {m.image ? <img src={m.image} alt={m.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+                          </div>
+                          <h4 className="font-bold">{m.name}</h4>
+                          <p className="text-sm text-blue-600 mb-2">{m.role}</p>
+                          <p className="text-xs text-gray-600 line-clamp-2 mb-3">{m.bio}</p>
+                          <div className="flex gap-2">
+                              <button type="button" onClick={()=>handleEditTeam(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
+                                <button type="button" onClick={()=>handleDeleteTeam(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}

@@ -4,7 +4,7 @@ Disallow: /admin.html
 Disallow: /admin-app.js
 Crawl-delay: 1
 
-Sitemap: https://four-wariors.vercel.app/sitemap.xml
+Sitemap: https://four-wariors.onrender.com/sitemap.xml
 
 User-agent: Googlebot
 Allow: /
