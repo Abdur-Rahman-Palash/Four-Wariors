@@ -51,6 +51,9 @@ function AdminApp(){
   const [newPass, setNewPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [showNewPw, setShowNewPw] = useState(false);
+  // Protected team members: selecting these requires a password
+  const PROTECTED_TEAM_INDEXES = [0,1,2];
+  const PROTECTED_PASSWORD = 'JASS';
   const [showConfirmPw, setShowConfirmPw] = useState(false);
   const [activeTab, setActiveTab] = useState('projects');
   const [showRegisterForm, setShowRegisterForm] = useState(false);
@@ -210,6 +213,19 @@ function AdminApp(){
   }
 
   function selectTeamMember(idx){
+    // If this member is protected, require the shared password
+    try {
+      if (PROTECTED_TEAM_INDEXES.includes(idx)) {
+        const pw = window.prompt('Enter access password for this profile:');
+        if (!pw || pw !== PROTECTED_PASSWORD) {
+          alert('Access denied: password required or incorrect.');
+          return;
+        }
+      }
+    } catch (err) { /* ignore prompt errors in non-browser environments */ }
+
+    // Prefill the editing form for the selected member
+    setTeamForm(team[idx] ? { ...team[idx] } : { name: '', role: '', image: '', bio: '', portfolio: '', github: '', telegram: '', whatsapp: '' });
     setUserRole(idx);
     setAuthMode('authenticated');
   }
@@ -285,6 +301,24 @@ function AdminApp(){
   }
   function handleEditTeam(idx){ const m = team[idx]; setTeamForm({ name: m.name, role: m.role, image: m.image || '', bio: m.bio, portfolio: m.portfolio, github: m.github, telegram: m.telegram, whatsapp: m.whatsapp }); setEditingTeamIdx(idx); window.scrollTo({top:0}); }
   function handleDeleteTeam(idx){ if(!confirm('Delete this team member?')) return; const copy = team.slice(); copy.splice(idx,1); setTeam(copy); }
+
+  // Save edits made by a non-admin team member to their own profile
+  async function handleSaveCurrentMember(e){
+    e?.preventDefault();
+    const idx = typeof userRole === 'number' ? userRole : -1;
+    if (idx < 0) return alert('No profile selected to save.');
+    if (!teamForm.name || !teamForm.role) return alert('Name and role are required');
+
+    let image = teamForm.image;
+    if (!image && teamFileRef.current?.files?.[0]) {
+      try { image = await onFile(teamFileRef.current.files[0]); } catch(err){ console.warn(err); }
+    }
+
+    const updatedMember = { name: teamForm.name, role: teamForm.role, image: image || team[idx]?.image || '', bio: teamForm.bio, portfolio: teamForm.portfolio, github: teamForm.github, telegram: teamForm.telegram, whatsapp: teamForm.whatsapp };
+    const copy = team.slice();
+    copy[idx] = updatedMember;
+    setTeam(copy);
+  }
 
   // ======== SERVICE HANDLERS ========
   const resetServiceForm = () => { setServiceForm({ icon: '', title: '', description: '', features: '' }); setEditingServiceIdx(-1); };
@@ -960,7 +994,7 @@ function AdminApp(){
           <div className="bg-white rounded-lg shadow p-6 max-w-2xl">
             <h2 className="text-2xl font-bold mb-6">Edit Your Profile</h2>
             
-            <form onSubmit={(e) => { e.preventDefault(); handleEditTeam(currentMemberIdx); }} className="space-y-4">
+            <form onSubmit={handleSaveCurrentMember} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Profile Photo</label>
                 <div className="w-32 h-32 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
