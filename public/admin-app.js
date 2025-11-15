@@ -22,41 +22,19 @@ function AdminApp(){
   };
 
   const checkDeviceAccess = () => {
-    const currentFingerprint = getDeviceFingerprint();
-    const savedFingerprint = localStorage.getItem('fw_device_fingerprint');
-    
-    if (!savedFingerprint) {
-      // First time - save device fingerprint
-      localStorage.setItem('fw_device_fingerprint', currentFingerprint);
-      return true;
-    }
-    
-    // Check if this is the same device
-    if (currentFingerprint !== savedFingerprint) {
-      alert('⚠️ Admin access is locked to your original device only.\n\nDifferent device detected. Access denied.\n\nContact administrator to unlock.');
-      return false;
-    }
+    // Device fingerprint checks are disabled for testing/maintenance.
+    // Always allow access regardless of device fingerprint.
     return true;
   };
 
   const isDeviceLocked = () => {
-    try {
-      const current = getDeviceFingerprint();
-      const saved = localStorage.getItem('fw_device_fingerprint');
-      return !!saved && current !== saved;
-    } catch (e) { return false; }
+    // Device locking disabled — never consider device locked.
+    return false;
   };
 
   const registerCurrentDevice = (pw) => {
-    try {
-      if (pw !== getSavedPass()) return alert('Incorrect admin password.');
-      const fp = getDeviceFingerprint();
-      localStorage.setItem('fw_device_fingerprint', fp);
-      alert('Device registered successfully. You can now login from this device.');
-      setShowRegisterForm(false);
-      setRegisterPw('');
-      setAuthMode('admin-login');
-    } catch (err) { console.warn(err); alert('Could not register device.'); }
+    // Device registration is disabled when device-locking is turned off.
+    alert('Device registration is disabled. Device-based locking has been removed.');
   };
 
   // ======== AUTH & ROLES ========
