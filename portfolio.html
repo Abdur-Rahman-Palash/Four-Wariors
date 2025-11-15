@@ -12,38 +12,21 @@
     <meta property="og:url" content="https://four-wariors.onrender.com/portfolio.html">
     <meta property="og:type" content="website">
     
-    <!-- Google Analytics -->
+    <!-- Google Analytics (delayed init) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XNBZ4550NC"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-XNBZ4550NC');
-    </script>
-    
-    <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js"></script>
-    <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://resource.trickle.so/vendor_lib/unpkg/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://resource.trickle.so/vendor_lib/unpkg/lucide-static@0.516.0/font/lucide.css" rel="stylesheet">
-    <style type="text/tailwindcss">
-    @layer theme {
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #f8fafc;
-            --text-dark: #1e293b;
-            --text-light: #64748b;
-        }
-    }
-    @layer components {
-        .btn-primary {
-            @apply px-8 py-3 bg-[var(--primary-color)] text-white rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300;
-        }
-        .section-padding {
-            @apply py-20 px-6;
-        }
-    }
-    </style>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.addEventListener('load',function(){try{gtag('js',new Date());gtag('config','G-XNBZ4550NC')}catch(e){}});</script>
+
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js" defer></script>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js" defer></script>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/@babel/standalone/babel.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <link href="https://resource.trickle.so/vendor_lib/unpkg/lucide-static@0.516.0/font/lucide.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://resource.trickle.so/vendor_lib/unpkg/lucide-static@0.516.0/font/lucide.css" rel="stylesheet"></noscript>
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3H6m3s5wqk2w3U4.woff2" as="font" type="font/woff2" crossorigin>
+    <style>@font-face{font-family:'Inter';src:url('https://fonts.gstatic.com/s/inter/v12/UcCO3H6m3s5wqk2w3U4.woff2') format('woff2');font-display:swap;}</style>
+    <style>html,body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}#root{min-height:60vh}.btn-primary{background:#2563eb;color:#fff;padding:.6rem 1.6rem;border-radius:.5rem}.section-padding{padding:5rem 1rem}</style>
+    <link rel="stylesheet" href="/styles.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/styles.css"></noscript>
     <!-- Anti-copy styles removed for testing -->
     <!-- Scroll progress bar styles -->
     <style>
@@ -54,11 +37,11 @@
 <body>
     <div id="scroll-progress-container" aria-hidden="true"><div id="scroll-progress"></div></div>
     <div id="root"></div>
-    <script type="text/babel" src="components/Header.js"></script>
-    <script type="text/babel" src="components/Footer.js"></script>
-    <script type="text/babel" src="components/FloatingContact.js"></script>
-    <script type="text/babel" src="components/ProjectCard.js"></script>
-    <script type="text/babel" src="portfolio-app.js"></script>
+    <script type="text/babel" src="components/Header.js" defer></script>
+    <script type="text/babel" src="components/Footer.js" defer></script>
+    <script type="text/babel" src="components/FloatingContact.js" defer></script>
+    <script type="text/babel" src="components/ProjectCard.js" defer></script>
+    <script type="text/babel" src="portfolio-app.js" defer></script>
         <script>
         (function(){
             // Anti-copy script removed for testing

@@ -6,20 +6,19 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Admin Panel - Restricted Access">
   <title>Admin Panel - CreativeAgency</title>
-  <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js"></script>
-  <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://resource.trickle.so/vendor_lib/unpkg/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    .btn-primary { @apply px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl; }
-    
-    /* Anti-copy styles: prevent text/image selection and printing */
-    body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
-    body { -webkit-touch-callout: none; }
-    img, a { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
-    @media print { body { display: none !important; } }
-  </style>
+  <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js" defer></script>
+  <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js" defer></script>
+  <script src="https://resource.trickle.so/vendor_lib/unpkg/@babel/standalone/babel.min.js" defer></script>
+  <script src="https://cdn.tailwindcss.com" defer></script>
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3H6m3s5wqk2w3U4.woff2" as="font" type="font/woff2" crossorigin>
+  <style>@font-face{font-family:Inter,ui-sans-serif;src:url('https://fonts.gstatic.com/s/inter/v12/UcCO3H6m3s5wqk2w3U4.woff2') format('woff2');font-display:swap;}html,body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;margin:0}#root{min-height:60vh}.btn-primary{padding:.6rem 1.6rem;background:#2563eb;color:#fff;border-radius:.5rem;font-weight:600}
+  /* Anti-copy styles: prevent text/image selection and printing */
+  body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+  body{-webkit-touch-callout:none}
+  img,a{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+  @media print{body{display:none!important}}</style>
+  <link rel="stylesheet" href="/styles.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="/styles.css"></noscript>
 </head>
 <body class="bg-gray-50">
   <div id="root" class="min-h-screen"></div>

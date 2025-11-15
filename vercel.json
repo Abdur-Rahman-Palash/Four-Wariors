@@ -11,13 +11,15 @@
     {
       "source": "/(.*)\\.(js|css|woff2|ttf|eot|svg)$",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+        { "key": "Vary", "value": "Accept-Encoding" }
       ]
     },
     {
       "source": "/(.*)\\.(jpg|jpeg|png|gif|webp|ico)$",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=2592000, immutable" }
+        { "key": "Cache-Control", "value": "public, max-age=2592000, immutable" },
+        { "key": "Vary", "value": "Accept-Encoding" }
       ]
     },
     {
@@ -29,7 +31,8 @@
     {
       "source": "/sw.js",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "Vary", "value": "Accept-Encoding" }
       ]
     },
     {

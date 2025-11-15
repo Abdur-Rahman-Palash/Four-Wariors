@@ -7,42 +7,42 @@ function PortfolioApp() {
       {
         title: 'E-Commerce Platform',
         category: 'web',
-        image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=600&q=80',
+        image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=600&auto=format&fit=crop&fm=webp&q=75',
         description: 'Full-stack e-commerce solution with payment integration',
         tools: ['React', 'Node.js', 'MongoDB']
       },
       {
         title: 'Brand Identity Design',
         category: 'design',
-        image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&q=80',
+        image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&auto=format&fit=crop&fm=webp&q=75',
         description: 'Complete brand identity for a tech startup',
         tools: ['Illustrator', 'Photoshop', 'Figma']
       },
       {
         title: 'Social Media Campaign',
         category: 'marketing',
-        image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&q=80',
+        image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&auto=format&fit=crop&fm=webp&q=75',
         description: 'Multi-platform social media marketing strategy',
         tools: ['Meta Ads', 'Analytics', 'Canva']
       },
       {
         title: 'Restaurant Website',
         category: 'web',
-        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80',
+        image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&fm=webp&q=75',
         description: 'Responsive restaurant website with online ordering',
         tools: ['React', 'Express', 'Stripe']
       },
       {
         title: 'Mobile App UI/UX',
         category: 'design',
-        image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80',
+        image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&fm=webp&q=75',
         description: 'Modern mobile app interface design',
         tools: ['Figma', 'Adobe XD']
       },
       {
         title: 'SEO Optimization',
         category: 'marketing',
-        image: 'https://images.unsplash.com/photo-1432888622747-4eb9a8f2c293?w=600&q=80',
+        image: 'https://images.unsplash.com/photo-1432888622747-4eb9a8f2c293?w=600&auto=format&fit=crop&fm=webp&q=75',
         description: 'Increased organic traffic by 300%',
         tools: ['SEMrush', 'Google Analytics']
       }

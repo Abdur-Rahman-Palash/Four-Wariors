@@ -7,21 +7,21 @@ function HeroCarousel() {
         title: 'We Design, Develop & Market',
         subtitle: 'Digital Experiences That Deliver Results',
         icon: '🚀',
-        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80',
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&fm=webp&q=75',
         color: '#3B82F6'
       },
       {
         title: 'Transform Your Brand',
         subtitle: 'With Creative Design Solutions',
         icon: '🎨',
-        image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&q=80',
+        image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&auto=format&fit=crop&fm=webp&q=75',
         color: '#8B5CF6'
       },
       {
         title: 'Build Your Digital Future',
         subtitle: 'With Modern Web Technology',
         icon: '💻',
-        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80',
+        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&auto=format&fit=crop&fm=webp&q=75',
         color: '#EC4899'
       }
     ];

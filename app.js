@@ -58,21 +58,21 @@ function App() {
       {
         title: 'E-Commerce Platform',
         category: 'web',
-        image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=600&q=80',
+        image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=600&auto=format&fit=crop&fm=webp&q=75',
         description: 'Full-stack e-commerce solution with payment integration',
         tools: ['React', 'Node.js', 'MongoDB']
       },
       {
         title: 'Brand Identity Design',
         category: 'design',
-        image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&q=80',
+        image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&auto=format&fit=crop&fm=webp&q=75',
         description: 'Complete brand identity for a tech startup',
         tools: ['Illustrator', 'Photoshop', 'Figma']
       },
       {
         title: 'Social Media Campaign',
         category: 'marketing',
-        image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&q=80',
+        image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&auto=format&fit=crop&fm=webp&q=75',
         description: 'Multi-platform social media marketing strategy',
         tools: ['Meta Ads', 'Analytics', 'Canva']
       }

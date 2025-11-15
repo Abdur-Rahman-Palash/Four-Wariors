@@ -83,7 +83,7 @@ function AdminApp(){
 
   // ======== DEFAULT DATA ========
   const defaultProjects = [{
-    title: 'E-Commerce Platform', category: 'web', image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=600&q=80',
+    title: 'E-Commerce Platform', category: 'web', image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=600&auto=format&fit=crop&fm=webp&q=75',
     description: 'Full-stack e-commerce solution with payment integration', tools: ['React', 'Node.js', 'MongoDB']
   }];
 

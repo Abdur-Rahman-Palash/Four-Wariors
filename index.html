@@ -47,13 +47,15 @@
     <link rel="preload" as="image" href="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&auto=format&fit=crop&fm=webp&q=75">
     
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XNBZ4550NC"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-XNBZ4550NC');
-    </script>
+        <!-- Google Analytics (delayed init to reduce main thread work) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XNBZ4550NC"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}      
+            window.addEventListener('load', function(){
+                try{ gtag('js', new Date()); gtag('config', 'G-XNBZ4550NC'); }catch(e){}
+            });
+        </script>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%232563eb' font-weight='bold'>C</text></svg>">
@@ -169,60 +171,28 @@
             }
         </style>
 
-    <style type="text/tailwindcss">
-    @layer theme {
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #f8fafc;
-            --accent-color: #0ea5e9;
-            --text-dark: #1e293b;
-            --text-light: #64748b;
-        }
-    }
+            <link href="https://resource.trickle.so/vendor_lib/unpkg/lucide-static@0.516.0/font/lucide.css" rel="stylesheet" media="print" onload="this.media='all'">
+            <noscript><link href="https://resource.trickle.so/vendor_lib/unpkg/lucide-static@0.516.0/font/lucide.css" rel="stylesheet"></noscript>
+            <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3H6m3s5wqk2w3U4.woff2" as="font" type="font/woff2" crossorigin>
+            <style>
+                @font-face {font-family: 'Inter';src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3H6m3s5wqk2w3U4.woff2') format('woff2');font-display: swap;}
+            </style>
 
-    @layer base {
-        body {
-            @apply font-sans antialiased text-[var(--text-dark)];
-            background-color: #fff;
-        }
-        h1, h2, h3, h4, h5, h6 {
-            @apply font-bold;
-        }
-        /* Accessibility: Improve color contrast */
-        .btn-primary {
-            background-color: #2563eb;
-            color: #fff;
-        }
-        .btn-secondary {
-            border-color: #2563eb;
-            color: #2563eb;
-        }
-    }
+        <!-- Critical CSS: minimal styles for FCP/LCP -->
+        <style>
+          html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+          #root{min-height:60vh}
+          .btn-primary{background:#2563eb;color:#fff;padding:.6rem 1.6rem;border-radius:.5rem}
+          .section-padding{padding:5rem 1rem}
+          #scroll-progress-container{position:fixed;top:0;left:0;width:100%;height:6px;z-index:9999}
+          #scroll-progress{width:100%;height:100%;transform-origin:left center;transform:scaleX(0);background:linear-gradient(90deg,#2563eb 0%,#1e40af 100%);transition:transform 250ms}
+        </style>
 
-    @layer components {
-        .btn-primary {
-            @apply px-8 py-3 bg-[var(--primary-color)] text-white rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl;
-        }
-        
-        .btn-secondary {
-            @apply px-8 py-3 border-2 border-[var(--primary-color)] text-[var(--primary-color)] rounded-lg font-semibold hover:bg-[var(--primary-color)] hover:text-white transition-all duration-300;
-        }
-        
-        .section-padding {
-            @apply py-20 px-6;
-        }
-        
-        .card-hover {
-            @apply transition-all duration-300 hover:shadow-2xl hover:-translate-y-2;
-        }
-    }
+        <!-- Load non-critical stylesheet without blocking -->
+        <link rel="stylesheet" href="/styles.css" media="print" onload="this.media='all'">
+        <noscript><link rel="stylesheet" href="/styles.css"></noscript>
 
-    @layer utilities {
-        .text-gradient {
-            @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500;
-        }
-    }
-    </style>
+    <!-- Tailwind runtime block removed from head; full utility styles live in styles.css -->
         <!-- Anti-copy styles removed for testing -->
         <!-- Scroll progress bar styles -->
         <style>
