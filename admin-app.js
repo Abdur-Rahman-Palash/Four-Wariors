@@ -122,12 +122,18 @@ function AdminApp(){
       features: ['Custom Website Development', 'E-commerce Solutions', 'Progressive Web Apps', 'API Development & Integration', 'Database Design & Management', 'Performance Optimization'] }
   ];
 
+  const defaultTestimonials = [
+    { name: 'Client A', role: 'CEO, ExampleCo', image: '', quote: 'Great work — boosted our traffic and conversions.' },
+    { name: 'Client B', role: 'Founder, DemoCorp', image: '', quote: 'Professional and fast. Highly recommended.' }
+  ];
+
   // ======== STATE ========
   const [projects, setProjects] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_projects') || 'null') || defaultProjects; } catch(e){ return defaultProjects; } });
   const [companyInfo, setCompanyInfo] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_company_info') || 'null') || defaultCompanyInfo; } catch(e){ return defaultCompanyInfo; } });
   const [team, setTeam] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_team') || 'null') || defaultTeam; } catch(e){ return defaultTeam; } });
   const [services, setServices] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_services') || 'null') || defaultServices; } catch(e){ return defaultServices; } });
   const [footer, setFooter] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_footer') || 'null') || defaultFooter; } catch(e){ return defaultFooter; } });
+  const [testimonials, setTestimonials] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_testimonials') || 'null') || defaultTestimonials; } catch(e){ return defaultTestimonials; } });
 
   const [projectForm, setProjectForm] = useState({ title: '', category: 'web', image: '', description: '', tools: '' });
   const [editingProjectIdx, setEditingProjectIdx] = useState(-1);
@@ -153,6 +159,7 @@ function AdminApp(){
   useEffect(() => { try { localStorage.setItem('fw_team', JSON.stringify(team)); } catch(e){} }, [team]);
   useEffect(() => { try { localStorage.setItem('fw_services', JSON.stringify(services)); } catch(e){} }, [services]);
   useEffect(() => { try { localStorage.setItem('fw_footer', JSON.stringify(footer)); } catch(e){} }, [footer]);
+  useEffect(() => { try { localStorage.setItem('fw_testimonials', JSON.stringify(testimonials)); } catch(e){} }, [testimonials]);
 
   // ======== AUTH FUNCTIONS ========
   function attemptAdminLogin(e){
@@ -267,6 +274,33 @@ function AdminApp(){
   }
   function handleEditService(idx){ const s = services[idx]; setServiceForm({ icon: s.icon, title: s.title, description: s.description, features: (s.features || []).join('\n') }); setEditingServiceIdx(idx); window.scrollTo({top:0}); }
   function handleDeleteService(idx){ if(!confirm('Delete this service?')) return; const copy = services.slice(); copy.splice(idx,1); setServices(copy); }
+
+  // ======== TESTIMONIALS HANDLERS ========
+  const [testimonialForm, setTestimonialForm] = useState({ name: '', role: '', image: '', quote: '' });
+  const [editingTestimonialIdx, setEditingTestimonialIdx] = useState(-1);
+  const testimonialFileRef = useRef(null);
+
+  const resetTestimonialForm = () => { setTestimonialForm({ name: '', role: '', image: '', quote: '' }); setEditingTestimonialIdx(-1); if(testimonialFileRef.current) testimonialFileRef.current.value=''; };
+  async function handleAddTestimonial(e){
+    e?.preventDefault();
+    if (!testimonialForm.name || !testimonialForm.quote) return alert('Name and quote are required');
+    let image = testimonialForm.image;
+    if (!image && testimonialFileRef.current?.files?.[0]) {
+      try { image = await onFile(testimonialFileRef.current.files[0]); } catch(err){ console.warn(err); }
+    }
+    const newItem = { name: testimonialForm.name, role: testimonialForm.role, image: image || '', quote: testimonialForm.quote };
+    if (editingTestimonialIdx >= 0) {
+      const copy = testimonials.slice();
+      copy[editingTestimonialIdx] = newItem;
+      setTestimonials(copy);
+      setEditingTestimonialIdx(-1);
+    } else {
+      setTestimonials([newItem, ...testimonials]);
+    }
+    resetTestimonialForm();
+  }
+  function handleEditTestimonial(idx){ const t = testimonials[idx]; setTestimonialForm({ name: t.name, role: t.role, image: t.image || '', quote: t.quote }); setEditingTestimonialIdx(idx); window.scrollTo({top:0}); }
+  function handleDeleteTestimonial(idx){ if(!confirm('Delete this testimonial?')) return; const copy = testimonials.slice(); copy.splice(idx,1); setTestimonials(copy); }
 
   // ======== LOGIN SCREEN - ROLE SELECTION ========
   if (authMode === 'login') {
@@ -398,7 +432,7 @@ function AdminApp(){
         {isAdmin && (
           <div className="bg-white rounded-lg shadow mb-6">
             <div className="flex border-b overflow-x-auto">
-              {['company', 'team', 'services', 'projects', 'footer'].map(tab => (
+              {['company', 'team', 'services', 'testimonials', 'projects', 'footer'].map(tab => (
                 <button type="button" key={tab} onClick={()=>setActiveTab(tab)} className={`px-4 py-3 font-medium capitalize whitespace-nowrap ${activeTab===tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}>
                   {tab === 'company' ? '🏢 Company' : tab === 'team' ? '👥 Team' : tab === 'services' ? '⚙️ Services' : tab === 'projects' ? '📁 Projects' : '📄 Footer'}
                 </button>
@@ -577,6 +611,59 @@ function AdminApp(){
                             <button type="button" onClick={()=>handleEditService(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
                             <button type="button" onClick={()=>handleDeleteService(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
                           </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* TESTIMONIALS TAB */}
+              {activeTab === 'testimonials' && (
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">Testimonials</h2>
+                  <form onSubmit={handleAddTestimonial} className="bg-gray-50 p-6 rounded mb-6">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Name *</label>
+                        <input value={testimonialForm.name} onChange={e=>setTestimonialForm({...testimonialForm, name:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Role</label>
+                        <input value={testimonialForm.role} onChange={e=>setTestimonialForm({...testimonialForm, role:e.target.value})} className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Image URL</label>
+                        <input value={testimonialForm.image} onChange={e=>setTestimonialForm({...testimonialForm, image:e.target.value})} placeholder="https://... or upload" className="w-full border px-3 py-2 rounded" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Or Upload Image</label>
+                        <input ref={testimonialFileRef} type="file" accept="image/*" className="w-full" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium mb-1">Quote *</label>
+                        <textarea value={testimonialForm.quote} onChange={e=>setTestimonialForm({...testimonialForm, quote:e.target.value})} className="w-full border px-3 py-2 rounded h-24"></textarea>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 mt-4">
+                      <button type="submit" className="btn-primary">{editingTestimonialIdx>=0 ? 'Save changes' : 'Add testimonial'}</button>
+                      <button type="button" onClick={resetTestimonialForm} className="px-4 py-2 border rounded">Reset</button>
+                    </div>
+                  </form>
+
+                  <h3 className="text-xl font-semibold mb-4">Testimonials ({testimonials.length})</h3>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {testimonials.map((t, idx) => (
+                      <div key={idx} className="bg-white border rounded p-4">
+                        <div className="w-full h-28 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
+                          {t.image ? <img src={t.image} alt={t.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+                        </div>
+                        <h4 className="font-bold">{t.name}</h4>
+                        <p className="text-sm text-blue-600 mb-2">{t.role}</p>
+                        <p className="text-xs text-gray-600 line-clamp-3 mb-3">{t.quote}</p>
+                        <div className="flex gap-2">
+                            <button type="button" onClick={()=>handleEditTestimonial(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
+                              <button type="button" onClick={()=>handleDeleteTestimonial(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
                         </div>
                       </div>
                     ))}
