@@ -44,7 +44,7 @@ function TeamMemberModal({ member, onClose }) {
           </button>
 
           {/* Header with image */}
-          <div className="relative -mt-12 h-72 bg-gradient-to-br from-blue-100 to-purple-100 overflow-hidden">
+          <div className="relative -mt-12 bg-gradient-to-br from-blue-100 to-purple-100 overflow-hidden" style={{ aspectRatio: '1/1' }}>
             {/* Fallback avatar */}
             {!imageLoaded && (
               <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500">
@@ -52,7 +52,7 @@ function TeamMemberModal({ member, onClose }) {
               </div>
             )}
             
-            {/* Member image */}
+            {/* Member image - improved sizing and centering */}
             <img 
               src={member.image} 
               alt={member.name}
@@ -61,11 +61,11 @@ function TeamMemberModal({ member, onClose }) {
                 setImageLoaded(true);
                 setImageError(true);
               }}
-              className={`w-full h-full object-cover transition-all duration-300 ${!imageLoaded ? 'opacity-0' : 'opacity-100'}`}
+              className={`w-full h-full object-cover object-center transition-all duration-300 ${!imageLoaded ? 'opacity-0' : 'opacity-100'}`}
             />
             
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
           </div>
 
           {/* Content */}

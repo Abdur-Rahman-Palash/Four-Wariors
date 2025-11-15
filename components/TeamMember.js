@@ -24,7 +24,7 @@ function TeamMember({ name, role, image, bio, onClick }) {
         tabIndex={onClick ? 0 : undefined}
         onKeyDown={e => { if (onClick && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onClick(); } }}
       >
-        <div className="relative overflow-hidden h-64 bg-gradient-to-br from-blue-100 to-purple-100">
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100" style={{ aspectRatio: '1/1.2' }}>
           {/* Fallback avatar */}
           {!imageLoaded && (
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500">
@@ -32,7 +32,7 @@ function TeamMember({ name, role, image, bio, onClick }) {
             </div>
           )}
           
-          {/* Team member image */}
+          {/* Team member image - improved sizing */}
           <img 
             src={image} 
             alt={name}
@@ -41,7 +41,7 @@ function TeamMember({ name, role, image, bio, onClick }) {
               setImageLoaded(true);
               setImageError(true);
             }}
-            className={`w-full h-full object-cover transition-all duration-300 ${isHovered ? 'scale-110' : 'scale-100'} ${!imageLoaded ? 'opacity-0' : 'opacity-100'}`}
+            className={`w-full h-full object-cover object-center transition-all duration-300 ${isHovered ? 'scale-110' : 'scale-100'} ${!imageLoaded ? 'opacity-0' : 'opacity-100'}`}
           />
           
           {/* Overlay on hover */}
