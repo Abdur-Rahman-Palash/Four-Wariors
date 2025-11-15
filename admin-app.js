@@ -163,6 +163,16 @@ function AdminApp(){
   const [serviceForm, setServiceForm] = useState({ icon: '', title: '', description: '', features: '' });
   const [editingServiceIdx, setEditingServiceIdx] = useState(-1);
 
+  // ======== CONTACTS ========
+  const defaultContacts = [
+    { type: 'Email', value: 'info@creativeagency.com', label: 'Main Email' },
+    { type: 'Phone', value: '+8801971233127', label: 'Phone Number' }
+  ];
+
+  const [contacts, setContacts] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_contacts') || 'null') || defaultContacts; } catch(e){ return defaultContacts; } });
+  const [contactForm, setContactForm] = useState({ type: 'Email', value: '', label: '' });
+  const [editingContactIdx, setEditingContactIdx] = useState(-1);
+
   // ======== AUTO-SAVE ========
   useEffect(() => { 
     // Check device access on component mount
@@ -179,6 +189,7 @@ function AdminApp(){
   useEffect(() => { try { localStorage.setItem('fw_testimonials', JSON.stringify(testimonials)); } catch(e){} }, [testimonials]);
   useEffect(() => { try { localStorage.setItem('fw_home', JSON.stringify(home)); } catch(e){} }, [home]);
   useEffect(() => { try { localStorage.setItem('fw_contact', JSON.stringify(contactSettings)); } catch(e){} }, [contactSettings]);
+    useEffect(() => { try { localStorage.setItem('fw_contacts', JSON.stringify(contacts)); } catch(e){} }, [contacts]);
 
   // ======== AUTH FUNCTIONS ========
   function attemptAdminLogin(e){
@@ -294,6 +305,24 @@ function AdminApp(){
   function handleEditService(idx){ const s = services[idx]; setServiceForm({ icon: s.icon, title: s.title, description: s.description, features: (s.features || []).join('\n') }); setEditingServiceIdx(idx); window.scrollTo({top:0}); }
   function handleDeleteService(idx){ if(!confirm('Delete this service?')) return; const copy = services.slice(); copy.splice(idx,1); setServices(copy); }
 
+    // ======== CONTACTS HANDLERS ========
+    const resetContactForm = () => { setContactForm({ type: 'Email', value: '', label: '' }); setEditingContactIdx(-1); };
+    function handleAddContact(e){
+      e?.preventDefault();
+      if (!contactForm.type || !contactForm.value) return alert('Type and value are required');
+      const newContact = { type: contactForm.type, value: contactForm.value, label: contactForm.label };
+      if (editingContactIdx >= 0) {
+        const copy = contacts.slice();
+        copy[editingContactIdx] = newContact;
+        setContacts(copy);
+        setEditingContactIdx(-1);
+      } else {
+        setContacts([newContact, ...contacts]);
+      }
+      resetContactForm();
+    }
+    function handleEditContact(idx){ const c = contacts[idx]; setContactForm({ type: c.type, value: c.value, label: c.label }); setEditingContactIdx(idx); window.scrollTo({top:0}); }
+    function handleDeleteContact(idx){ if(!confirm('Delete this contact?')) return; const copy = contacts.slice(); copy.splice(idx,1); setContacts(copy); }
   // ======== TESTIMONIALS HANDLERS ========
   const [testimonialForm, setTestimonialForm] = useState({ name: '', role: '', image: '', quote: '' });
   const [editingTestimonialIdx, setEditingTestimonialIdx] = useState(-1);
@@ -870,6 +899,58 @@ function AdminApp(){
                   </div>
                 </div>
               )}
+
+                {/* CONTACT TAB */}
+                {activeTab === 'contact' && (
+                  <div>
+                    <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
+                    <form onSubmit={handleAddContact} className="bg-gray-50 p-6 rounded mb-6">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Contact Type *</label>
+                          <select value={contactForm.type} onChange={e=>setContactForm({...contactForm, type:e.target.value})} className="w-full border px-3 py-2 rounded">
+                            <option value="Email">Email</option>
+                            <option value="Phone">Phone</option>
+                            <option value="Address">Address</option>
+                            <option value="Website">Website</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Label (e.g., Main, Support)</label>
+                          <input value={contactForm.label} onChange={e=>setContactForm({...contactForm, label:e.target.value})} placeholder="Main, Support, etc" className="w-full border px-3 py-2 rounded" />
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-medium mb-1">Value *</label>
+                          <textarea value={contactForm.value} onChange={e=>setContactForm({...contactForm, value:e.target.value})} placeholder="Email, phone number, address, or URL" className="w-full border px-3 py-2 rounded h-20"></textarea>
+                        </div>
+                      </div>
+                      <div className="flex gap-3 mt-4">
+                        <button type="submit" className="btn-primary">{editingContactIdx>=0 ? 'Save changes' : 'Add contact'}</button>
+                        <button type="button" onClick={resetContactForm} className="px-4 py-2 border rounded">Reset</button>
+                      </div>
+                    </form>
+
+                    <h3 className="text-xl font-semibold mb-4">Contact Entries ({contacts.length})</h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {contacts.map((c, idx) => (
+                        <div key={idx} className="bg-white border rounded p-4">
+                          <div className="flex items-start justify-between mb-3">
+                            <div>
+                              <span className="inline-block px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">{c.type}</span>
+                              {c.label && <p className="text-xs text-gray-500 mt-1">{c.label}</p>}
+                            </div>
+                          </div>
+                          <p className="text-sm font-mono text-gray-700 break-words mb-4">{c.value}</p>
+                          <div className="flex gap-2">
+                              <button type="button" onClick={()=>handleEditContact(idx)} className="px-3 py-1 border rounded text-sm">Edit</button>
+                                <button type="button" onClick={()=>handleDeleteContact(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
         )}

@@ -14,8 +14,11 @@
     body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
     .btn-primary { @apply px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl; }
     
-    /* Anti-copy protection */
-    /* Anti-copy styles removed for testing */
+    /* Anti-copy styles: prevent text/image selection and printing */
+    body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+    body { -webkit-touch-callout: none; }
+    img, a { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+    @media print { body { display: none !important; } }
   </style>
 </head>
 <body class="bg-gray-50">
@@ -25,8 +28,68 @@
   <script type="text/babel" src="/components/Footer.js"></script>
   <script type="text/babel" src="/components/ProjectCard.js"></script>
   <script type="text/babel" src="/admin-app.js"></script>
-
-  <!-- Anti-copy protection (Enhanced) -->
-  <!-- Anti-copy script removed for testing -->
+  </br>
+    <!-- Anti-copy Protection: Prevents unauthorized copying, printing, and inspection -->
+    <script>
+      // Disable right-click context menu except on inputs/textareas
+      document.addEventListener('contextmenu', (e) => {
+        const t = e.target;
+        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+        e.preventDefault(); return false;
+      });
+      
+      // Disable copy, cut, paste except within editable fields
+      function isEditable(el) { return !el ? false : (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable); }
+      document.addEventListener('copy', (e) => { if (!isEditable(e.target)) { e.preventDefault(); return false; } });
+      document.addEventListener('cut', (e) => { if (!isEditable(e.target)) { e.preventDefault(); return false; } });
+      document.addEventListener('paste', (e) => { if (!isEditable(e.target)) { e.preventDefault(); return false; } });
+      
+      // Disable keyboard shortcuts for copying/cutting/selecting/printing but allow inside editable fields
+      document.addEventListener('keydown', (e) => {
+        const t = e.target;
+        if (isEditable(t)) return;
+        if ((e.ctrlKey || e.metaKey) && (
+          e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'u' || e.key === 's' || e.key === 'p'
+        )) {
+          e.preventDefault();
+          return false;
+        }
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (
+          e.key === 'I' || e.key === 'J' || e.key === 'C' || e.key === 'K'
+        ))) {
+          e.preventDefault();
+          return false;
+        }
+      });
+      
+      // Prevent double/triple click selection globally but allow selection inside editable fields
+      document.addEventListener('mousedown', (e) => {
+        const t = e.target;
+        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+        if (e.detail > 2) e.preventDefault();
+      });
+      
+      // Disable drag and drop except into editable fields
+      document.addEventListener('dragstart', (e) => { if (!isEditable(e.target)) { e.preventDefault(); return false; } });
+      document.addEventListener('drop', (e) => { if (!isEditable(e.target)) { e.preventDefault(); return false; } });
+      
+      // Detect DevTools opening (basic detection)
+      const devTools = { open: false };
+      const threshold = 160;
+      
+      setInterval(() => {
+        if (window.outerHeight - window.innerHeight > threshold || 
+          window.outerWidth - window.innerWidth > threshold) {
+          if (!devTools.open) {
+            devTools.open = true;
+            console.clear();
+            console.log('%cDeveloper Tools Detected!', 'color: red; font-size: 20px; font-weight: bold;');
+            console.log('%cThis site is protected against unauthorized access.', 'color: orange; font-size: 14px;');
+          }
+        } else {
+          devTools.open = false;
+        }
+      }, 500);
+    </script>
 </body>
 </html>

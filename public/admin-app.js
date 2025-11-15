@@ -179,6 +179,7 @@ function AdminApp(){
   useEffect(() => { try { localStorage.setItem('fw_testimonials', JSON.stringify(testimonials)); } catch(e){} }, [testimonials]);
   useEffect(() => { try { localStorage.setItem('fw_home', JSON.stringify(home)); } catch(e){} }, [home]);
   useEffect(() => { try { localStorage.setItem('fw_contact', JSON.stringify(contactSettings)); } catch(e){} }, [contactSettings]);
+    useEffect(() => { try { localStorage.setItem('fw_contacts', JSON.stringify(contacts)); } catch(e){} }, [contacts]);
 
   // ======== AUTH FUNCTIONS ========
   function attemptAdminLogin(e){
@@ -294,6 +295,33 @@ function AdminApp(){
   function handleEditService(idx){ const s = services[idx]; setServiceForm({ icon: s.icon, title: s.title, description: s.description, features: (s.features || []).join('\n') }); setEditingServiceIdx(idx); window.scrollTo({top:0}); }
   function handleDeleteService(idx){ if(!confirm('Delete this service?')) return; const copy = services.slice(); copy.splice(idx,1); setServices(copy); }
 
+    // ======== CONTACTS ========
+    const defaultContacts = [
+      { type: 'Email', value: 'info@creativeagency.com', label: 'Main Email' },
+      { type: 'Phone', value: '+8801971233127', label: 'Phone Number' }
+    ];
+
+    const [contacts, setContacts] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_contacts') || 'null') || defaultContacts; } catch(e){ return defaultContacts; } });
+    const [contactForm, setContactForm] = useState({ type: 'Email', value: '', label: '' });
+    const [editingContactIdx, setEditingContactIdx] = useState(-1);
+
+    const resetContactForm = () => { setContactForm({ type: 'Email', value: '', label: '' }); setEditingContactIdx(-1); };
+    function handleAddContact(e){
+      e?.preventDefault();
+      if (!contactForm.type || !contactForm.value) return alert('Type and value are required');
+      const newContact = { type: contactForm.type, value: contactForm.value, label: contactForm.label };
+      if (editingContactIdx >= 0) {
+        const copy = contacts.slice();
+        copy[editingContactIdx] = newContact;
+        setContacts(copy);
+        setEditingContactIdx(-1);
+      } else {
+        setContacts([newContact, ...contacts]);
+      }
+      resetContactForm();
+    }
+    function handleEditContact(idx){ const c = contacts[idx]; setContactForm({ type: c.type, value: c.value, label: c.label }); setEditingContactIdx(idx); window.scrollTo({top:0}); }
+    function handleDeleteContact(idx){ if(!confirm('Delete this contact?')) return; const copy = contacts.slice(); copy.splice(idx,1); setContacts(copy); }
   // ======== TESTIMONIALS HANDLERS ========
   const [testimonialForm, setTestimonialForm] = useState({ name: '', role: '', image: '', quote: '' });
   const [editingTestimonialIdx, setEditingTestimonialIdx] = useState(-1);
