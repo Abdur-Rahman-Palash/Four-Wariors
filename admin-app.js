@@ -318,7 +318,25 @@ function AdminApp(){
     const copy = team.slice();
     copy[idx] = updatedMember;
     setTeam(copy);
+    try { alert('Profile saved'); } catch(e){}
   }
+
+  // Reset non-admin form back to the currently selected member values
+  function handleResetCurrentMember(){
+    if (currentMember) {
+      setTeamForm({ ...currentMember });
+    } else {
+      resetTeamForm();
+    }
+    try { if (teamFileRef.current) teamFileRef.current.value = ''; } catch(e){}
+  }
+
+  // Ensure the teamForm is prefilled whenever the currentMember changes
+  useEffect(() => {
+    if (!isAdmin && currentMember) {
+      setTeamForm({ ...currentMember });
+    }
+  }, [currentMemberIdx, isAdmin]);
 
   // ======== SERVICE HANDLERS ========
   const resetServiceForm = () => { setServiceForm({ icon: '', title: '', description: '', features: '' }); setEditingServiceIdx(-1); };
@@ -1049,7 +1067,7 @@ function AdminApp(){
 
               <div className="flex gap-3 pt-4">
                 <button type="submit" className="btn-primary">Save Changes</button>
-                <button type="button" onClick={() => { resetTeamForm(); setTeamForm(currentMember); }} className="px-4 py-2 border rounded">Reset</button>
+                <button type="button" onClick={handleResetCurrentMember} className="px-4 py-2 border rounded">Reset</button>
               </div>
             </form>
 
