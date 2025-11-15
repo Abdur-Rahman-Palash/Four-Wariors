@@ -25,72 +25,68 @@
   <div id="root" class="min-h-screen"></div>
   <!-- Anti-copy script removed for testing -->
 
-  <script type="text/babel" src="components/Header.js"></script>
-  <script type="text/babel" src="components/Footer.js"></script>
-  <script type="text/babel" src="components/ProjectCard.js"></script>
-  <script type="text/babel" src="admin-app.js"></script>
+  <script type="text/babel" src="components/Header.js" defer></script>
+  <script type="text/babel" src="components/Footer.js" defer></script>
+  <script type="text/babel" src="components/ProjectCard.js" defer></script>
+  <script type="text/babel" src="admin-app.js" defer></script>
 
-    <!-- Anti-copy Protection: Prevents unauthorized copying, printing, and inspection -->
-    <script>
-      // Disable right-click context menu except on inputs/textareas
-      document.addEventListener('contextmenu', (e) => {
-        const t = e.target;
-        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
-        e.preventDefault(); return false;
-      });
+    <!-- Anti-copy Protection: Prevents unauthorized copying, printing, and inspection (deferred) -->
+    <script defer>
+      const antiCopySetup = () => {
+        const isEditable = (el) => el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+        
+        document.addEventListener('contextmenu', (e) => {
+          const t = e.target;
+          if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+          e.preventDefault(); return false;
+        }, { passive: false });
+        
+        document.addEventListener('copy', (e) => { if (!isEditable(e.target)) e.preventDefault(); }, { passive: false });
+        document.addEventListener('cut', (e) => { if (!isEditable(e.target)) e.preventDefault(); }, { passive: false });
+        document.addEventListener('paste', (e) => { if (!isEditable(e.target)) e.preventDefault(); }, { passive: false });
+        
+        document.addEventListener('keydown', (e) => {
+          if ((e.ctrlKey || e.metaKey) && ['c', 'x', 'a', 'u', 's', 'p'].includes(e.key.toLowerCase())) {
+            e.preventDefault();
+          } else if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['i', 'j', 'c', 'k'].includes(e.key.toLowerCase()))) {
+            e.preventDefault();
+          }
+        }, { passive: false });
+        
+        document.addEventListener('mousedown', (e) => {
+          if (!isEditable(e.target) && e.detail > 2) e.preventDefault();
+        }, { passive: false });
+        
+        document.addEventListener('dragstart', (e) => e.preventDefault(), { passive: false });
+        document.addEventListener('drop', (e) => e.preventDefault(), { passive: false });
+      };
       
-      // Disable copy, cut, paste except within editable fields
-      function isEditable(el) { return !el ? false : (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable); }
-      document.addEventListener('copy', (e) => { if (!isEditable(e.target)) { e.preventDefault(); return false; } });
-      document.addEventListener('cut', (e) => { if (!isEditable(e.target)) { e.preventDefault(); return false; } });
-      document.addEventListener('paste', (e) => { if (!isEditable(e.target)) { e.preventDefault(); return false; } });
-      
-      // Disable keyboard shortcuts for copying/cutting/selecting/printing
-      document.addEventListener('keydown', (e) => {
-        // Disable Ctrl+C, Ctrl+X, Ctrl+A, Ctrl+U, Ctrl+S, Ctrl+P, F12, Ctrl+Shift+I/J/C/K
-        if ((e.ctrlKey || e.metaKey) && (
-          e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'u' || e.key === 's' || e.key === 'p'
-        )) {
-          e.preventDefault();
-          return false;
-        }
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+Shift+K
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (
-          e.key === 'I' || e.key === 'J' || e.key === 'C' || e.key === 'K'
-        ))) {
-          e.preventDefault();
-          return false;
-        }
-      });
-      
-      // Prevent double/triple click selection globally but allow selection inside editable fields
-      document.addEventListener('mousedown', (e) => {
-        const t = e.target;
-        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
-        if (e.detail > 2) e.preventDefault();
-      });
-      
-      // Disable drag and drop
-      document.addEventListener('dragstart', (e) => { e.preventDefault(); return false; });
-      document.addEventListener('drop', (e) => { e.preventDefault(); return false; });
-      
-      // Detect DevTools opening (basic detection)
-      const devTools = { open: false };
-      const threshold = 160;
-      
-      setInterval(() => {
-        if (window.outerHeight - window.innerHeight > threshold || 
-          window.outerWidth - window.innerWidth > threshold) {
-          if (!devTools.open) {
-            devTools.open = true;
+      const setupDevToolsDetection = () => {
+        let devToolsOpen = false;
+        const threshold = 160;
+        setInterval(() => {
+          const isOpen = window.outerHeight - window.innerHeight > threshold || 
+                         window.outerWidth - window.innerWidth > threshold;
+          if (isOpen && !devToolsOpen) {
+            devToolsOpen = true;
             console.clear();
             console.log('%cDeveloper Tools Detected!', 'color: red; font-size: 20px; font-weight: bold;');
             console.log('%cThis site is protected against unauthorized access.', 'color: orange; font-size: 14px;');
+          } else if (!isOpen) {
+            devToolsOpen = false;
           }
-        } else {
-          devTools.open = false;
-        }
-      }, 500);
+        }, 1000);
+      };
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          antiCopySetup();
+          setupDevToolsDetection();
+        });
+      } else {
+        antiCopySetup();
+        setupDevToolsDetection();
+      }
     </script>
   </body>
   </html>

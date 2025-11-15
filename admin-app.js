@@ -21,19 +21,17 @@ function AdminApp(){
     return Math.abs(hash).toString(36);
   };
 
+  // Optimize: Cache device access result
+  const deviceAccessCache = useRef(null);
   const checkDeviceAccess = () => {
-    // Device fingerprint checks are disabled for testing/maintenance.
-    // Always allow access regardless of device fingerprint.
+    if (deviceAccessCache.current !== null) return deviceAccessCache.current;
+    deviceAccessCache.current = true;
     return true;
   };
 
-  const isDeviceLocked = () => {
-    // Device locking disabled — never consider device locked.
-    return false;
-  };
+  const isDeviceLocked = () => false;
 
   const registerCurrentDevice = (pw) => {
-    // Device registration is disabled when device-locking is turned off.
     alert('Device registration is disabled. Device-based locking has been removed.');
   };
 
@@ -145,23 +143,34 @@ function AdminApp(){
     mapEmbed: ''
   };
 
+  // Optimize: Reusable localStorage parser
+  const parseLS = (key, defaults) => {
+    try {
+      const val = localStorage.getItem(key);
+      return val ? JSON.parse(val) : defaults;
+    } catch(e) {
+      return defaults;
+    }
+  };
+
   // ======== STATE ========
-  const [projects, setProjects] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_projects') || 'null') || defaultProjects; } catch(e){ return defaultProjects; } });
-  const [companyInfo, setCompanyInfo] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_company_info') || 'null') || defaultCompanyInfo; } catch(e){ return defaultCompanyInfo; } });
-  const [team, setTeam] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_team') || 'null') || defaultTeam; } catch(e){ return defaultTeam; } });
-  const [services, setServices] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_services') || 'null') || defaultServices; } catch(e){ return defaultServices; } });
-  const [footer, setFooter] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_footer') || 'null') || defaultFooter; } catch(e){ return defaultFooter; } });
-  const [testimonials, setTestimonials] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_testimonials') || 'null') || defaultTestimonials; } catch(e){ return defaultTestimonials; } });
-  const [home, setHome] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_home') || 'null') || defaultHome; } catch(e){ return defaultHome; } });
-  const [contactSettings, setContactSettings] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_contact') || 'null') || defaultContact; } catch(e){ return defaultContact; } });
+  const [projects, setProjects] = useState(() => parseLS('fw_projects', defaultProjects));
+  const [companyInfo, setCompanyInfo] = useState(() => parseLS('fw_company_info', defaultCompanyInfo));
+  const [team, setTeam] = useState(() => parseLS('fw_team', defaultTeam));
+  const [services, setServices] = useState(() => parseLS('fw_services', defaultServices));
+  const [footer, setFooter] = useState(() => parseLS('fw_footer', defaultFooter));
+  const [testimonials, setTestimonials] = useState(() => parseLS('fw_testimonials', defaultTestimonials));
+  const [home, setHome] = useState(() => parseLS('fw_home', defaultHome));
+  const [contactSettings, setContactSettings] = useState(() => parseLS('fw_contact', defaultContact));
+
+  const projectFileRef = useRef(null);
+  const teamFileRef = useRef(null);
 
   const [projectForm, setProjectForm] = useState({ title: '', category: 'web', image: '', description: '', tools: '' });
   const [editingProjectIdx, setEditingProjectIdx] = useState(-1);
-  const projectFileRef = useRef(null);
 
   const [teamForm, setTeamForm] = useState({ name: '', role: '', image: '', bio: '', portfolio: '', github: '', telegram: '', whatsapp: '' });
   const [editingTeamIdx, setEditingTeamIdx] = useState(-1);
-  const teamFileRef = useRef(null);
 
   const [serviceForm, setServiceForm] = useState({ icon: '', title: '', description: '', features: '' });
   const [editingServiceIdx, setEditingServiceIdx] = useState(-1);
@@ -172,7 +181,7 @@ function AdminApp(){
     { type: 'Phone', value: '+8801971233127', label: 'Phone Number' }
   ];
 
-  const [contacts, setContacts] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_contacts') || 'null') || defaultContacts; } catch(e){ return defaultContacts; } });
+  const [contacts, setContacts] = useState(() => parseLS('fw_contacts', defaultContacts));
   const [contactForm, setContactForm] = useState({ type: 'Email', value: '', label: '' });
   const [editingContactIdx, setEditingContactIdx] = useState(-1);
 
@@ -383,7 +392,7 @@ function AdminApp(){
       { name: 'Tech Startup USA', country: 'United States', email: 'info@techstartup.com', website: 'https://techstartup.com', projectsCompleted: 3, industry: 'Technology' },
       { name: 'Fashion Brand UK', country: 'United Kingdom', email: 'hello@fashionbrand.co.uk', website: 'https://fashionbrand.co.uk', projectsCompleted: 2, industry: 'Fashion' }
     ];
-    const [clients, setClients] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_clients') || 'null') || defaultClients; } catch(e){ return defaultClients; } });
+    const [clients, setClients] = useState(() => parseLS('fw_clients', defaultClients));
     const [clientForm, setClientForm] = useState({ name: '', country: '', email: '', website: '', projectsCompleted: 0, industry: '' });
     const [editingClientIdx, setEditingClientIdx] = useState(-1);
 
@@ -410,7 +419,7 @@ function AdminApp(){
       { clientName: 'Tech Startup USA', rating: 5, quote: 'Amazing work! Delivered on time and exceeded expectations.', date: '2025-10-15' },
       { clientName: 'Fashion Brand UK', rating: 4.5, quote: 'Great team, very professional. Highly recommended!', date: '2025-09-20' }
     ];
-    const [satisfaction, setSatisfaction] = useState(() => { try { return JSON.parse(localStorage.getItem('fw_satisfaction') || 'null') || defaultSatisfaction; } catch(e){ return defaultSatisfaction; } });
+    const [satisfaction, setSatisfaction] = useState(() => parseLS('fw_satisfaction', defaultSatisfaction));
     const [satisfactionForm, setSatisfactionForm] = useState({ clientName: '', rating: 5, quote: '', date: new Date().toISOString().split('T')[0] });
     const [editingSatisfactionIdx, setEditingSatisfactionIdx] = useState(-1);
 
