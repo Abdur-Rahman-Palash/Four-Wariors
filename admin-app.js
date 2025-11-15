@@ -444,7 +444,7 @@ function AdminApp(){
             {team.map((member, idx) => (
               <button type="button" key={idx} onClick={() => selectTeamMember(idx)} className="p-4 bg-white border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-lg transition-all text-left">
                 <div className="w-16 h-16 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
-                  {member.image ? <img src={member.image} alt={member.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-xs">No image</span>}
+                  {member.image ? <img src={member.image} alt={member.name} width={64} height={64} loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <span className="text-gray-400 text-xs">No image</span>}
                 </div>
                 <h3 className="font-bold text-lg">{member.name}</h3>
                 <p className="text-sm text-blue-600">{member.role}</p>
@@ -650,7 +650,7 @@ function AdminApp(){
                     {team.map((m, idx) => (
                       <div key={idx} className="bg-white border rounded p-4">
                         <div className="w-full h-40 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
-                          {m.image ? <img src={m.image} alt={m.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+                          {m.image ? <img src={m.image} alt={m.name} width={400} height={480} loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
                         </div>
                         <h4 className="font-bold">{m.name}</h4>
                         <p className="text-sm text-blue-600 mb-2">{m.role}</p>
@@ -789,7 +789,7 @@ function AdminApp(){
                       {team.map((m, idx) => (
                         <div key={idx} className="bg-white border rounded p-4">
                           <div className="w-full h-40 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
-                            {m.image ? <img src={m.image} alt={m.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+                            {m.image ? <img src={m.image} alt={m.name} width={400} height={480} loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
                           </div>
                           <h4 className="font-bold">{m.name}</h4>
                           <p className="text-sm text-blue-600 mb-2">{m.role}</p>
@@ -843,7 +843,7 @@ function AdminApp(){
                     {testimonials.map((t, idx) => (
                       <div key={idx} className="bg-white border rounded p-4">
                         <div className="w-full h-28 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
-                          {t.image ? <img src={t.image} alt={t.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+                          {t.image ? <img src={t.image} alt={t.name} width={280} height={160} loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
                         </div>
                         <h4 className="font-bold">{t.name}</h4>
                         <p className="text-sm text-blue-600 mb-2">{t.role}</p>
@@ -904,7 +904,7 @@ function AdminApp(){
                     {projects.map((p, idx) => (
                       <div key={idx} className="bg-white rounded-lg shadow p-4">
                         <div className="w-full h-40 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
-                          {p.image ? <img src={p.image} alt={p.title} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+                          {p.image ? <img src={p.image} alt={p.title} width={800} height={400} loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
                         </div>
                         <h4 className="font-bold">{p.title}</h4>
                         <p className="text-xs text-blue-600 mb-1">{p.category}</p>
@@ -1016,7 +1016,7 @@ function AdminApp(){
               <div>
                 <label className="block text-sm font-medium mb-1">Profile Photo</label>
                 <div className="w-32 h-32 bg-gray-200 rounded mb-3 flex items-center justify-center overflow-hidden">
-                  {teamForm.image || currentMember.image ? <img src={teamForm.image || currentMember.image} alt={currentMember.name} className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
+                  {teamForm.image || currentMember.image ? <img src={teamForm.image || currentMember.image} alt={currentMember.name} width={256} height={256} loading="lazy" decoding="async" className="w-full h-full object-cover" /> : <span className="text-gray-400 text-sm">No image</span>}
                 </div>
               </div>
 
