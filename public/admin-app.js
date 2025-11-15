@@ -531,9 +531,9 @@ function AdminApp(){
         {isAdmin && (
           <div className="bg-white rounded-lg shadow mb-6">
             <div className="flex border-b overflow-x-auto">
-              {['home','about','company', 'team', 'services', 'testimonials', 'projects', 'footer','contact'].map(tab => (
+              {['home','about','company', 'team', 'services', 'testimonials', 'projects', 'clients', 'satisfaction', 'footer','contact'].map(tab => (
                 <button type="button" key={tab} onClick={()=>setActiveTab(tab)} className={`px-4 py-3 font-medium capitalize whitespace-nowrap ${activeTab===tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600 hover:text-gray-800'}`}>
-                  {tab === 'home' ? '🏠 Home' : tab === 'about' ? 'ℹ️ About' : tab === 'company' ? '🏢 Company' : tab === 'team' ? '👥 Team' : tab === 'services' ? '⚙️ Services' : tab === 'projects' ? '📁 Portfolio' : tab === 'contact' ? '✉️ Contact' : '📄 Footer'}
+                  {tab === 'home' ? '🏠 Home' : tab === 'about' ? 'ℹ️ About' : tab === 'company' ? '🏢 Company' : tab === 'team' ? '👥 Team' : tab === 'services' ? '⚙️ Services' : tab === 'projects' ? '📁 Portfolio' : tab === 'clients' ? '🌍 Clients' : tab === 'satisfaction' ? '⭐ Satisfaction' : tab === 'contact' ? '✉️ Contact' : '📄 Footer'}
                 </button>
               ))}
             </div>
@@ -947,6 +947,93 @@ function AdminApp(){
                       </div>
                     </div>
                     <p className="text-xs text-gray-500 mt-4">💾 Changes are saved automatically.</p>
+                  </div>
+                </div>
+              )}
+
+              {/* CLIENTS TAB */}
+              {activeTab === 'clients' && (
+                <div>
+                  <h3 className="text-xl font-bold mb-4">International Clients Management</h3>
+                  
+                  <div className="bg-gray-50 p-4 rounded mb-6">
+                    <h4 className="font-semibold mb-4">{editingClientIdx !== null ? 'Edit Client' : 'Add New Client'}</h4>
+                    <form onSubmit={editingClientIdx !== null ? ()=>handleEditClient() : ()=>handleAddClient()} className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <input placeholder="Client Name" value={clientForm.name} onChange={e=>setClientForm({...clientForm, name:e.target.value})} className="border px-3 py-2 rounded" />
+                        <input placeholder="Country" value={clientForm.country} onChange={e=>setClientForm({...clientForm, country:e.target.value})} className="border px-3 py-2 rounded" />
+                        <input placeholder="Email" type="email" value={clientForm.email} onChange={e=>setClientForm({...clientForm, email:e.target.value})} className="border px-3 py-2 rounded" />
+                        <input placeholder="Website" value={clientForm.website} onChange={e=>setClientForm({...clientForm, website:e.target.value})} className="border px-3 py-2 rounded" />
+                        <input placeholder="Industry" value={clientForm.industry} onChange={e=>setClientForm({...clientForm, industry:e.target.value})} className="border px-3 py-2 rounded" />
+                        <input placeholder="Projects Completed" type="number" value={clientForm.projectsCompleted} onChange={e=>setClientForm({...clientForm, projectsCompleted:parseInt(e.target.value) || 0})} className="border px-3 py-2 rounded" />
+                      </div>
+                      <div className="flex gap-2">
+                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded font-medium">{editingClientIdx !== null ? 'Update Client' : 'Add Client'}</button>
+                        {editingClientIdx !== null && <button type="button" onClick={()=>{resetClientForm(); setEditingClientIdx(null);}} className="px-4 py-2 border rounded font-medium">Cancel</button>}
+                      </div>
+                    </form>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {clients.map((client, idx) => (
+                      <div key={idx} className="border rounded p-4 bg-white">
+                        <h5 className="font-bold text-lg mb-2">{client.name}</h5>
+                        <p className="text-sm text-gray-600 mb-1"><strong>Country:</strong> {client.country}</p>
+                        <p className="text-sm text-gray-600 mb-1"><strong>Email:</strong> {client.email}</p>
+                        <p className="text-sm text-gray-600 mb-1"><strong>Website:</strong> <a href={client.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{client.website}</a></p>
+                        <p className="text-sm text-gray-600 mb-1"><strong>Industry:</strong> {client.industry}</p>
+                        <p className="text-sm text-gray-600 mb-3"><strong>Projects:</strong> {client.projectsCompleted}</p>
+                        <div className="flex gap-2">
+                          <button type="button" onClick={()=>{setClientForm(client); setEditingClientIdx(idx);}} className="px-3 py-1 border rounded text-sm">Edit</button>
+                          <button type="button" onClick={()=>handleDeleteClient(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* SATISFACTION TAB */}
+              {activeTab === 'satisfaction' && (
+                <div>
+                  <h3 className="text-xl font-bold mb-4">Client Satisfaction Management</h3>
+                  
+                  <div className="bg-gray-50 p-4 rounded mb-6">
+                    <h4 className="font-semibold mb-4">{editingSatisfactionIdx !== null ? 'Edit Satisfaction Record' : 'Add New Satisfaction Record'}</h4>
+                    <form onSubmit={editingSatisfactionIdx !== null ? ()=>handleEditSatisfaction() : ()=>handleAddSatisfaction()} className="space-y-3">
+                      <div className="grid grid-cols-1 gap-3">
+                        <input placeholder="Client Name" value={satisfactionForm.clientName} onChange={e=>setSatisfactionForm({...satisfactionForm, clientName:e.target.value})} className="border px-3 py-2 rounded" />
+                        <div className="flex items-center gap-2">
+                          <label className="font-medium">Rating:</label>
+                          <select value={satisfactionForm.rating} onChange={e=>setSatisfactionForm({...satisfactionForm, rating:parseInt(e.target.value)})} className="border px-3 py-2 rounded">
+                            {[1,2,3,4,5].map(r => <option key={r} value={r}>{r} ⭐</option>)}
+                          </select>
+                        </div>
+                        <textarea placeholder="Client Feedback / Quote" value={satisfactionForm.quote} onChange={e=>setSatisfactionForm({...satisfactionForm, quote:e.target.value})} className="border px-3 py-2 rounded" rows="3"></textarea>
+                        <input type="date" value={satisfactionForm.date} onChange={e=>setSatisfactionForm({...satisfactionForm, date:e.target.value})} className="border px-3 py-2 rounded" />
+                      </div>
+                      <div className="flex gap-2">
+                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded font-medium">{editingSatisfactionIdx !== null ? 'Update Record' : 'Add Record'}</button>
+                        {editingSatisfactionIdx !== null && <button type="button" onClick={()=>{resetSatisfactionForm(); setEditingSatisfactionIdx(null);}} className="px-4 py-2 border rounded font-medium">Cancel</button>}
+                      </div>
+                    </form>
+                  </div>
+
+                  <div className="space-y-3">
+                    {satisfaction.map((sat, idx) => (
+                      <div key={idx} className="border rounded p-4 bg-white">
+                        <div className="flex justify-between items-start mb-2">
+                          <h5 className="font-bold text-lg">{sat.clientName}</h5>
+                          <div className="text-lg">{'⭐'.repeat(sat.rating)}</div>
+                        </div>
+                        <p className="text-sm text-gray-700 italic mb-2">"{sat.quote}"</p>
+                        <p className="text-xs text-gray-500 mb-3">Date: {sat.date}</p>
+                        <div className="flex gap-2">
+                          <button type="button" onClick={()=>{setSatisfactionForm(sat); setEditingSatisfactionIdx(idx);}} className="px-3 py-1 border rounded text-sm">Edit</button>
+                          <button type="button" onClick={()=>handleDeleteSatisfaction(idx)} className="px-3 py-1 border rounded text-red-600 text-sm">Delete</button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
