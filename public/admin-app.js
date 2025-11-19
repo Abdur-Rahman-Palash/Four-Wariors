@@ -284,8 +284,13 @@ function AdminApp(){
       copy[editingTeamIdx] = newMember;
       setTeam(copy);
       setEditingTeamIdx(-1);
+      try { localStorage.setItem('fw_team', JSON.stringify(copy)); } catch(e){}
+      alert('Team member updated successfully');
     } else {
-      setTeam([newMember, ...team]);
+      const updatedTeam = [newMember, ...team];
+      setTeam(updatedTeam);
+      try { localStorage.setItem('fw_team', JSON.stringify(updatedTeam)); } catch(e){}
+      alert('Team member added successfully');
     }
     resetTeamForm();
   }
