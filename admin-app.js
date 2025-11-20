@@ -21,6 +21,40 @@ function AdminApp(){
     return Math.abs(hash).toString(36);
   };
 
+  // ======== REMOTE SYNC (optional: Firestore) ========
+  // If you want team data to sync across devices, set `window.FIREBASE_CONFIG` in your page
+  // to your Firebase project's config object. The code below will lazily load the compat
+  // SDK and sync `team` to `site_data/team` document in Firestore. If FIREBASE_CONFIG is
+  // not present, the app falls back to localStorage-only behavior.
+  let _remoteDb = null;
+  function loadScript(src){ return new Promise((res, rej)=>{ const s=document.createElement('script'); s.src=src; s.onload=res; s.onerror=rej; document.head.appendChild(s); }); }
+  async function initRemote(){
+    if (_remoteDb) return _remoteDb;
+    if (!window.FIREBASE_CONFIG) return null;
+    try {
+      // load compat SDKs
+      await loadScript('https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js');
+      await loadScript('https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js');
+      if (!window.firebase.apps || !window.firebase.apps.length) firebase.initializeApp(window.FIREBASE_CONFIG);
+      _remoteDb = firebase.firestore();
+      return _remoteDb;
+    } catch (err) { console.warn('Remote init failed', err); return null; }
+  }
+  async function loadTeamRemote(){
+    const db = await initRemote();
+    if (!db) return null;
+    try {
+      const doc = await db.collection('site_data').doc('team').get();
+      if (doc.exists) return doc.data().members || [];
+    } catch(e){ console.warn('loadTeamRemote error', e); }
+    return null;
+  }
+  async function saveTeamRemote(members){
+    const db = await initRemote();
+    if (!db) return false;
+    try { await db.collection('site_data').doc('team').set({ members }); return true; } catch(e){ console.warn('saveTeamRemote error', e); return false; }
+  }
+
   // Optimize: Cache device access result
   const deviceAccessCache = useRef(null);
   const checkDeviceAccess = () => {
@@ -195,7 +229,25 @@ function AdminApp(){
     try { localStorage.setItem('fw_projects', JSON.stringify(projects)); } catch(e){} 
   }, [projects]);
   useEffect(() => { try { localStorage.setItem('fw_company_info', JSON.stringify(companyInfo)); } catch(e){} }, [companyInfo]);
-  useEffect(() => { try { localStorage.setItem('fw_team', JSON.stringify(team)); } catch(e){} }, [team]);
+  useEffect(() => { 
+    try { localStorage.setItem('fw_team', JSON.stringify(team)); } catch(e){}
+    // If remote sync is configured, also push team to remote firestore
+    (async ()=>{ try{ if (window.FIREBASE_CONFIG) await saveTeamRemote(team); }catch(e){ console.warn('remote save failed', e); } })();
+  }, [team]);
+
+  // Attempt to load remote team once on mount (if configured). Remote data will override local team if present.
+  useEffect(() => {
+    (async ()=>{
+      try{
+        if (window.FIREBASE_CONFIG) {
+          const remote = await loadTeamRemote();
+          if (Array.isArray(remote) && remote.length) {
+            setTeam(remote);
+          }
+        }
+      }catch(e){ console.warn('remote load on mount failed', e); }
+    })();
+  }, []);
   useEffect(() => { try { localStorage.setItem('fw_services', JSON.stringify(services)); } catch(e){} }, [services]);
   useEffect(() => { try { localStorage.setItem('fw_footer', JSON.stringify(footer)); } catch(e){} }, [footer]);
   useEffect(() => { try { localStorage.setItem('fw_testimonials', JSON.stringify(testimonials)); } catch(e){} }, [testimonials]);
