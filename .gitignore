@@ -1,0 +1,13 @@
+# Local config and secrets
+firebase-config.js
+firebase-config.local.js
+secrets/
+.env
+
+# Node modules (if used locally)
+node_modules/
+
+# OS files
+Thumbs.db
+ehthumbs.db
+.DS_Store
