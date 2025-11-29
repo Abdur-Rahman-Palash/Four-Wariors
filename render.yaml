@@ -4,7 +4,7 @@ services:
     environments:
       - production
     buildCommand: echo "Static site - no build needed"
-    staticPublishPath: ./public
+    staticPublishPath: ./
     routes:
       - path: /
         index: index.html
