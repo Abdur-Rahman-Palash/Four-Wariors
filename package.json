@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Abdur-Rahman-Palash/Four-Wariors/issues"
   },
-  "homepage": "https://github.com/Abdur-Rahman-Palash/Four-Wariors#readme"
+  "homepage": "https://github.com/Abdur-Rahman-Palash/Four-Wariors#readme",
+  "dependencies": {
+    "firebase": "^12.6.0"
+  }
 }

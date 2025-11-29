@@ -3,7 +3,7 @@ function Header() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const [isServicesDropdownOpen, setIsServicesDropdownOpen] = React.useState(false);
 
-    const defaultCompanyInfo = { name: 'CreativeAgency', facebook: 'https://www.facebook.com/', twitter: 'https://twitter.com/', instagram: 'https://www.instagram.com/', linkedin: 'https://www.linkedin.com/' };
+    const defaultCompanyInfo = { name: 'Noventrix Tech Agency', facebook: 'https://www.facebook.com/', twitter: 'https://twitter.com/', instagram: 'https://www.instagram.com/', linkedin: 'https://www.linkedin.com/' };
     const companyInfo = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('fw_company_info') || 'null') || defaultCompanyInfo; } catch(e){ return defaultCompanyInfo; } }, []);
 
     const navItems = [

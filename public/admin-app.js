@@ -124,7 +124,7 @@ function AdminApp(){
   }];
 
   const defaultCompanyInfo = {
-    name: 'CreativeAgency', tagline: 'Designing, developing & marketing digital experiences that deliver results.',
+    name: 'Noventrix Tech Agency', tagline: 'Designing, developing & marketing digital experiences that deliver results',
     address: 'Dadul, Kazihal, Attpukurhat, Fulbari, Dinajpur, Bangladesh',
     email: 'fourwarriors24@gmail.com', phone: '+8801971233127', website: 'four-wariors.vercel.app',
     hours: 'Mon - Fri: 9AM - 6PM', facebook: 'https://www.facebook.com/', twitter: 'https://twitter.com/',

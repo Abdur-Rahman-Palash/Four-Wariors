@@ -1,4 +1,4 @@
-# Four Wariors — CreativeAgency
+# Four Wariors — Noventrix Tech Agency
 
 > Small 4-member creative agency static site (marketing, design, web development).
 

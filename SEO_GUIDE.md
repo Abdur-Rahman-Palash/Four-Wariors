@@ -1,4 +1,4 @@
-# 🚀 SEO Optimization Guide - CreativeAgency
+# 🚀 SEO Optimization Guide - Noventrix Tech Agency
 
 আপনার প্রজেক্ট Google এর প্রথম পাতায় আসার জন্য সম্পূর্ণ SEO অপটিমাইজেশন করা হয়েছে।
 
@@ -107,7 +107,7 @@ Sitemap: https://four-wariors.vercel.app/sitemap.xml
 ### Meta Tags Examples
 
 **Home Page:**
-- Title: CreativeAgency - Digital Marketing, Design & Web Development | Bangladesh
+- Title: Noventrix Tech Agency - Digital Marketing, Design & Web Development | Bangladesh
 - Description: Expert 4-member creative agency in Bangladesh...
 - Keywords: digital marketing agency Bangladesh, web development, graphic design, SEO services
 
