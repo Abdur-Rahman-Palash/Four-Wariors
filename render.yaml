@@ -1,0 +1,12 @@
+services:
+  - type: static
+    name: four-wariors
+    environments:
+      - production
+    buildCommand: echo "Static site - no build needed"
+    staticPublishPath: ./public
+    routes:
+      - path: /
+        index: index.html
+      - path: /<path>
+        index: index.html
