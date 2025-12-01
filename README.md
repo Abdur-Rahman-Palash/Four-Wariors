@@ -1,55 +1,75 @@
+
 # Four Wariors — Noventrix Tech Agency
 
-Small 4-member creative agency static site (marketing, design, web development).
+Professional marketing site and lightweight admin for a small creative team (digital marketing, design, and web development).
 
-This repository contains a multi-page marketing site and a lightweight client-side admin panel to manage team members, projects, clients and satisfaction entries. The site is implemented as static HTML + in-page React (UMD via Babel) and optimized for fast loads.
+This repository contains a multi-page static site (HTML + in-page React) and a minimal admin UI used to manage team members, projects and related content. The codebase is optimized for fast page loads and simple deployments.
 
-## What’s in this repo
+## Key Features
+
+- Static multi-page marketing site (no build step required)
+- Lightweight client-side admin (stores data locally; optional remote sync with Firestore)
+- Performance optimizations: critical CSS inlined, deferred scripts, font preloads and image WebP hints
+- Simple server option (`server.js`) for Render deployments that require a Node web service
+
+## Repository structure (important files)
 
 - `index.html`, `about.html`, `services.html`, `portfolio.html`, `contact.html`, `testimonials.html` — public pages
 - `admin.html`, `public/admin.html` — admin interfaces
-- `components/` and `public/components/` — UI components used by the in-page React apps
-- `app.js`, `admin-app.js`, `portfolio-app.js`, `testimonials-app.js`, `public/app.js` — page/app scripts
-- `styles.css`, `public/styles.css` — CSS (non-critical styles are loaded non-blocking)
-- `vercel.json`, `render.yaml` — hosting config and cache header rules
-- `server.js` — small Express server (used for Render when configured as a web service)
+- `components/`, `public/components/` — reusable UI components
+- `app.js`, `admin-app.js`, `portfolio-app.js`, `testimonials-app.js` — page scripts and app logic
+- `styles.css`, `public/styles.css` — stylesheet files
+- `render.yaml`, `vercel.json` — deployment configuration for Render and Vercel
+- `server.js` — small Express server used when deploying as a Node web service
+- `firebase-config.example.js` — example template for optional Firebase integration (do not commit secrets)
 
-## Recent changes
+## Local development
 
-- Rebranded to **Noventrix Tech Agency** across pages and meta tags.
-- Optional Firestore sync helpers added to allow cross-device admin sync when `window.FIREBASE_CONFIG` is provided.
-- Performance improvements: critical CSS inlined, non-blocking CSS loading pattern, deferred scripts, font preloads, WebP image variants.
+1. Quick static serve (no install required):
 
-## Run locally
-
-Fast static serve (recommended):
-```bash
+```powershell
 npx serve -s . -l 3000
-# then open http://localhost:3000
+# open http://localhost:3000
 ```
 
-Node/Express option (if you prefer the included server):
-```bash
+2. Node (Express) option (if you want the included server):
+
+```powershell
 npm install
 npm start
-# then open http://localhost:3000
+# open http://localhost:3000
 ```
 
-## Deploy (Render / Vercel)
+3. Editing: files can be edited directly (HTML / JS). The admin UI reads/writes `localStorage` keys such as `fw_team`, `fw_projects`, `fw_clients`, and `fw_satisfaction`.
 
-- This repo includes `render.yaml` for Render and `vercel.json` for Vercel. Ensure the service root and build settings match your hosting provider.
-- If you change files but the live site doesn't update: clear browser cache, check Render/Vercel build logs, and trigger a manual redeploy.
+## Deployment
 
-## Admin panel notes
+- Render: This repo includes `render.yaml`. When using Render, ensure the service is configured to use the repository root (or update `render.yaml` to point to the correct `staticPublishPath`), then trigger a deploy. If you use the Node service variant, Render will run `npm install` and `npm start` per `render.yaml`.
+- Vercel: `vercel.json` is included for easy Vercel deployment. Configure the project in Vercel and deploy from the repository.
 
-- Admin stores data in `localStorage` under keys: `fw_team`, `fw_projects`, `fw_clients`, `fw_satisfaction`.
-- To enable cross-device syncing, provide a Firebase Web config as `window.FIREBASE_CONFIG` in a secure way (do **not** commit secrets). See `firebase-config.example.js`.
+If your live site does not reflect recent changes: clear browser cache, try an incognito window, or trigger a manual redeploy from your hosting dashboard. Edge caches (CDN) can take a few minutes to purge.
+
+## Admin — Cross-device sync (optional)
+
+- By default the admin saves to `localStorage` (local device only). Optional Firestore helpers are present in the codebase to enable cross-device sync.
+- To enable remote sync:
+	1. Create a Firebase project and add a Web app in the Firebase Console.
+	2. Copy the Web SDK config and provide it at runtime as `window.FIREBASE_CONFIG` on pages that load the admin.
+	3. The admin will then read/write a Firestore document (e.g. `site_data/team`) so changes propagate across devices.
+
+See `firebase-config.example.js` for the expected shape. Do NOT commit real credentials to the repository.
+
+## Contributing
+
+- Small content or copy updates: edit the HTML/JS files and open a PR.
+- Larger structural changes: open an issue first so we can discuss scope and backwards compatibility.
 
 ## Contact
 
-fourwarriors24@gmail.com
+Email: fourwarriors24@gmail.com
 
-_Updated on 2025-12-01_
+---
+_Maintained by Noventrix Tech Agency — updated 2025-12-01_
 # Four Wariors — Noventrix Tech Agency
 
 > Small 4-member creative agency static site (marketing, design, web development).
