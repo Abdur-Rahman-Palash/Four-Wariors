@@ -148,6 +148,10 @@ function AdminApp(){
       bio: 'Design thinking advocate focused on creating intuitive and engaging user interfaces.',
       portfolio: 'https://emilypark.portfolio.com', github: 'https://github.com/emilypark',
       telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1', whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm' }
+  ,  { name: 'Sohanur Islam Sujon', role: 'Full Stack Developer', image: 'https://i.ibb.co/Z7Pb3ZX/sujon.png',
+      bio: 'Full Stack Developer specializing in MERN stack and modern web applications.',
+      portfolio: '', github: '',
+      telegram: 'https://t.me/Sohanurislamsujon', whatsapp: 'https://wa.me/8801971233127' }
   ];
 
   const defaultServices = [

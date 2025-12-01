@@ -43,6 +43,16 @@ function AboutApp() {
         telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1',
         whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
       }
+    ,  {
+        name: 'Sohanur Islam Sujon',
+        role: 'Graphic Designer',
+        image: 'https://i.ibb.co/Z7Pb3ZX/sujon.png',
+        bio: 'Design thinking advocate focused on creating intuitive and engaging user interfaces.',
+        portfolio: '',
+        github: '',
+        telegram: 'https://t.me/Sohanurislamsujon',
+        whatsapp: 'https://wa.me/8801971233127'
+      }
     ];
 
     const team = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('fw_team') || 'null') || defaultTeam; } catch(e){ return defaultTeam; } }, []);
