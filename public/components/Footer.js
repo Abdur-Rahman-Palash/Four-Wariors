@@ -1,6 +1,6 @@
 function Footer() {
   try {
-    const defaultCompanyInfo = { name: 'Noventrix Tech Agency', tagline: 'Designing, developing & marketing digital experiences that deliver results.', address: 'Dadul, Kazihal, Attpukurhat, Fulbari, Dinajpur, Bangladesh', website: 'four-wariors.vercel.app', facebook: 'https://www.facebook.com/', twitter: 'https://twitter.com/', instagram: 'https://www.instagram.com/', linkedin: 'https://www.linkedin.com/' };
+    const defaultCompanyInfo = { name: 'Noventrix Tech Agency', tagline: 'Designing, developing & marketing digital experiences that deliver results.', address: 'Dadul, Kazihal, Attpukurhat, Fulbari, Dinajpur, Bangladesh', website: 'four-wariors.onrender.com', facebook: 'https://www.facebook.com/', twitter: 'https://twitter.com/', instagram: 'https://www.instagram.com/', linkedin: 'https://www.linkedin.com/' };
     const defaultFooter = { about: 'We are a creative agency specializing in digital transformation.', copyright: '© 2025 Noventrix Tech Agency. All rights reserved.', quickLinks: 'Home, About, Services, Portfolio, Contact', footerEmail: 'info@creativeagency.com', footerPhone: '+8801971233127' };
     const companyInfo = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('fw_company_info') || 'null') || defaultCompanyInfo; } catch(e){ return defaultCompanyInfo; } }, []);
     const footerData = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('fw_footer') || 'null') || defaultFooter; } catch(e){ return defaultFooter; } }, []);
