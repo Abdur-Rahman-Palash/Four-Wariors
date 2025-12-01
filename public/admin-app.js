@@ -154,6 +154,20 @@ function AdminApp(){
       telegram: 'https://t.me/Sohanurislamsujon', whatsapp: 'https://wa.me/8801971233127' }
   ];
 
+  // If an older `fw_team` exists in localStorage, add the new member non-destructively.
+  try {
+    const stored = JSON.parse(localStorage.getItem('fw_team') || 'null');
+    const newMember = defaultTeam.find(m => m && m.name === 'Sohanur Islam Sujon');
+    if (newMember) {
+      if (!Array.isArray(stored)) {
+        localStorage.setItem('fw_team', JSON.stringify(defaultTeam));
+      } else if (!stored.some(m => m && m.name === newMember.name)) {
+        const merged = [...stored, newMember];
+        localStorage.setItem('fw_team', JSON.stringify(merged));
+      }
+    }
+  } catch (e) { /* ignore localStorage errors */ }
+
   const defaultServices = [
     { icon: 'megaphone', title: 'Digital Marketing', description: 'Grow your online presence with our data-driven marketing strategies.',
       features: ['Search Engine Optimization (SEO)', 'Social Media Marketing & Management', 'Content Marketing Strategy', 'Brand Development & Positioning', 'Pay-Per-Click Advertising', 'Email Marketing Campaigns'] },

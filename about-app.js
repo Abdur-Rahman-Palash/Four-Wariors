@@ -54,6 +54,19 @@ function AboutApp() {
         whatsapp: 'https://wa.me/8801971233127'
       }
     ];
+    // Ensure the live site's localStorage includes our new member.
+    try {
+      const stored = JSON.parse(localStorage.getItem('fw_team') || 'null');
+      const newMember = defaultTeam.find(m => m && m.name === 'Sohanur Islam Sujon');
+      if (newMember) {
+        if (!Array.isArray(stored)) {
+          localStorage.setItem('fw_team', JSON.stringify(defaultTeam));
+        } else if (!stored.some(m => m && m.name === newMember.name)) {
+          const merged = [...stored, newMember];
+          localStorage.setItem('fw_team', JSON.stringify(merged));
+        }
+      }
+    } catch (e) { /* ignore localStorage errors */ }
 
     const team = React.useMemo(() => { try { return JSON.parse(localStorage.getItem('fw_team') || 'null') || defaultTeam; } catch(e){ return defaultTeam; } }, []);
 
