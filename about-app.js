@@ -8,50 +8,20 @@ function AboutApp() {
         role: 'Frontend Developer & Graphics Designer',
         image: 'https://i.ibb.co/GQ2MXkD7/Whats-App-Image-2025-10-29-at-23-59-06-46b7c15f.jpg',
         bio: 'Frontend Developer & Graphics Designer | React | AI-Assisted Websites | PSD → HTML | WordPress & SEO.',
-        portfolio: 'https://portfolio-edit-t3uy.vercel.app/',
-        github: 'https://github.com/Abdur-Rahman-Palash',
-        telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1',
-        whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
       },
       {
-        name: 'Sarah Chen',
-        role: 'Lead Graphic Designer',
-        image: 'https://i.pravatar.cc/300?img=2&u=sarahchen',
+        name: 'Md Jahid Hasan',
+        role: 'Digital marketer',
+        image: 'https://i.ibb.co.com/TxcgbNHv/Picsart-25-11-13-17-28-01-238.png',
         bio: 'Creative designer passionate about crafting beautiful visual identities and user experiences.',
-        portfolio: 'https://sarahchen.portfolio.com',
-        github: 'https://github.com/sarahchen',
-        telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1',
-        whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
       },
-      {
-        name: 'Michael Rodriguez',
-        role: 'Full Stack Developer',
-        image: 'https://i.pravatar.cc/300?img=3&u=michaelrodriguez',
-        bio: 'MERN stack expert building scalable web applications with clean, efficient code.',
-        portfolio: 'https://michaelrodriguez.portfolio.com',
-        github: 'https://github.com/michaelrodriguez',
-        telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1',
-        whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
-      },
-      {
-        name: 'Emily Park',
-        role: 'UI/UX Designer',
-        image: 'https://i.pravatar.cc/300?img=4&u=emilypark',
-        bio: 'Design thinking advocate focused on creating intuitive and engaging user interfaces.',
-        portfolio: 'https://emilypark.portfolio.com',
-        github: 'https://github.com/emilypark',
-        telegram: 'https://t.me/+rIv1Kf6xr7pmNTM1',
-        whatsapp: 'https://chat.whatsapp.com/CCfz7x1ZqsvKXDCGMnLNCm'
-      }
+      
+      
     ,  {
         name: 'Sohanur Islam Sujon',
         role: 'Graphic Designer',
         image: 'https://i.ibb.co/Z7Pb3ZX/sujon.png',
         bio: 'Design thinking advocate focused on creating intuitive and engaging user interfaces.',
-        portfolio: '',
-        github: '',
-        telegram: 'https://t.me/Sohanurislamsujon',
-        whatsapp: 'https://wa.me/8801971233127'
       }
     ];
     // Ensure the live site's localStorage includes our new member.
